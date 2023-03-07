@@ -1,8 +1,8 @@
 import React from "react";
 import MessagePage from "../components/pages/message/MessagePage";
 
-export default function TestMessagePage() {
+export default function TestMessagePage({ navigation }) {
   return (
-    <MessagePage />
+    <MessagePage navigation={navigation} />
   )
 }

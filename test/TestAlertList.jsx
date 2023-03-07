@@ -32,8 +32,8 @@ const data = [
   },
 ]
 
-export default function TestAlertList() {
+export default function TestAlertList({ navigation }) {
   return (
-    <AlertListPage data={data} />
+    <AlertListPage data={data} navigation={navigation} />
   )
 }

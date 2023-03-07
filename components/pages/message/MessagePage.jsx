@@ -1,5 +1,5 @@
 import React from "react";
-import { Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import AlertImage from "../../../assets/alert.png"
 import TaskImage from "../../../assets/task.png"
 
@@ -50,28 +50,33 @@ const styles = StyleSheet.create({
   }
 })
 
-function Item(props) {
+function Item({ barge, icon, title, subtitle, onPress }) {
   return (
-    <View style={styles.item}>
-      <View style={styles.icon}>
-        <Image style={styles.image} source={props.icon} />
-        <View style={styles.barge}>
-          <Text style={styles.bargeText}>{props.barge}</Text>
+    <Pressable onPress={onPress}>
+      <View style={styles.item}>
+        <View style={styles.icon}>
+          <Image style={styles.image} source={icon} />
+          <View style={styles.barge}>
+            <Text style={styles.bargeText}>{barge}</Text>
+          </View>
+        </View>
+        <View style={styles.info}>
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.subtitle}>{subtitle}</Text>
         </View>
       </View>
-      <View style={styles.info}>
-        <Text style={styles.title}>{props.title}</Text>
-        <Text style={styles.subtitle}>{props.subtitle}</Text>
-      </View>
-    </View>
+    </Pressable>
   )
 }
 
-export default function MessagePage(props) {
+export default function MessagePage({ navigation }) {
   return (
     <ScrollView style={{ backgroundColor: '#F4F6F8' }}>
-      <Item barge={6} icon={AlertImage} title="告警提醒" subtitle="副标题文字" />
-      <Item barge={99} icon={TaskImage} title="任务消息" subtitle="副标题文字" />
+      <Item barge={6} icon={AlertImage} title="告警提醒" subtitle="副标题文字"
+        onPress={() => {
+          navigation.navigate('alertlist')
+        }} />
+      {/* <Item barge={99} icon={TaskImage} title="任务消息" subtitle="副标题文字" /> */}
     </ScrollView>
   )
 }

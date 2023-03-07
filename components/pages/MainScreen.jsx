@@ -9,6 +9,8 @@ import IconMapChecked from '../../assets/icon_map_checked.png';
 import IconProfile from '../../assets/icon_profile.png';
 import IconProfileChecked from '../../assets/icon_profile_checked.png';
 import { Image } from "react-native";
+import MainMap from "./map/MainMap";
+import MainMessage from "./message/MainMessage";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +35,7 @@ const tabs = {
 export default function MainScreen() {
 
   return (
-    <Tab.Navigator initialRouteName="map"
+    <Tab.Navigator initialRouteName="message"
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, size, color }) => {
           let tab = tabs[route.name];
@@ -43,12 +45,12 @@ export default function MainScreen() {
         headerShown: false,
       })}
     >
-      <Tab.Screen name="message" component={MessagePage} options={() => {
+      <Tab.Screen name="message" component={MainMessage} options={() => {
         return {
           tabBarLabel: '消息',
         }
       }} />
-      <Tab.Screen name="map" component={MapPage} options={() => {
+      <Tab.Screen name="map" component={MainMap} options={() => {
         return {
           tabBarLabel: '地图',
         }
