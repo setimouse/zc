@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 
-export default function SearchBarWidget(props) {
-  const placeholder = props.placeholder ?? '搜索词'
+export default function SearchBarWidget({ placeholder, onSubmit }) {
+  const [text, setText] = useState('');
 
   return (
     <View style={styles.bar}>
-      <TextInput style={styles.search} placeholder={placeholder} clearButtonMode='always'></TextInput>
+      <TextInput style={styles.search}
+        placeholder={placeholder ?? '搜索词'}
+        clearButtonMode='always'
+        onChangeText={setText}
+        onSubmitEditing={() => onSubmit && onSubmit(text)}
+      />
     </View>
   )
 }
@@ -26,6 +31,6 @@ const styles = StyleSheet.create({
     paddingLeft: 25,
     backgroundColor: 'rgba(255 255 255 / .15)',
     marginVertical: 8,
-    color: 'rgba(255 255 255 / .7)',
+    color: 'white',
   },
 })

@@ -1,8 +1,8 @@
 import React from "react";
 import MapPage from "../components/pages/map/MapPage";
 
-export default function TestMapPage() {
+export default function TestMapPage({ route, navigation }) {
   return (
-    <MapPage />
+    <MapPage navigation={navigation} route={route} />
   )
 }

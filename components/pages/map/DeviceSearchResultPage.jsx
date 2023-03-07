@@ -13,9 +13,6 @@ function Item(props) {
 }
 
 export default function DeviceSearchResultPage(props) {
-  const [phoneNumber, setPhoneNumbers] = useState('');
-  const [password, setPassword] = useState('');
-
   return (
     <View style={[styles.container]}>
       <SearchBarWidget />
@@ -31,9 +28,6 @@ export default function DeviceSearchResultPage(props) {
 }
 
 const styles = StyleSheet.create({
-  statusbar: {
-    height: 44,
-  },
   container: {
     backgroundColor: '#F7F8F8',
     flex: 1,

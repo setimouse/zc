@@ -57,7 +57,7 @@ const vehicle = [
 
 ]
 
-export default function TestMapDeviceSearchResultPage() {
+export default function TestMapVehicleDetailPage() {
   return (
     <VehicleDetailPage vehicle={vehicle} />
   )

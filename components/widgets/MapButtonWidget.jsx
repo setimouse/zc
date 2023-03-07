@@ -3,7 +3,7 @@ import { StyleSheet, Pressable, View, Text, Image } from "react-native";
 
 export default function MapButtonWidget(props) {
   return (
-    <Pressable>
+    <Pressable onPress={props.onPress}>
       <View style={styles.button}>
         <Image style={styles.icon} source={props.icon} />
         <Text style={styles.text}>
