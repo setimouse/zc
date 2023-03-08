@@ -1,5 +1,9 @@
+/**
+ * 设备详情页
+ */
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, View, Text, SectionList, ScrollView, Image } from "react-native";
+import { StyleSheet, View, Text, SectionList, ScrollView, Image, Pressable } from "react-native";
 import ButtonWidget from "../../widgets/ButtonWidget";
 import SectionGroupList from "../../widgets/SectionGroupList";
 
@@ -43,36 +47,55 @@ function Body(props) {
   );
 }
 
-function CellView({ direction = 'row', children, underline = true }) {
+function CellView({ direction = 'row', children, underline = true, onPress }) {
   const styles = StyleSheet.create({
     cell: {
+      flexDirection: 'row',
+      justifyContent: "space-between",
+      // backgroundColor: 'yellow',
+    },
+    content: {
+      flex: 1,
       alignItems: direction === 'column' ? 'flex-start' : 'center',
-      // alignItems: 'center',
       padding: 12,
       flexDirection: direction,
       justifyContent: "space-between",
       borderBottomColor: '#DDDEDF',
       borderBottomWidth: underline ? 0.5 : 0,
+    },
+    target: {
+      // backgroundColor: 'red',
+      justifyContent: 'center',
+    },
+    arrow: {
+      // backgroundColor: 'pink'
     }
   });
 
   return (
     <View style={styles.cell}>
-      {children}
+      <Pressable style={{ flex: 1, }} onPress={() => onPress ? onPress() : {}}>
+        <View style={styles.content}>
+          {children}
+        </View>
+      </Pressable>
+      {onPress && <View style={styles.target}><Text style={styles.arrow}>&gt;</Text></View>}
     </View>
   )
 }
 
 function BaseInfoView({ device }) {
+  const navigation = useNavigation();
+
   return (
     <>
       <Header title="基础信息" />
       <Body>
-        <CellView>
+        <CellView onPress={() => navigation.navigate('devicepic')}>
           <View><Text style={styles.text}>型号图片</Text></View>
           <View><Image source={device.img} style={{ width: 60, height: 60 }} /></View>
         </CellView>
-        <CellView>
+        <CellView onPress={() => navigation.navigate('deviceid')}>
           <View><Text style={styles.text}>设备ID</Text></View>
           <View><Text>{device.deviceId}</Text></View>
         </CellView>
@@ -90,6 +113,8 @@ function BaseInfoView({ device }) {
 }
 
 function BindInfoView({ device }) {
+  const navigation = useNavigation();
+
   const bindingStatus = {
     'binding': '已绑定',
   }
@@ -101,21 +126,13 @@ function BindInfoView({ device }) {
           <View><Text style={styles.text}>绑定对象</Text></View>
           <View><Text>{bindingStatus[device.bindStatus]}</Text></View>
         </CellView>
-        <CellView>
+        <CellView onPress={() => navigation.navigate('objectbinding')}>
           <View><Text style={styles.text}>绑定对象</Text></View>
           <View><Text>{device.bindObject}</Text></View>
         </CellView>
         <CellView>
           <View><Text style={styles.text}>当前台位</Text></View>
           <View><Text style={styles.text}>{device.currentStage}</Text></View>
-        </CellView>
-        <CellView>
-          <View><Text style={styles.text}>绑定时间</Text></View>
-          <View><Text style={styles.text}>{device.bindTime}</Text></View>
-        </CellView>
-        <CellView>
-          <View><Text style={styles.text}>绑定时间</Text></View>
-          <View><Text style={styles.text}>{device.bindTime}</Text></View>
         </CellView>
         <CellView>
           <View><Text style={styles.text}>绑定时间</Text></View>
@@ -132,6 +149,7 @@ function BindInfoView({ device }) {
 }
 
 export default function DeviceDetailPage(props) {
+  const navigation = useNavigation();
 
   const device = props.device;
   return (
@@ -142,7 +160,7 @@ export default function DeviceDetailPage(props) {
           <BindInfoView device={device} />
         </View>
         {/* <SectionGroupList data={device} /> */}
-        <ButtonWidget title="绑定" />
+        <ButtonWidget title="绑定" onPress={() => { navigation.goBack() }} />
       </ScrollView>
     </View>
   )
