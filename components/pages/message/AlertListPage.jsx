@@ -130,7 +130,6 @@ function AlertList(props) {
 
 export default function AlertListPage(props) {
   const data = props.data;
-  console.log(data)
   return (
     <Tab.Navigator>
       <Tab.Screen name="pending" component={AlertList} initialParams={{ data }} options={{ title: '未处理' }} />

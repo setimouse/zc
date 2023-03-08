@@ -1,5 +1,5 @@
 import React from "react";
-import DeviceSearchResultPage from "../components/pages/map/DeviceSearchResultPage";
+import DeviceSearchResultPage from "../components/pages/device/DeviceSearchResultPage";
 
 const suggests = [
   { word: 'abc' },

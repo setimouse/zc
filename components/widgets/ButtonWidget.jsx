@@ -1,10 +1,10 @@
 import React from "react";
 import { StyleSheet, Pressable, View, Text } from "react-native";
 
-export default function ButtonWidget(props) {
+export default function ButtonWidget({ title, onPress }) {
   return (
-    <Pressable>
-      <Text style={styles.button}>{props.title}</Text>
+    <Pressable onPress={() => onPress && onPress()}>
+      <Text style={styles.button}>{title}</Text>
     </Pressable>
   )
 }

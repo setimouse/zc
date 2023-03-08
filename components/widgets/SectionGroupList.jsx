@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
   }
 })
 
-const Item = ({ info }) => {
+const Item = ({ info, index }) => {
   let value;
   if (typeof info.value === 'string') {
     value = <Text style={styles.textMiddle}>{info.value}</Text>
@@ -38,7 +38,7 @@ export default function SectionGroupList(props) {
       style={{ marginBottom: 24, }}
       sections={props.data}
       keyExtractor={(item, index) => item + index}
-      renderItem={({ item }) => <Item info={item} />}
+      renderItem={({ item, index }) => <Item info={item} index={index} />}
       renderSectionHeader={({ section: { title } }) => (
         <Text style={{ fontSize: 12, color: '#B0B1B3', padding: 8 }}>{title}</Text>
       )}

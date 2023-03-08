@@ -1,13 +1,15 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View, Text, Image } from "react-native";
+import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 
-export default function SearchResultItemWidget(props) {
-
+export default function SearchResultItemWidget({ item, detailText, onTargetPress, onDetailPress }) {
+  const navigation = useNavigation()
+  console.log(navigation);
   return (
     <View style={styles.searchbox}>
       <View style={styles.left}>
         {
-          props.item.items.map(item => {
+          item.items.map(item => {
             return (
               <Text key={item.key} style={styles.infoText}>
                 {item.key}: {item.value}
@@ -17,8 +19,12 @@ export default function SearchResultItemWidget(props) {
         }
       </View>
       <View style={styles.right}>
-        <Text style={{ color: '#B0B1B3', fontSize: 14 }}>车辆详情 &raquo;</Text>
-        <Image style={styles.icon} source={require('../../assets/locate.png')} />
+        <Pressable onPress={() => onDetailPress && onDetailPress()}>
+          <Text style={{ color: '#B0B1B3', fontSize: 14 }}>{detailText} &raquo;</Text>
+        </Pressable>
+        <Pressable onPress={() => onTargetPress && onTargetPress()}>
+          <Image style={styles.icon} source={require('../../assets/locate.png')} />
+        </Pressable>
       </View>
     </View >
   )

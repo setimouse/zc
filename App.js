@@ -1,8 +1,6 @@
 import { SafeAreaView } from 'react-native';
 import LoginPage from './components/pages/login/LoginPage'
 import SwitchMapPage from './components/pages/map/SwitchMapPage'
-// import TestMapDeviceSearchResultPage from './test/TestMapDeviceSearchResultPage';
-// import TestMapDeviceBindPage from './test/TestMapDeviceBindPage';
 import TestMapVehicleDetailPage from './test/TestMapVehicleDetailPage';
 import TestDeviceDetailPage from './test/TestDeviceDetailPage';
 import TestDeviceModelSettingPage from './test/TestDeviceModelSettingPage';
@@ -19,6 +17,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MapPage from './components/pages/map/MapPage';
 import TestMapDeviceSearchResultPage from './test/TestMapDeviceSearchResultPage';
 import MainScreen from './components/pages/MainScreen';
+import TestMapSearchPage from './test/TestMapSearch';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,12 +27,10 @@ export default function App() {
       <NavigationContainer>
         <Stack.Navigator initialRouteName='login'>
           <Stack.Screen name='login' component={LoginPage} options={{ header: () => null }} />
-          {/* <Stack.Screen name="map" component={TestMapPage} options={{ header: () => null }} />
-          <Stack.Screen name="switchmap" component={TestSwitchMapPage} options={{ title: '切换地图' }} />
-          <Stack.Screen name="mapsearch" component={TestMapDeviceSearchResultPage} options={{ title: '地图搜索结果' }} /> */}
           <Stack.Screen name='main' component={MainScreen} options={{ header: () => null }} />
         </Stack.Navigator>
       </NavigationContainer>
+      {/* <TestMapSearchPage /> */}
 
       {/* <TestMapVehicleDetailPage /> */}
       {/* <TestDeviceDetailPage /> */}

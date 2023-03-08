@@ -3,7 +3,6 @@ import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import IconSwitch from '../../../assets/alert_pending.png';
 import IconDevice from '../../../assets/alert_done.png';
-import TabBarWidget from '../../widgets/TabBarWidget';
 
 export default function MapPage({ route, navigation }) {
   return (
@@ -11,7 +10,7 @@ export default function MapPage({ route, navigation }) {
       <View style={styles.map}></View>
       <View style={styles.search}>
         <MapSearchWidget placeholder="请输入车号、设备编号"
-          onSubmitText={word => navigation.navigate('mapsearch')}
+          onFocus={e => { navigation.navigate('mapsearch') }}
         />
       </View>
       <View style={styles.sidebar}>
@@ -29,7 +28,6 @@ export default function MapPage({ route, navigation }) {
       <View style={styles.locate}>
         <Image source={IconSwitch} />
       </View>
-      {/* <TabBarWidget checked={1} /> */}
     </View>
   );
 }
@@ -43,7 +41,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#00ffff',
+    backgroundColor: 'lightgrey',
   },
   search: {
     flex: 1,
@@ -57,14 +55,14 @@ const styles = StyleSheet.create({
   },
   sidebar: {
     position: 'absolute',
-    right: 9, top: 128,
+    right: 12, top: 128,
     width: 36, height: 88,
     backgroundColor: '#FFFFFF',
     borderRadius: 4,
   },
   locate: {
     position: 'absolute',
-    right: 9, bottom: 130,
+    right: 12, bottom: 40,
     backgroundColor: '#fff',
     width: 40, height: 40,
     borderRadius: 20,

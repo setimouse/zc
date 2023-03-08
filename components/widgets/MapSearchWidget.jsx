@@ -1,8 +1,8 @@
 import React from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, View, TextInput, Keyboard } from "react-native";
 import { useState } from "react";
 
-export default function MapSearchWidget({ placeholder, onSubmitText }) {
+export default function MapSearchWidget({ placeholder, onSubmitText, onFocus }) {
   placeholder = placeholder ?? '搜索词'
   const [text, setText] = useState('');
   return (
@@ -12,6 +12,11 @@ export default function MapSearchWidget({ placeholder, onSubmitText }) {
         onChangeText={setText}
         value={text}
         onSubmitEditing={() => { onSubmitText && onSubmitText(text) }}
+        ref={input => { this.textInput = input }}
+        onFocus={(e) => {
+          this.textInput.blur();
+          onFocus && onFocus(e);
+        }}
         clearButtonMode='always'></TextInput>
     </View>
   )

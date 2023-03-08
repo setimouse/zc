@@ -23,7 +23,6 @@ const maps = {
 }
 
 export default function TestSwitchMapPage({ navigation, route }) {
-  console.log('test switch map page')
   return (
     <SwitchMapPage maps={maps}
       navigation={navigation} route={route} />

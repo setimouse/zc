@@ -1,22 +1,54 @@
 import React, { useState } from "react";
-import { StyleSheet, View, TextInput } from "react-native";
+import { StyleSheet, View, TextInput, FlatList, Text, Image } from "react-native";
+import IconHistory from '../../assets/history.png';
+import IconCross from '../../assets/cross.png';
 
-export default function SearchBarWidget({ placeholder, onSubmit }) {
+function Item({ item }) {
+  return (
+    <View style={styles.suggest}>
+      <View style={styles.left} >
+        <Image style={styles.icon} source={IconHistory} />
+        <Text style={styles.text}>{item.word}</Text>
+      </View>
+      <View style={styles.right}>
+        <Image style={styles.cross} source={IconCross} />
+      </View>
+    </View >
+  )
+}
+
+export default function SearchBarWidget({ placeholder, suggests, onSubmit, resultPage }) {
   const [text, setText] = useState('');
 
   return (
-    <View style={styles.bar}>
-      <TextInput style={styles.search}
-        placeholder={placeholder ?? '搜索词'}
-        clearButtonMode='always'
-        onChangeText={setText}
-        onSubmitEditing={() => onSubmit && onSubmit(text)}
-      />
+    <View style={styles.container}>
+      <View style={styles.bar} ref={bar => this.bar = bar}>
+        <TextInput style={styles.search}
+          placeholder={placeholder ?? '搜索词'}
+          clearButtonMode='always'
+          onChangeText={setText}
+          onSubmitEditing={() => onSubmit && onSubmit(text)}
+        />
+      </View>
+      <View style={styles.mainpage}>
+        {resultPage}
+      </View>
+      <View style={styles.history}>
+        <FlatList
+          data={suggests}
+          keyExtractor={({ id }) => id}
+          renderItem={({ item }) => <Item item={item} />}
+        />
+        <View style={styles.clearView}>
+          <Text style={styles.clear}>清空历史</Text>
+        </View>
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+
   bar: {
     flexDirection: 'row',
     height: 44,
@@ -33,4 +65,46 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     color: 'white',
   },
+  history: {
+    position: 'absolute',
+    top: 45, left: 0,
+    zIndex: 0,
+    width: '100%',
+    backgroundColor: 'white',
+  },
+  suggest: {
+    flexDirection: 'row',
+    height: 44,
+    alignItems: 'center',
+    padding: 12,
+    borderBottomColor: '#DDDEDF',
+    borderBottomWidth: 0.5,
+    justifyContent: "space-between",
+  },
+  left: {
+    flexDirection: "row",
+    alignItems: 'center',
+  },
+  icon: {
+    width: 16, height: 16,
+  },
+  text: {
+    marginLeft: 8,
+    fontSize: 14,
+    color: '#3E4146',
+  },
+  cross: {
+    width: 16, height: 16,
+  },
+  mainpage: {
+    backgroundColor: '#F7F8F8',
+  },
+  clearView: {
+    marginVertical: 16,
+    alignItems: 'center',
+  },
+  clear: {
+    color: '#3E4146',
+    fontSize: 12,
+  }
 })

@@ -1,5 +1,4 @@
 import React from "react";
-import DeviceSearchResultPage from "../components/pages/map/DeviceSearchResultPage";
 import VehicleDetailPage from "../components/pages/map/VehicleDetailPage";
 
 const suggests = [

@@ -20,7 +20,7 @@ export default function LoginPage({ navigation }) {
         <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='请输入密码'></TextInput>
       </View>
       <Pressable style={styles.loginButton}
-        onPress={() => navigation.navigate('main')}
+        onPress={() => navigation.replace('main')}
       >
         <Text style={{ color: 'white', fontSize: 16, width: 320, textAlign: 'center' }}>登录</Text>
       </Pressable>
