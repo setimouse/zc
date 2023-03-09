@@ -10,6 +10,7 @@ import TestDeviceDetailPage from "../../../test/TestDeviceDetailPage";
 import TestDeviceModelSettingPage from "../../../test/TestDeviceModelSettingPage";
 import TestDeviceIDSettingPage from '../../../test/TestDeviceIDSettingPage';
 import TestDeviceObjectBindingPage from '../../../test/TestDeviceObjectBindingPage';
+import TestMapSearch from "../../../test/TestMapSearch";
 
 const Stack = createNativeStackNavigator();
 
@@ -18,7 +19,7 @@ export default function MainMap() {
     // <NavigationContainer>
     <Stack.Navigator initialRouteName='mapmain'>
       <Stack.Screen name="mapmain" component={TestMapPage} options={{ header: () => null }} />
-      <Stack.Screen name="mapsearch" component={MapSearchPage} options={{ title: '搜索车号及设备' }} />
+      <Stack.Screen name="mapsearch" component={TestMapSearch} options={{ title: '搜索车号及设备' }} />
       <Stack.Screen name="switchmap" component={TestSwitchMapPage} options={{ title: '地图', }} />
       <Stack.Screen name="vehicledetail" component={TestMapVehicleDetailPage} options={{ title: '车辆详情' }} />
       <Stack.Screen name="devicesearch" component={TestDeviceSearchPage} options={{ title: '设备' }} />

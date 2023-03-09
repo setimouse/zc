@@ -7,7 +7,7 @@ const suggests = [
   { word: '123', id: 3 },
 ];
 
-export default function TestMapSearchPage() {
+export default function TestMapSearch() {
   return (
     <MapSearchPage suggests={suggests} />
   )

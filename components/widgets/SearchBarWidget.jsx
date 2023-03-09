@@ -19,6 +19,8 @@ function Item({ item }) {
 
 export default function SearchBarWidget({ placeholder, suggests, onSubmit, resultPage }) {
   const [text, setText] = useState('');
+  const [searching, setSearching] = useState(false);
+  const [result, setResult] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -27,22 +29,38 @@ export default function SearchBarWidget({ placeholder, suggests, onSubmit, resul
           placeholder={placeholder ?? '搜索词'}
           clearButtonMode='always'
           onChangeText={setText}
-          onSubmitEditing={() => onSubmit && onSubmit(text)}
+          autoFocus={true}
+          onFocus={() => {
+            setSearching(true);
+          }}
+          onBlur={() => {
+            setSearching(false);
+            setResult(true);
+          }}
+          onSubmitEditing={() => {
+            onSubmit && onSubmit(text);
+          }}
         />
       </View>
-      <View style={styles.mainpage}>
-        {resultPage}
-      </View>
-      <View style={styles.history}>
-        <FlatList
-          data={suggests}
-          keyExtractor={({ id }) => id}
-          renderItem={({ item }) => <Item item={item} />}
-        />
-        <View style={styles.clearView}>
-          <Text style={styles.clear}>清空历史</Text>
+      {result &&
+        <View style={styles.mainpage}>
+          {resultPage}
         </View>
-      </View>
+      }
+      {searching &&
+        <View style={styles.history}>
+          <FlatList
+            data={suggests}
+            keyExtractor={({ id }) => id}
+            renderItem={({ item }) => <Item item={item} />}
+          />
+          {suggests && suggests.size > 0 &&
+            <View style={styles.clearView}>
+              <Text style={styles.clear}>清空历史</Text>
+            </View>
+          }
+        </View>
+      }
     </View>
   )
 }
