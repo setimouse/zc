@@ -17,7 +17,7 @@ function Item({ item }) {
   )
 }
 
-export default function SearchBarWidget({ placeholder, suggests, onSubmit, resultPage }) {
+export default function SearchBarWidget({ placeholder, suggests, onSubmit, onChangeText, resultPage }) {
   const [text, setText] = useState('');
   const [searching, setSearching] = useState(false);
   const [result, setResult] = useState(false);
@@ -28,7 +28,10 @@ export default function SearchBarWidget({ placeholder, suggests, onSubmit, resul
         <TextInput style={styles.search}
           placeholder={placeholder ?? '搜索词'}
           clearButtonMode='always'
-          onChangeText={setText}
+          onChangeText={(text) => {
+            setText(text)
+            onChangeText(text)
+          }}
           autoFocus={true}
           onFocus={() => {
             setSearching(true);
