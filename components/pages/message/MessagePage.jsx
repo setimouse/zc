@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import AlertImage from "../../../assets/alert.png"
@@ -69,7 +70,9 @@ function Item({ barge, icon, title, subtitle, onPress }) {
   )
 }
 
-export default function MessagePage({ navigation }) {
+export default function MessagePage() {
+  const navigation = useNavigation();
+
   return (
     <ScrollView style={{ backgroundColor: '#F4F6F8' }}>
       <Item barge={6} icon={AlertImage} title="告警提醒" subtitle="副标题文字"

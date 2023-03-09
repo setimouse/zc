@@ -18,6 +18,7 @@ import MapPage from './components/pages/map/MapPage';
 import TestMapDeviceSearchResultPage from './test/TestMapDeviceSearchResultPage';
 import MainScreen from './components/pages/MainScreen';
 import TestMapSearchPage from './test/TestMapSearch';
+import TestProfilePage from './test/TestProfilePage';
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ export default function App() {
           <Stack.Screen name='main' component={MainScreen} options={{ header: () => null }} />
         </Stack.Navigator>
       </NavigationContainer>
+      {/* <TestProfilePage /> */}
       {/* <TestMapSearchPage /> */}
 
       {/* <TestMapVehicleDetailPage /> */}

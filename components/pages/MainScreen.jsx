@@ -11,6 +11,7 @@ import IconProfileChecked from '../../assets/icon_profile_checked.png';
 import { Image } from "react-native";
 import MainMap from "./map/MainMap";
 import MainMessage from "./message/MainMessage";
+import MainProfile from "./profile/MainProfile";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,7 +56,7 @@ export default function MainScreen() {
           tabBarLabel: '地图',
         }
       }} />
-      <Tab.Screen name="profile" component={MapPage} options={() => {
+      <Tab.Screen name="profile" component={MainProfile} options={() => {
         return {
           tabBarLabel: '我的',
         }

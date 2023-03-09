@@ -22,6 +22,7 @@ function Page({ result }) {
     </View>
   );
 }
+
 export default function DeviceSearchPage(props) {
   return (
     <View style={[styles.container]}>
@@ -30,7 +31,6 @@ export default function DeviceSearchPage(props) {
         suggests={props.suggests}
         resultPage={<Page result={props.result} />}
       />
-
     </View>
   );
 }

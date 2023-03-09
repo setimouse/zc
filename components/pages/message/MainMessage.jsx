@@ -14,9 +14,7 @@ export default function MainMessage({ navigation }) {
   return (
     <Stack.Navigator initialRouteName='messagemain'>
       <Stack.Screen name="messagemain" component={TestMessagePage} options={{ title: '消息' }} />
-      <Stack.Screen name="alertlist" component={TestAlertList} options={{
-        title: '告警提醒',
-      }} />
+      <Stack.Screen name="alertlist" component={TestAlertList} options={{ title: '告警提醒', }} />
       <Stack.Screen name="alertdetail" component={TestAlertDetailPage} options={{ title: '告警详情' }} />
     </Stack.Navigator>
   )

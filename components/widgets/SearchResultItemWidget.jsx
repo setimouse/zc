@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 
 export default function SearchResultItemWidget({ item, detailText, onTargetPress, onDetailPress }) {
   const navigation = useNavigation()
-  console.log(navigation);
+
   return (
     <View style={styles.searchbox}>
       <View style={styles.left}>

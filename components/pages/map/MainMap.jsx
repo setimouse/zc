@@ -16,10 +16,10 @@ const Stack = createNativeStackNavigator();
 export default function MainMap() {
   return (
     // <NavigationContainer>
-    <Stack.Navigator initialRouteName='map'>
+    <Stack.Navigator initialRouteName='mapmain'>
       <Stack.Screen name="mapmain" component={TestMapPage} options={{ header: () => null }} />
       <Stack.Screen name="mapsearch" component={MapSearchPage} options={{ title: '搜索车号及设备' }} />
-      <Stack.Screen name="switchmap" component={TestSwitchMapPage} options={{ title: '地图' }} />
+      <Stack.Screen name="switchmap" component={TestSwitchMapPage} options={{ title: '地图', }} />
       <Stack.Screen name="vehicledetail" component={TestMapVehicleDetailPage} options={{ title: '车辆详情' }} />
       <Stack.Screen name="devicesearch" component={TestDeviceSearchPage} options={{ title: '设备' }} />
       <Stack.Screen name="devicedetail" component={TestDeviceDetailPage} options={{ title: '设备详情' }} />
