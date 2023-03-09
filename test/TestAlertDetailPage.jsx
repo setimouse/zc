@@ -7,18 +7,30 @@ const device = [
     title: '基础信息',
     data: [
       { key: '告警对象', value: '周生生' },
-      { key: '设备ID', value: 'CU-XXXX-382A8832' },
-      { key: '设备型号', value: '检修中' },
-      { key: '当前台位', value: '台位1' },
+      { key: '对象部门', value: '一车间' },
+      { key: '设备编号', value: 'CN-2389471' },
     ],
   },
   {
-    title: '绑定信息',
+    title: '告警信息',
     data: [
-      { key: '合并车型', value: '提速车' },
-      { key: '全场', value: '23783m' },
-      { key: '制造厂', value: '常客' },
-      { key: '制造年月', value: '2007-03' },
+      { key: '告警地图', value: '硫酸车间' },
+      { key: '告警围栏', value: '车辆滞留' },
+      { key: '告警时间', value: '2023.1.12 15:33:21' },
+      { key: '告警时长', value: '3分钟' },
+      { key: '告警状态', value: '告警中' },
+      { key: '告警事件', value: '滞留' },
+      { key: '滞留时长', value: '10分钟' },
+    ],
+  },
+  {
+    title: '处理信息',
+    data: [
+      { key: '处理方式', value: '人工处理' },
+      { key: '处理意见', value: '尽快驶离' },
+      { key: '处理时间', value: '2023.1.12 15:33:21' },
+      { key: '是否误报', value: '否' },
+      { key: '处理状态', value: '已处理' },
     ],
   },
 
