@@ -2,7 +2,7 @@
  * 我的
  */
 import React from 'react';
-import { Image, View, Text, StyleSheet, Pressable } from 'react-native';
+import { Image, View, Text, StyleSheet, Pressable, StatusBar } from 'react-native';
 import ProfileBg from '../../../assets/profile_bg.png';
 import AlertIcon from '../../../assets/profile_alert.png';
 import DeviceIcon from '../../../assets/profile_device.png';

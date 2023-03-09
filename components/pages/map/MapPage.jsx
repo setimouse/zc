@@ -1,13 +1,15 @@
-import { StyleSheet, Text, View, TextInput, Pressable, Image, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
-import IconSwitch from '../../../assets/alert_pending.png';
-import IconDevice from '../../../assets/alert_done.png';
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import MapView from 'react-native-maps';
 
 export default function MapPage({ route, navigation }) {
   return (
     <View style={styles.container}>
-      <View style={styles.map}></View>
+      <View style={styles.map}>
+        {/* <MapView style={{ width: '100%', height: '100%' }} /> */}
+      </View>
       <View style={styles.search}>
         <MapSearchWidget placeholder="请输入车号、设备编号"
           onFocus={e => { navigation.navigate('mapsearch') }}
@@ -15,18 +17,18 @@ export default function MapPage({ route, navigation }) {
       </View>
       <View style={styles.sidebar}>
         <View>
-          <MapButtonWidget title="切换" icon={IconSwitch}
+          <MapButtonWidget title="切换" icon={<FontAwesome name="exchange" size={16} />}
             onPress={() => navigation.navigate('switchmap')} />
         </View>
         <View style={{ height: 1, backgroundColor: '#dddedf', marginHorizontal: 4 }}></View>
         <View>
-          <MapButtonWidget title="设备" icon={IconDevice}
+          <MapButtonWidget title="设备" icon={<FontAwesome name="chain" size={16} />}
             onPress={() => navigation.navigate('devicesearch')}
           />
         </View>
       </View>
       <View style={styles.locate}>
-        <Image source={IconSwitch} />
+        <MaterialCommunityIcons name="target" size={28} color='#2882FF' />
       </View>
     </View>
   );

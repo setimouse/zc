@@ -2,8 +2,6 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TextInput, Pressable, Image } from 'react-native';
 import { useState } from 'react';
 import BackgroundImage from '../../../assets/login_bg.png';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 export default function LoginPage({ navigation }) {
   const [phoneNumber, setPhoneNumbers] = useState('');
@@ -25,7 +23,7 @@ export default function LoginPage({ navigation }) {
         <Text style={{ color: 'white', fontSize: 16, width: 320, textAlign: 'center' }}>登录</Text>
       </Pressable>
       <Text style={{ fontSize: 14, color: '#3E4146', fontWeight: 'bold' }}>忘记密码？</Text>
-      <StatusBar style="auto" />
+      <StatusBar translucent={true} />
     </View>
   );
 }

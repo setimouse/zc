@@ -5,7 +5,8 @@ export default function MapButtonWidget(props) {
   return (
     <Pressable onPress={props.onPress}>
       <View style={styles.button}>
-        <Image style={styles.icon} source={props.icon} />
+        {props.icon}
+        {/* <Image style={styles.icon} source={props.icon} /> */}
         <Text style={styles.text}>
           {props.title}
         </Text>
