@@ -20,7 +20,7 @@ export default function LoginPage({ navigation }) {
       <Pressable style={styles.loginButton}
         onPress={() => navigation.replace('main')}
       >
-        <Text style={{ color: 'white', fontSize: 16, width: 320, textAlign: 'center' }}>登录</Text>
+        <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>登录</Text>
       </Pressable>
       <Text style={{ fontSize: 14, color: '#3E4146', fontWeight: 'bold' }}>忘记密码？</Text>
       <StatusBar translucent={true} />
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
   },
   loginButton: {
     justifyContent: 'center',
-    width: 320,
+    width: '100%',
     height: 48,
     alignContent: 'center',
     color: '#fff',

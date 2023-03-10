@@ -154,13 +154,14 @@ export default function DeviceDetailPage(props) {
   const device = props.device;
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8' }}>
-      <ScrollView style={{ paddingHorizontal: 12 }} showsVerticalScrollIndicator={false}>
+      <ScrollView style={{ paddingHorizontal: 12, marginBottom: 0 }} showsVerticalScrollIndicator={false}>
         <View style={{ marginBottom: 24 }}>
           <BaseInfoView device={device} />
           <BindInfoView device={device} />
         </View>
-        {/* <SectionGroupList data={device} /> */}
-        <ButtonWidget title="绑定" onPress={() => { navigation.goBack() }} />
+        <View style={{ marginBottom: 24, }}>
+          <ButtonWidget title="绑定" onPress={() => { navigation.goBack() }} />
+        </View>
       </ScrollView>
     </View>
   )

@@ -2,8 +2,8 @@ import { StyleSheet, Text, View, FlatList, Image, Pressable } from 'react-native
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import SearchResultItemWidget from '../../widgets/SearchResultItemWidget';
 import CurrentImage from '../../../assets/locate_current.png';
-function Item(props) {
 
+function Item(props) {
   const s = StyleSheet.create({
     item: {
       height: 44, borderBottomColor: '#DDDEDF',

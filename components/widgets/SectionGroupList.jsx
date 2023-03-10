@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   textMiddle: {
-    verticalAlign: 'middle',
     fontSize: 14,
   }
 })

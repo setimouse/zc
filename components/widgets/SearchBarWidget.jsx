@@ -30,7 +30,7 @@ export default function SearchBarWidget({ placeholder, suggests, onSubmit, onCha
           clearButtonMode='always'
           onChangeText={(text) => {
             setText(text)
-            onChangeText(text)
+            onChangeText && onChangeText(text)
           }}
           autoFocus={true}
           onFocus={() => {
@@ -57,7 +57,7 @@ export default function SearchBarWidget({ placeholder, suggests, onSubmit, onCha
             keyExtractor={({ id }) => id}
             renderItem={({ item }) => <Item item={item} />}
           />
-          {suggests && suggests.size > 0 &&
+          {suggests && suggests.length > 0 &&
             <View style={styles.clearView}>
               <Text style={styles.clear}>清空历史</Text>
             </View>
