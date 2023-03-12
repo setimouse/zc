@@ -6,6 +6,10 @@ const headBar = (options) => {
     headerStyle: { backgroundColor: '#2882FF' },
     statusBarColor: '#2882FF',
     headerBackImageSource: IconBack,
+    headerTitleAlign: "center",
+    headerBackTitleVisible: false,
+    headerTintColor: '#fff',
+
   }, options);
 };
 

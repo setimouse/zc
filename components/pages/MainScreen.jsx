@@ -37,14 +37,17 @@ export default function MainScreen() {
 
   return (
     <Tab.Navigator initialRouteName="message"
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, size, color }) => {
-          let tab = tabs[route.name];
-          let icon = focused ? tab.activeIcon : tab.icon
-          return <Image source={icon} style={{ width: 28, height: 28 }} />;
-        },
-        headerShown: false,
-      })}
+      screenOptions={({ route }) => {
+        return ({
+          tabBarIcon: ({ focused, size, color }) => {
+            let tab = tabs[route.name];
+            let icon = focused ? tab.activeIcon : tab.icon
+            return <Image source={icon} style={{ width: 28, height: 28 }} />;
+          },
+          headerShown: false,
+          tabBarHideOnKeyboard: true,
+        })
+      }}
     >
       <Tab.Screen name="message" component={MainMessage} options={() => {
         return {

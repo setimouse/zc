@@ -58,7 +58,6 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     justifyContent: 'flex-start',
     alignContent: 'stretch',
-    backgroundColor: 'red',
     width: '100%',
     padding: 12,
     backgroundColor: 'white',
