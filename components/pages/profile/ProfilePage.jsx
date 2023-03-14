@@ -1,12 +1,14 @@
 /**
  * 我的
  */
-import React from 'react';
-import { Image, View, Text, StyleSheet, Pressable, StatusBar } from 'react-native';
+import React, { useContext } from 'react';
+import { Image, View, Text, StyleSheet, Pressable, StatusBar, Alert } from 'react-native';
 import ProfileBg from '../../../assets/profile_bg.png';
 import AlertIcon from '../../../assets/profile_alert.png';
 import DeviceIcon from '../../../assets/profile_device.png';
 import { useNavigation } from '@react-navigation/native';
+import ButtonWidget from '../../widgets/ButtonWidget';
+import { AuthContext } from '../../../webserve/AuthContext';
 
 function UserView({ user }) {
   const styles = StyleSheet.create({
@@ -153,12 +155,22 @@ function FunctionsView() {
 }
 
 export default function ProfilePage({ user }) {
+  const { logout } = useContext(AuthContext)
   return (
     <View style={{ backgroundColor: '#F4F6F8', flex: 1 }}>
       <Image style={{ position: 'absolute', height: 220, width: '100%' }} source={ProfileBg} />
       <UserView user={user} />
       <View top={-36} style={{ backgroundColor: '#fff', marginHorizontal: 12 }} borderRadius={10} >
         <FunctionsView />
+      </View>
+      <View style={{ marginHorizontal: 12, }}>
+        <ButtonWidget title="登出" onPress={() => {
+          Alert.alert('登出', '确定登出吗？', [
+            { text: '确定', onPress: logout },
+            { text: '取消' },
+          ])
+          logout
+        }} />
       </View>
     </View>
   )

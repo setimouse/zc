@@ -1,9 +1,11 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Pressable, Image } from 'react-native';
-import { useState } from 'react';
+import { StyleSheet, Alert, Text, View, TextInput, Pressable, Image } from 'react-native';
+import { useContext, useState } from 'react';
 import BackgroundImage from '../../../assets/login_bg.png';
+import { AuthContext } from '../../../webserve/AuthContext';
 
-export default function LoginPage({ navigation }) {
+export default function LoginPage(props) {
+  const { login } = useContext(AuthContext)
   const [phoneNumber, setPhoneNumbers] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,7 +20,12 @@ export default function LoginPage({ navigation }) {
         <TextInput style={styles.input} secureTextEntry={true} value={password} onChangeText={setPassword} placeholder='请输入密码'></TextInput>
       </View>
       <Pressable style={styles.loginButton}
-        onPress={() => navigation.replace('main')}
+        onPress={() => {
+          login(phoneNumber, password)
+            .catch((error) => {
+              Alert.alert('', error.message);
+            })
+        }}
       >
         <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>登录</Text>
       </Pressable>

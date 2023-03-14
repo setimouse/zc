@@ -12,6 +12,7 @@ import { Image } from "react-native";
 import MainMap from "./map/MainMap";
 import MainMessage from "./message/MainMessage";
 import MainProfile from "./profile/MainProfile";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,34 +37,36 @@ const tabs = {
 export default function MainScreen() {
 
   return (
-    <Tab.Navigator initialRouteName="message"
-      screenOptions={({ route }) => {
-        return ({
-          tabBarIcon: ({ focused, size, color }) => {
-            let tab = tabs[route.name];
-            let icon = focused ? tab.activeIcon : tab.icon
-            return <Image source={icon} style={{ width: 28, height: 28 }} />;
-          },
-          headerShown: false,
-          tabBarHideOnKeyboard: true,
-        })
-      }}
-    >
-      <Tab.Screen name="message" component={MainMessage} options={() => {
-        return {
-          tabBarLabel: '消息',
-        }
-      }} />
-      <Tab.Screen name="map" component={MainMap} options={() => {
-        return {
-          tabBarLabel: '地图',
-        }
-      }} />
-      <Tab.Screen name="profile" component={MainProfile} options={() => {
-        return {
-          tabBarLabel: '我的',
-        }
-      }} />
-    </Tab.Navigator>
+    <NavigationContainer>
+      <Tab.Navigator initialRouteName="message"
+        screenOptions={({ route }) => {
+          return ({
+            tabBarIcon: ({ focused, size, color }) => {
+              let tab = tabs[route.name];
+              let icon = focused ? tab.activeIcon : tab.icon
+              return <Image source={icon} style={{ width: 28, height: 28 }} />;
+            },
+            headerShown: false,
+            tabBarHideOnKeyboard: true,
+          })
+        }}
+      >
+        <Tab.Screen name="message" component={MainMessage} options={() => {
+          return {
+            tabBarLabel: '消息',
+          }
+        }} />
+        <Tab.Screen name="map" component={MainMap} options={() => {
+          return {
+            tabBarLabel: '地图',
+          }
+        }} />
+        <Tab.Screen name="profile" component={MainProfile} options={() => {
+          return {
+            tabBarLabel: '我的',
+          }
+        }} />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }

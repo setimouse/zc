@@ -2,7 +2,6 @@ import { StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
-import MapView from 'react-native-maps';
 
 export default function MapPage({ route, navigation }) {
   return (
