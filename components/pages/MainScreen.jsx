@@ -1,7 +1,5 @@
 import React from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import MapPage from "./map/MapPage";
-import MessagePage from "./message/MessagePage";
 import IconMessage from '../../assets/icon_message.png';
 import IconMessageChecked from '../../assets/icon_message_checked.png';
 import IconMap from '../../assets/icon_map.png';

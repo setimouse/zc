@@ -1,9 +1,9 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { baseURL } from "./http_config";
 
-const host = 'http://47.94.249.77';
-const url = host + '/lmsapi/lms-auth/oauth/token';
+const url = baseURL + '/lmsapi/lms-auth/oauth/token';
 
 export const AuthContext = createContext();
 
@@ -12,15 +12,16 @@ export const AuthProvider = ({ children }) => {
   const [userInfo, setUserInfo] = useState();
   const [isLogin, setIsLogin] = useState(false);
   const [loginError, setLoginError] = useState(null);
+  const [tokenType, setTokenType] = useState(null)
 
   async function login(username, password) {
-    // username = 'admin'; password = '123456';
+    username = 'admin'; password = '123456';
     const fetchUrl = `${url}?grant_type=captcha&username=${username}&password=${password}`
+    console.log('login url=' + fetchUrl);
     return await fetch(fetchUrl, {
       method: 'POST',
       headers: {
         Authorization: 'Basic bWFsbC1hZG1pbi13ZWI6MTIzNDU2',
-        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: username,
@@ -41,16 +42,12 @@ export const AuthProvider = ({ children }) => {
       .then((data) => {
         console.log(data);
         const storage = useAsyncStorage("token");
+        setUserInfo(JSON.stringify(data))
+        setAccessToken(data['access_token'])
+        setTokenType(data['token_type'])
         storage.setItem(data["access_token"]).then(() => {
-          setUserInfo(JSON.stringify(data))
-          setAccessToken(data['access_token'])
         })
       })
-    // .catch(error => {
-    //   console.log(error);
-    //   setLoginError(error);
-    //   throw error;
-    // })
   }
 
   async function logout() {
@@ -61,7 +58,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ accessToken, userInfo, isLogin, login, logout }}>
+    <AuthContext.Provider value={{ accessToken, tokenType, userInfo, isLogin, login, logout }}>
       {children}
     </AuthContext.Provider>
   )
