@@ -1,9 +1,7 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useState } from "react";
 
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { baseURL } from "./http_config";
-
-const url = baseURL + '/lmsapi/lms-auth/oauth/token';
 
 export const AuthContext = createContext();
 
@@ -16,6 +14,7 @@ export const AuthProvider = ({ children }) => {
 
   async function login(username, password) {
     username = 'admin'; password = '123456';
+    const url = baseURL + '/lmsapi/lms-auth/oauth/token';
     const fetchUrl = `${url}?grant_type=captcha&username=${username}&password=${password}`
     console.log('login url=' + fetchUrl);
     return await fetch(fetchUrl, {
@@ -23,7 +22,7 @@ export const AuthProvider = ({ children }) => {
       headers: {
         Authorization: 'Basic bWFsbC1hZG1pbi13ZWI6MTIzNDU2',
       },
-      body: JSON.stringify({
+      params: JSON.stringify({
         username: username,
         password: password,
         grant_type: 'captcha',

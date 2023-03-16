@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, SectionList, Image, ScrollView, StyleSheet, Text, View, Pressable } from "react-native";
+import { FlatList, Image, StyleSheet, Text, View, Pressable, ActivityIndicator } from "react-native";
 import AlertPending from '../../../assets/alert_pending.png';
 import AlertDone from '../../../assets/alert_done.png';
-import SwitchBarWidget from "../../widgets/SwitchBarWidget";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useRoute } from "@react-navigation/native";
 import { AlarmContext } from "../../../webserve/AlarmContext";
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -91,7 +90,7 @@ function Body(props) {
   const status = statusMap[data.processingStatus];
   const title = status['title'] ?? '未知状态';
   const icon = status['icon'] ?? <></>;
-
+  const navigation = useNavigation();
   return (
     <View style={s.body}>
       <View style={s.headline}>
@@ -100,7 +99,10 @@ function Body(props) {
           <Text style={s.statusText}>{title}</Text>
         </View>
         <Pressable onPress={() => {
-          props.navigation.navigate('alertdetail')
+          navigation.navigate('alertdetail', {
+            id: data.alarmEventId,
+            onGoBack: () => { console.log('go back!!!!!') }
+          })
         }}>
           <View>
             <Text style={s.detail}>告警详情 &raquo;</Text>
@@ -125,26 +127,31 @@ function Item(props) {
 }
 
 function AlertList(props) {
-  const { alarmEvent, alarmList } = useContext(AlarmContext)
+  const { alarmEvent, alarmItems } = useContext(AlarmContext)
   const params = props.route.params;
   const [data, setData] = useState([])
 
-  const processingStatus = params.processingStatus;
-
   useEffect(function () {
-    setData(alarmList[processingStatus])
-  }, [alarmList])
-  // console.log(params);
-  alarmEvent({ processingStatus: params.processingStatus })
-  // .then(resp => console.log('resp', resp))
+    alarmEvent({ processingStatus: params.processingStatus, pageSize: 1000, })
+      .then(resp => setData(resp.list))
+      .catch(error => console.log(error))
+    return () => {
+    }
+  }, [alarmItems])
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#F4F6F8' }}>
-      <FlatList
-        data={data}
-        keyExtractor={item => item.alarmEventId}
-        renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
-      />
+    <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
+      {data.length > 0 &&
+        <FlatList
+          data={data}
+          keyExtractor={item => item.alarmEventId}
+          renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
+        />
+        ||
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator></ActivityIndicator>
+        </View>
+      }
     </View>
   )
 }

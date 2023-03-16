@@ -12,7 +12,6 @@ export default function ButtonWidget({ title, onPress }) {
 const styles = StyleSheet.create({
   press: {
     height: 40,
-    width: '100%',
     padding: 8,
     borderRadius: 4,
     backgroundColor: '#2882FF',
