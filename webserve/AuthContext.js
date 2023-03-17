@@ -28,8 +28,7 @@ export const AuthProvider = ({ children }) => {
         grant_type: 'captcha',
         uuid: '',
       })
-    })
-      .then(resp => resp.json())
+    }).then(resp => resp.json())
       .then(json => {
         if (json.code !== '00000') {
           console.log(json)
@@ -50,10 +49,22 @@ export const AuthProvider = ({ children }) => {
   }
 
   async function logout() {
-    const storage = useAsyncStorage("token");
-    storage.removeItem();
-    setAccessToken(null);
-    setUserInfo(null);
+    const url = baseURL + '/lmsapi/lms-auth/oauth/logout';
+    const fetchUrl = `${url}`
+    console.log('logout url=' + fetchUrl);
+    return await fetch(fetchUrl, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `${tokenType} ${accessToken}`,
+      },
+    }).then(resp => resp.json())
+      .then((data) => {
+        console.log(data);
+        const storage = useAsyncStorage("token");
+        storage.removeItem();
+        setAccessToken(null);
+        setUserInfo(null);
+      })
   }
 
   return (
