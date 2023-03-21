@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View, FlatList, Image, Pressable } from 'react-native';
-import SearchBarWidget from '../../widgets/SearchBarWidget';
-import SearchResultItemWidget from '../../widgets/SearchResultItemWidget';
 import CurrentImage from '../../../assets/locate_current.png';
+import { useContext, useEffect, useState } from 'react';
+import { MapContext } from '../../../webserve/MapContext';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
-function Item(props) {
+function Item({ item, onPress }) {
   const s = StyleSheet.create({
     item: {
       height: 44, borderBottomColor: '#DDDEDF',
@@ -16,29 +17,54 @@ function Item(props) {
     }
   })
   return (
-    <Pressable onPress={props.onPress}>
+    <Pressable onPress={onPress}>
       <View style={s.item}>
-        <Text style={s.text}>{props.item.name}</Text>
+        <Text style={s.text}>{item.name}</Text>
       </View >
     </Pressable>
   )
 }
 
-export default function SwitchMapPage(props) {
-  const { navigation, route } = props
+export default function SwitchMapPage({ route }) {
+  // console.log("navigate to switchmap with params: ", route.params)
+  const { requestMapList } = useContext(MapContext);
+  const [maps, setMaps] = useState([])
+  useEffect(() => {
+    requestMapList({ pageNum: 1, pageSize: 1000 })
+      .then(response => {
+        const list = response.data.list
+        setMaps(list.filter(e => e.id != '-101'))
+      })
+  }, [])
+
+  // const route = useRoute()
+  const { currentMap } = route.params
+  console.log("当前地图：", currentMap)
+
+  const navigation = useNavigation()
+
   return (
     <View style={[styles.container]}>
       <View style={styles.current}>
         <Text style={styles.currentMap}>当前地图</Text>
         <View style={styles.currentName}>
           <Image style={styles.locateIcon} source={CurrentImage} />
-          <Text style={styles.currentText}>{props.maps.current.name}</Text>
+          <Text style={styles.currentText}>{currentMap.name}</Text>
         </View>
       </View>
       <View style={styles.listView}>
         <FlatList style={styles.list}
-          data={props.maps.list}
-          renderItem={({ item }) => (<Item item={item} onPress={() => { navigation.goBack(); }}></Item>)}
+          data={maps}
+          renderItem={({ item }) => (
+            <Item item={item}
+              onPress={() => {
+                navigation.navigate({
+                  name: 'mapmain',
+                  params: { map: item },
+                  merge: true,
+                });
+              }} />
+          )}
           keyExtractor={item => item.id}
         />
       </View>

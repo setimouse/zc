@@ -1,13 +1,40 @@
-import { StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import FMMapWidget from '../../widgets/FMMapWidget';
+import { useContext, useEffect, useState } from 'react';
+import { MapContext } from '../../../webserve/MapContext';
 
 export default function MapPage({ route, navigation }) {
+  const { requestDefaultMap, requestIndoorMap } = useContext(MapContext)
+  const [displayMap, setDisplayMap] = useState()
+  const [mapInfo, setMapInfo] = useState()
+
+  useEffect(() => {
+    if (route.params && route.params.map) {
+      console.log("param[map]: ", route.params.map)
+      setDisplayMap(route.params.map)
+    } else {
+      requestDefaultMap().then(resp => {
+        setDisplayMap(resp.data)
+        // console.log(resp.data);
+      }).catch(error => Alert.alert("Oops", error.message))
+    }
+  }, [route.params])
+
+  useEffect(() => {
+    displayMap &&
+      requestIndoorMap({ id: displayMap.id }).then(resp => {
+        setMapInfo(resp.data)
+      }).catch(error => Alert.alert("Opps", error.message))
+  }, [displayMap])
+
   return (
+    // <SafeAreaView>
     <View style={styles.container}>
       <View style={styles.map}>
-        {/* <MapView style={{ width: '100%', height: '100%' }} /> */}
+        <FMMapWidget mapInfo={mapInfo} />
       </View>
       <View style={styles.search}>
         <MapSearchWidget placeholder="请输入车号、设备编号"
@@ -17,7 +44,9 @@ export default function MapPage({ route, navigation }) {
       <View style={styles.sidebar}>
         <View>
           <MapButtonWidget title="切换" icon={<FontAwesome name="exchange" size={16} />}
-            onPress={() => navigation.navigate('switchmap')} />
+            onPress={() => navigation.navigate('switchmap', {
+              currentMap: displayMap
+            })} />
         </View>
         <View style={{ height: 1, backgroundColor: '#dddedf', marginHorizontal: 4 }}></View>
         <View>
@@ -30,6 +59,7 @@ export default function MapPage({ route, navigation }) {
         <MaterialCommunityIcons name="target" size={28} color='#2882FF' />
       </View>
     </View>
+    // </SafeAreaView>
   );
 }
 
@@ -63,7 +93,7 @@ const styles = StyleSheet.create({
   },
   locate: {
     position: 'absolute',
-    right: 12, bottom: 40,
+    right: 12, bottom: 64,
     backgroundColor: '#fff',
     width: 40, height: 40,
     borderRadius: 20,
