@@ -2,14 +2,26 @@ import { Alert, StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
-import FMMapWidget from '../../widgets/FMMapWidget';
+import FMMapWidget, { webView } from '../../widgets/FMMapWidget';
 import { useContext, useEffect, useState } from 'react';
 import { MapContext } from '../../../webserve/MapContext';
 
 export default function MapPage({ route, navigation }) {
-  const { requestDefaultMap, requestIndoorMap } = useContext(MapContext)
+  const { requestDefaultMap, requestIndoorMap,
+    requestListTargetReals } = useContext(MapContext)
   const [displayMap, setDisplayMap] = useState()
   const [mapInfo, setMapInfo] = useState()
+  const [deviceList, setDeviceList] = useState([])
+
+  const refreshDevice = () => {
+    requestListTargetReals({ consumerStatus: 1, deviceList: deviceList }).then((resp) => {
+      let list = resp.data
+      // console.log("device list:", list.map(e => e.deviceId))
+      console.log('ddd', list[1])
+      let deviceListJson = JSON.stringify(list)
+      webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
+    })
+  }
 
   useEffect(() => {
     if (route.params && route.params.map) {
@@ -18,17 +30,36 @@ export default function MapPage({ route, navigation }) {
     } else {
       requestDefaultMap().then(resp => {
         setDisplayMap(resp.data)
-        // console.log(resp.data);
       }).catch(error => Alert.alert("Oops", error.message))
     }
   }, [route.params])
 
   useEffect(() => {
-    displayMap &&
+    if (displayMap) {
+      // 获取室内地图
       requestIndoorMap({ id: displayMap.id }).then(resp => {
         setMapInfo(resp.data)
       }).catch(error => Alert.alert("Opps", error.message))
+      // 获取设备列表
+      requestListTargetReals({ consumerStatus: 1, status: 0 }).then((resp) => {
+        let list = resp.data.map(e => e.deviceId)
+        // console.log("device list:", list)
+        // console.log('device info', resp.data)
+        setDeviceList(list)
+        console.log('webview: ', webView)
+        let deviceListJson = JSON.stringify(resp.data)
+        console.log('device list json:', deviceListJson)
+        webView.injectJavaScript(`setMarkers(${deviceListJson})`)
+      })
+    }
   }, [displayMap])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      refreshDevice()
+    }, 1000);
+    return () => { clearInterval(timer) }
+  }, [])
 
   return (
     // <SafeAreaView>

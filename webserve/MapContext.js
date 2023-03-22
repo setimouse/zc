@@ -33,8 +33,28 @@ export const MapProvider = ({ children }) => {
       .catch(error => console.log(error))
   }
 
+  async function requestListTargetReals({ consumerStatus = 1, deviceList = [], status = 0 }) {
+    const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/listTargetReals`
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        Authorization: `${tokenType} ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        consumerStatus: consumerStatus,
+        deviceIdList: deviceList,
+        status: status,
+      })
+    }).then(resp => resp.json())
+      .catch(error => console.log(error))
+  }
+
   return (
-    <MapContext.Provider value={{ requestDefaultMap, requestMapList, requestIndoorMap }}>
+    <MapContext.Provider value={{
+      requestDefaultMap, requestMapList,
+      requestIndoorMap, requestListTargetReals,
+    }}>
       {children}
     </MapContext.Provider>
   )
