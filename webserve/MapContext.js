@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { AuthContext } from "./AuthContext";
 import { baseURL } from "./http_config";
 
@@ -13,6 +14,7 @@ export const MapProvider = ({ children }) => {
       method: 'GET',
       headers: { Authorization: `${tokenType} ${accessToken}`, }
     }).then(resp => resp.json())
+      .catch(error => Alert.alert('Oops', error.message))
   }
 
   async function requestMapList({ deptId, name, pageNum = 1, pageSize = 100 }) {
@@ -21,7 +23,7 @@ export const MapProvider = ({ children }) => {
       method: 'GET',
       headers: { Authorization: `${tokenType} ${accessToken}`, }
     }).then(resp => resp.json())
-      .catch(error => console.log(error))
+      .catch(error => Alert.alert('Oops', error.message))
   }
 
   async function requestIndoorMap({ id }) {
@@ -30,7 +32,7 @@ export const MapProvider = ({ children }) => {
       method: 'GET',
       headers: { Authorization: `${tokenType} ${accessToken}`, }
     }).then(resp => resp.json())
-      .catch(error => console.log(error))
+      .catch(error => Alert.alert('Oops', error.message))
   }
 
   async function requestListTargetReals({ consumerStatus = 1, deviceList = [], status = 0 }) {
@@ -47,13 +49,26 @@ export const MapProvider = ({ children }) => {
         status: status,
       })
     }).then(resp => resp.json())
-      .catch(error => console.log(error))
+      .catch(error => Alert.alert('Oops', error.message))
+  }
+
+  async function requestTargets({ keywords, pageNum = 1, pageSize = 5000, blackStatus = 0 }) {
+    // todo: escape keywords
+    const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/pages?keywords=${keywords}&pageNum=${pageNum}&pageSize=${pageSize}&blackStatus=${blackStatus}`
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        Authorization: `${tokenType} ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
+    }).then(resp => resp.json())
+      .catch(error => Alert.alert('Oops', error.message))
   }
 
   return (
     <MapContext.Provider value={{
       requestDefaultMap, requestMapList,
-      requestIndoorMap, requestListTargetReals,
+      requestIndoorMap, requestListTargetReals, requestTargets
     }}>
       {children}
     </MapContext.Provider>

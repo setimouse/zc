@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Platform, StatusBar, StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -14,10 +14,10 @@ export default function MapPage({ route, navigation }) {
   const [deviceList, setDeviceList] = useState([])
 
   const refreshDevice = () => {
+    console.log('refresh device')
     requestListTargetReals({ consumerStatus: 1, deviceList: deviceList }).then((resp) => {
       let list = resp.data
       // console.log("device list:", list.map(e => e.deviceId))
-      console.log('ddd', list[1])
       let deviceListJson = JSON.stringify(list)
       webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
     })
@@ -57,13 +57,14 @@ export default function MapPage({ route, navigation }) {
   useEffect(() => {
     const timer = setInterval(() => {
       refreshDevice()
-    }, 1000);
+    }, 10000);
     return () => { clearInterval(timer) }
   }, [])
 
   return (
     // <SafeAreaView>
     <View style={styles.container}>
+      <StatusBar />
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo} />
       </View>
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     flex: 1,
     position: 'absolute',
     paddingHorizontal: 12,
-    top: 12,
+    top: Platform.OS === 'ios' ? 48 : 12,
     width: '100%',
     height: 44,
     zIndex: 1,

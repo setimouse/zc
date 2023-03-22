@@ -1,7 +1,7 @@
 const fmmapScript = `
 <script>
   var ready = false;
-  window.ReactNativeWebView.postMessage("abc")
+  // window.ReactNativeWebView.postMessage("abc")
   map.on('loaded', function () {
     ready = true;
     console.log(deviceList)
