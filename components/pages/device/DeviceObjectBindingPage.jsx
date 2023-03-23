@@ -1,7 +1,62 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
+import { MapContext } from '../../../webserve/MapContext';
 import SearchBarWidget from '../../widgets/SearchBarWidget';
+
+export default function DeviceObjectBindingPage() {
+  const navigation = useNavigation();
+
+  const {
+    requestListTargetReals
+  } = useContext(MapContext)
+
+  const [objects, setObjects] = useState([])
+  const [displayObjs, setDisplayObjs] = useState([])
+  useEffect(() => {
+    requestListTargetReals({})
+      .then(resp => resp.data)
+      .then(data => {
+        return data.map(o => {
+          console.log(o)
+          return {
+            id: o.consumerId,
+            obj: o.consumerName,
+          }
+        })
+      })
+      .then(objects => {
+        setObjects(objects)
+        setDisplayObjs(objects)
+      })
+  }, [])
+
+  return (
+    <View style={[styles.container]}>
+      <SearchBarWidget placeholder="请输入设备编号"
+        onChangeText={(text) => {
+          let filtered = objects.filter(e => e.obj.indexOf(text) > -1)
+          setDisplayObjs(filtered);
+        }}
+      />
+      <View style={styles.objects}>
+        <FlatList
+          data={displayObjs}
+          keyExtractor={item => item.id}
+          renderItem={({ item }) => <Item
+            object={item}
+            onPress={() => {
+              navigation.navigate('devicedetail', {
+                item: item,
+              })
+            }}
+          />}
+        />
+      </View>
+
+    </View>
+  );
+}
 
 function Item({ object, onPress }) {
   const styles = StyleSheet.create({
@@ -24,33 +79,6 @@ function Item({ object, onPress }) {
       </View>
     </Pressable>
   )
-}
-
-export default function DeviceObjectBindingPage(props) {
-  const navigation = useNavigation();
-
-  const [objects, setObjects] = useState(props.objects)
-  return (
-    <View style={[styles.container]}>
-      <SearchBarWidget placeholder="请输入设备编号"
-        onChangeText={(text) => {
-          let filtered = props.objects.filter(e => e.obj.indexOf(text) > -1)
-          setObjects(filtered);
-        }}
-      />
-      <View style={styles.objects}>
-        <FlatList
-          data={objects}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => <Item
-            object={item}
-            onPress={() => { navigation.goBack() }}
-          />}
-        />
-      </View>
-
-    </View>
-  );
 }
 
 const styles = StyleSheet.create({

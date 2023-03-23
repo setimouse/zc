@@ -29,7 +29,7 @@ export default function DeviceSearchPage(props) {
             })
             .then(resp => resp.data.list)
             .then(data => data.map(r => {
-              console.log(r)
+              // console.log(r)
               return {
                 id: r.id,
                 items: [

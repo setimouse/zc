@@ -11,6 +11,7 @@ import SectionGroupList from "../../widgets/SectionGroupList";
 export default function DeviceDetailPage(props) {
   const navigation = useNavigation();
   const route = useRoute()
+
   const {
     requestDeviceDetail, // 详情
     requestStation, // 台位
@@ -23,6 +24,7 @@ export default function DeviceDetailPage(props) {
   const [stage, setStage] = useState()
   const [image, setImage] = useState()
   const [binding, setBinding] = useState()
+  const [targetId, setTargetId] = useState()
 
   useEffect(() => {
     setDevice(Object.assign({}, device, stage, image))
@@ -91,6 +93,17 @@ export default function DeviceDetailPage(props) {
     getDeviceDetail(route.params.targetId)
   }, [])
 
+  useEffect(() => {
+    console.log('effect params', route.params)
+    if (route.params.targetId) {
+      setTargetId(targetId)
+    }
+    if (route.params.item) {
+      let item = route.params.item;
+      setDevice(Object.assign({}, device, { consumerId: item.id, bindObject: item.obj }))
+    }
+  }, [route.params])
+
   console.log('detail, target id =', route.params)
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8' }}>
@@ -103,13 +116,26 @@ export default function DeviceDetailPage(props) {
           {
             binding === '已绑定'
             && <ButtonWidget title='解绑' onPress={() => {
-              console.log(device)
-              unbind({ targetId: device.id })
-                .then(() => Alert.alert('解绑成功'))
+              Alert.alert('确认解绑该设备吗？', '', [
+                {
+                  text: '确认', onPress: () => unbind({ targetId: device.id })
+                    .then(() => Alert.alert('解绑成功'))
+                },
+                {
+                  text: '取消'
+                }
+              ], { cancelable: false })
             }} />
             || <ButtonWidget title='绑定' onPress={() => {
-              bind({ targetId: device.id, consumerId: device.consumerId })
-                .then(() => Alert.alert('绑定成功'))
+              Alert.alert('确认绑定该设备吗？', '', [
+                {
+                  text: '确认', onPress: () => bind({ targetId: device.id, consumerId: device.consumerId })
+                    .then(() => Alert.alert('绑定成功'))
+                },
+                {
+                  text: '取消'
+                }
+              ], { cancelable: false })
             }} />
           }
         </View>
@@ -237,7 +263,9 @@ function BindInfoView({ device }) {
           <View><Text style={styles.text}>绑定状态</Text></View>
           <View><Text style={{ color: '#2882FF' }}>{device.bindStatus}</Text></View>
         </CellView>
-        <CellView onPress={() => navigation.navigate('objectbinding')}>
+        <CellView onPress={() => navigation.navigate('objectbinding', {
+          targetId: device.id,
+        })}>
           <View><Text style={styles.text}>绑定对象</Text></View>
           <View><Text>{device.bindObject}</Text></View>
         </CellView>

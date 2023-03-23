@@ -13,6 +13,7 @@ import TestDeviceDetailPage from "../../../test/TestDeviceDetailPage";
 import TestDeviceModelSettingPage from "../../../test/TestDeviceModelSettingPage";
 import TestDeviceIDSettingPage from '../../../test/TestDeviceIDSettingPage';
 import TestDeviceObjectBindingPage from '../../../test/TestDeviceObjectBindingPage';
+import DeviceObjectBindingPage from "../device/DeviceObjectBindingPage";
 import TestMapSearch from "../../../test/TestMapSearch";
 import headBar from "../../../common/global";
 import { MapProvider } from "../../../webserve/MapContext";
@@ -31,7 +32,7 @@ export default function MainMap() {
         <Stack.Screen name="devicedetail" component={DeviceDetailPage} options={headBar({ title: '设备详情' })} />
         <Stack.Screen name="devicepic" component={TestDeviceModelSettingPage} options={headBar({ title: '设置型号图片' })} />
         <Stack.Screen name="deviceid" component={TestDeviceIDSettingPage} options={headBar({ title: '设置设备ID' })} />
-        <Stack.Screen name="objectbinding" component={TestDeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
+        <Stack.Screen name="objectbinding" component={DeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
       </Stack.Navigator>
     </MapProvider>
   )
