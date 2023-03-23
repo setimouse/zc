@@ -64,7 +64,11 @@ function Page({ result }) {
                 deviceId: item.info.deviceId
               })
             }}
-            onDetailPress={() => { navigation.navigate('devicedetail') }}
+            onDetailPress={() => {
+              navigation.navigate('devicedetail', {
+                targetId: item.info.id
+              })
+            }}
           />
         )}
         keyExtractor={item => item.id}

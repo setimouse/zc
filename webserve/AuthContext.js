@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     init = Object.assign(oriInit, init)
     // console.log('init', init)
     return new Promise((resolve, reject) => {
+      console.log('fetch json url:', url)
       fetch(url, init)
         .then(resp => resp.json())
         .then(json => {

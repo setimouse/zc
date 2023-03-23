@@ -6,6 +6,7 @@ import TestMapPage from "../../../test/TestMap";
 import MapPage from "./MapPage";
 import TestMapVehicleDetailPage from "../../../test/TestMapVehicleDetailPage";
 import MapSearchPage from "./MapSearchPage";
+import DeviceDetailPage from "../device/DeviceDetailPage";
 import DeviceSearchPage from "../device/DeviceSearchPage";
 import TestDeviceSearchPage from "../../../test/TestDeviceSearchPage";
 import TestDeviceDetailPage from "../../../test/TestDeviceDetailPage";
@@ -23,11 +24,11 @@ export default function MainMap() {
     <MapProvider>
       <Stack.Navigator initialRouteName='mapmain'>
         <Stack.Screen name="mapmain" component={MapPage} options={headBar({ header: () => null })} />
-        <Stack.Screen name="mapsearch" component={TestMapSearch} options={headBar({ title: '搜索车号及设备' })} />
+        <Stack.Screen name="mapsearch" component={MapSearchPage} options={headBar({ title: '搜索车号及设备' })} />
         <Stack.Screen name="switchmap" component={SwitchMapPage} options={headBar({ title: '地图', })} />
         <Stack.Screen name="vehicledetail" component={TestMapVehicleDetailPage} options={headBar({ title: '车辆详情' })} />
         <Stack.Screen name="devicesearch" component={DeviceSearchPage} options={headBar({ title: '设备' })} />
-        <Stack.Screen name="devicedetail" component={TestDeviceDetailPage} options={headBar({ title: '设备详情' })} />
+        <Stack.Screen name="devicedetail" component={DeviceDetailPage} options={headBar({ title: '设备详情' })} />
         <Stack.Screen name="devicepic" component={TestDeviceModelSettingPage} options={headBar({ title: '设置型号图片' })} />
         <Stack.Screen name="deviceid" component={TestDeviceIDSettingPage} options={headBar({ title: '设置设备ID' })} />
         <Stack.Screen name="objectbinding" component={TestDeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />

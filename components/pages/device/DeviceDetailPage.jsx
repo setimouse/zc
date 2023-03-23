@@ -1,11 +1,122 @@
 /**
  * 设备详情页
  */
-import { useNavigation } from "@react-navigation/native";
-import React from "react";
-import { StyleSheet, View, Text, SectionList, ScrollView, Image, Pressable } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, View, Text, SectionList, ScrollView, Image, Pressable, Alert } from "react-native";
+import { MapContext } from "../../../webserve/MapContext";
 import ButtonWidget from "../../widgets/ButtonWidget";
 import SectionGroupList from "../../widgets/SectionGroupList";
+
+export default function DeviceDetailPage(props) {
+  const navigation = useNavigation();
+  const route = useRoute()
+  const {
+    requestDeviceDetail, // 详情
+    requestStation, // 台位
+    requestListTargetTypes, // 图片
+    requestBind, // 绑定
+    requestUnbind, // 解绑
+  } = useContext(MapContext)
+
+  const [device, setDevice] = useState({})
+  const [stage, setStage] = useState()
+  const [image, setImage] = useState()
+  const [binding, setBinding] = useState()
+
+  useEffect(() => {
+    setDevice(Object.assign({}, device, stage, image))
+  }, [stage, image])
+
+  let getImage = async (deviceData) => {
+    requestListTargetTypes()
+      .then(result => result.data)
+      .then(data => data.filter(e => e.deviceType == deviceData.deviceType)[0])
+      .then(data => { console.log('list target types: ', data); return data })
+      .then(data => data.featureImage)
+      .then(image => setImage({ img: image }))
+  }
+
+  let getStation = async (data) => {
+    requestStation({ x: data.x, y: data.y })
+      .then(resp => resp.data)
+      .then(data => {
+        if (data.length > 0) {
+          setStage({ currentStage: data[0].fenceName })
+        }
+      })
+  }
+
+  let getDeviceDetail = async (targetId) => {
+    requestDeviceDetail({ targetId: targetId })
+      .then(result => result.data)
+      .then(data => {
+        getStation(data)
+        getImage(data)
+        return data
+      })
+      .then(data => {
+        console.log(data)
+        setBinding(data.consumerStatusLabel)
+        return {
+          id: data.id,
+          // 'img': image,
+          deviceId: data.deviceId,
+          deviceModel: data.deviceType,
+          desc: data.description,
+          // 绑定信息
+          bindStatus: data.consumerStatusLabel,
+          bindObject: data.consumerName,
+          consumerId: data.consumerId,
+          // currentStage: '',
+          bindTime: data.consumerTime,
+          power: data.qoe + '%'
+        }
+      })
+      .then(device => setDevice(device))
+  }
+
+  let unbind = async ({ targetId }) => {
+    return requestUnbind({ targetId: targetId })
+      .then(data => console.log(data))
+      .then(() => getDeviceDetail(targetId))
+  }
+
+  let bind = async ({ targetId, consumerId }) => {
+    return requestBind({ targetId: targetId, consumerId: consumerId })
+      .then(() => getDeviceDetail(targetId))
+  }
+
+  useEffect(() => {
+    getDeviceDetail(route.params.targetId)
+  }, [])
+
+  console.log('detail, target id =', route.params)
+  return (
+    <View style={{ flex: 1, backgroundColor: '#F4F6F8' }}>
+      <ScrollView style={{ paddingHorizontal: 12, marginBottom: 0 }} showsVerticalScrollIndicator={false}>
+        <View style={{ marginBottom: 24 }}>
+          <BaseInfoView device={device} />
+          <BindInfoView device={device} />
+        </View>
+        <View style={{ marginBottom: 24, }}>
+          {
+            binding === '已绑定'
+            && <ButtonWidget title='解绑' onPress={() => {
+              console.log(device)
+              unbind({ targetId: device.id })
+                .then(() => Alert.alert('解绑成功'))
+            }} />
+            || <ButtonWidget title='绑定' onPress={() => {
+              bind({ targetId: device.id, consumerId: device.consumerId })
+                .then(() => Alert.alert('绑定成功'))
+            }} />
+          }
+        </View>
+      </ScrollView>
+    </View>
+  )
+}
 
 const styles = StyleSheet.create({
   text: {
@@ -123,8 +234,8 @@ function BindInfoView({ device }) {
       <Header title="绑定信息" />
       <Body>
         <CellView>
-          <View><Text style={styles.text}>绑定对象</Text></View>
-          <View><Text>{bindingStatus[device.bindStatus]}</Text></View>
+          <View><Text style={styles.text}>绑定状态</Text></View>
+          <View><Text style={{ color: '#2882FF' }}>{device.bindStatus}</Text></View>
         </CellView>
         <CellView onPress={() => navigation.navigate('objectbinding')}>
           <View><Text style={styles.text}>绑定对象</Text></View>
@@ -148,21 +259,3 @@ function BindInfoView({ device }) {
 
 }
 
-export default function DeviceDetailPage(props) {
-  const navigation = useNavigation();
-
-  const device = props.device;
-  return (
-    <View style={{ flex: 1, backgroundColor: '#F4F6F8' }}>
-      <ScrollView style={{ paddingHorizontal: 12, marginBottom: 0 }} showsVerticalScrollIndicator={false}>
-        <View style={{ marginBottom: 24 }}>
-          <BaseInfoView device={device} />
-          <BindInfoView device={device} />
-        </View>
-        <View style={{ marginBottom: 24, }}>
-          <ButtonWidget title="绑定" onPress={() => { navigation.goBack() }} />
-        </View>
-      </ScrollView>
-    </View>
-  )
-}

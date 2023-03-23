@@ -75,7 +75,7 @@ export default function MapPage({ route, navigation }) {
   useEffect(() => {
     const timer = setInterval(() => {
       refreshDevice()
-    }, 3000);
+    }, 10000);
     return () => { clearInterval(timer) }
   }, [])
 
