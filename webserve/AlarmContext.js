@@ -8,7 +8,7 @@ export const AlarmContext = createContext();
 export const AlarmProvider = ({ children }) => {
   const [alarmCount, setAlarmCount] = useState()
   const [alarmItems, setAlarmItems] = useState([])
-  const { tokenType, accessToken } = useContext(AuthContext);
+  const { fetch_json, tokenType, accessToken } = useContext(AuthContext);
 
   useEffect(function () {
     console.log('start interval')
@@ -40,6 +40,15 @@ export const AlarmProvider = ({ children }) => {
       .catch(error => {
         console.log(error)
       });
+    // const url = `${baseURL}/lmsapi/lms-admin/api/v1/reminder`
+    // fetch_json(url)
+    //   .then(response => {
+    //     let respData = response.data
+    //     let data = respData.data;
+    //     setAlarmCount(data.count);
+    //     setAlarmItems(data.items)
+    //     console.log(data);
+    //   })
   }
 
   async function alarmEvent({ processingStatus, pageSize = 10, pageNum = 1 }) {

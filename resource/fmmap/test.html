@@ -36,9 +36,11 @@
 </script>
 <script>
   var ready = false;
+  var oriCenter = {}
   map.on('loaded', function () {
-    alert('ok')
     ready = true;
+    console.log(map.getCenter())
+    oriCenter = map.getCenter()
     setMarkers(deviceList)
     // setInterval(() => {
     //   deviceList.forEach(d => { d.x += Math.random() * 100; d.y += Math.random() * 100 })
@@ -46,6 +48,9 @@
     // }, 1000);
   })
 
+  map.on("move", function () {
+    console.log(oriCenter.x, oriCenter.y)
+  })
   var devices = {}
   function addMarker(device) {
     var marker = new fengmap.FMImageMarker({
@@ -57,7 +62,6 @@
     var floor = map.getFloor(level);
     /* 将 Marker 添加到地图的指定楼层上 */
     marker.addTo(floor);
-    console.log("device ", device)
     devices[device['deviceId']] = marker
   }
 

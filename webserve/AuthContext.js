@@ -12,6 +12,31 @@ export const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState(null);
   const [tokenType, setTokenType] = useState(null)
 
+
+  async function fetch_json(url, init = {}) {
+    var oriInit = {
+      method: 'GET',
+      headers: { Authorization: `${tokenType} ${accessToken}`, }
+    }
+    init.headers = Object.assign({}, init.headers, oriInit.headers)
+
+    init = Object.assign(oriInit, init)
+    // console.log('init', init)
+    return new Promise((resolve, reject) => {
+      fetch(url, init)
+        .then(resp => resp.json())
+        .then(json => {
+          // console.log('json', json)
+          if (json.code && json.code == '00000') {
+            resolve(json)
+          } else {
+            console.log('fetch json error:', json)
+            reject(json)
+          }
+        })
+    })
+  }
+
   async function login(username, password) {
     username = 'admin'; password = '123456';
     const url = baseURL + '/lmsapi/lms-auth/oauth/token';
@@ -68,7 +93,7 @@ export const AuthProvider = ({ children }) => {
   }
 
   return (
-    <AuthContext.Provider value={{ accessToken, tokenType, userInfo, isLogin, login, logout }}>
+    <AuthContext.Provider value={{ fetch_json, accessToken, tokenType, userInfo, isLogin, login, logout }}>
       {children}
     </AuthContext.Provider>
   )

@@ -1,4 +1,4 @@
-import { Alert, Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Alert, Platform, Pressable, StatusBar, StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -16,21 +16,39 @@ export default function MapPage({ route, navigation }) {
   const refreshDevice = () => {
     console.log('refresh device')
     requestListTargetReals({ consumerStatus: 1, deviceList: deviceList }).then((resp) => {
+      // console.log('list target reals:', resp)
       let list = resp.data
       // console.log("device list:", list.map(e => e.deviceId))
       let deviceListJson = JSON.stringify(list)
+      // console.log('move devices:', list)
       webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
     })
   }
 
   useEffect(() => {
+    console.log('params:', route.params)
     if (route.params && route.params.map) {
       console.log("param[map]: ", route.params.map)
       setDisplayMap(route.params.map)
+    } else if (route.params && route.params.deviceId) {
+      console.log('deviceId:', route.params.deviceId)
+      const deviceId = route.params.deviceId
+      requestListTargetReals({ deviceList: [deviceId] })
+        .then(resp => resp.data.filter(e => e.deviceId == deviceId))
+        .then(list => {
+          console.log(list)
+          if (list.length > 0) {
+            let device = list[0]
+            console.log(device);
+            const x = device.x
+            const y = device.y
+            webView.injectJavaScript(`setMapCenter(${x}, ${y})`)
+          }
+        })
     } else {
       requestDefaultMap().then(resp => {
         setDisplayMap(resp.data)
-      }).catch(error => Alert.alert("Oops", error.message))
+      }).catch(error => console.log('request default map failed. error:', error))
     }
   }, [route.params])
 
@@ -48,7 +66,7 @@ export default function MapPage({ route, navigation }) {
         setDeviceList(list)
         console.log('webview: ', webView)
         let deviceListJson = JSON.stringify(resp.data)
-        console.log('device list json:', deviceListJson)
+        // console.log('device list json:', deviceListJson)
         webView.injectJavaScript(`setMarkers(${deviceListJson})`)
       })
     }
@@ -57,7 +75,7 @@ export default function MapPage({ route, navigation }) {
   useEffect(() => {
     const timer = setInterval(() => {
       refreshDevice()
-    }, 10000);
+    }, 3000);
     return () => { clearInterval(timer) }
   }, [])
 
@@ -87,9 +105,15 @@ export default function MapPage({ route, navigation }) {
           />
         </View>
       </View>
-      <View style={styles.locate}>
-        <MaterialCommunityIcons name="target" size={28} color='#2882FF' />
-      </View>
+      <Pressable style={styles.locate}
+        onPress={() => {
+          webView.injectJavaScript('resetMapLocation()')
+        }}
+      >
+        <View>
+          <MaterialCommunityIcons name="target" size={28} color='#2882FF' />
+        </View>
+      </Pressable>
     </View>
     // </SafeAreaView>
   );

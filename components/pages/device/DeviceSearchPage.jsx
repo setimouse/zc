@@ -23,23 +23,25 @@ export default function DeviceSearchPage(props) {
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
           search(keywords)
-            .then(resp => resp.data.list)
-            .then(data => {
-              console.log('data', data)
-              var results = data.map(r => {
-                console.log('r', r)
-                return {
-                  id: r.id,
-                  items: [
-                    { key: '设备编号', value: r.deviceId },
-                    { key: '设备ID', value: '-' },
-                    { key: '车号', value: r.consumerName },
-                  ],
-                }
-              })
-              setResult(results)
+            .then(resp => {
+              console.log(resp)
+              return resp;
             })
-            // .then(results => console.log(results))
+            .then(resp => resp.data.list)
+            .then(data => data.map(r => {
+              console.log(r)
+              return {
+                id: r.id,
+                items: [
+                  { key: '设备编号', value: r.deviceId },
+                  { key: '设备ID', value: '-' },
+                  { key: '车号', value: r.consumerName },
+                ],
+                info: r,
+              }
+            })
+            )
+            .then(results => setResult(results))
             .catch(error => console.log('error', error.message))
         }}
       />
@@ -57,7 +59,11 @@ function Page({ result }) {
         renderItem={({ item }) => (
           <SearchResultItemWidget item={item}
             detailText="设备详情"
-            onTargetPress={() => { navigation.navigate('mapmain') }}
+            onTargetPress={() => {
+              navigation.navigate('mapmain', {
+                deviceId: item.info.deviceId
+              })
+            }}
             onDetailPress={() => { navigation.navigate('devicedetail') }}
           />
         )}

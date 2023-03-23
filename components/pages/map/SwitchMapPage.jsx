@@ -32,6 +32,7 @@ export default function SwitchMapPage({ route }) {
   useEffect(() => {
     requestMapList({ pageNum: 1, pageSize: 1000 })
       .then(response => {
+        console.log('map list', response)
         const list = response.data.list
         setMaps(list.filter(e => e.id != '-101'))
       })
