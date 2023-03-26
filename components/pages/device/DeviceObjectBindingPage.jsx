@@ -15,17 +15,21 @@ export default function DeviceObjectBindingPage() {
   const [displayObjs, setDisplayObjs] = useState([])
   useEffect(() => {
     requestListTargetReals({})
+      // .then(resp => {
+      //   console.log(resp);
+      //   return resp;
+      // })
       .then(resp => resp.data)
       .then(data => {
         return data.map(o => {
-          console.log(o)
           return {
             id: o.consumerId,
             obj: o.consumerName,
           }
-        })
+        }).filter(o => o.id && o.obj)
       })
       .then(objects => {
+        console.log(objects)
         setObjects(objects)
         setDisplayObjs(objects)
       })
@@ -34,6 +38,7 @@ export default function DeviceObjectBindingPage() {
   return (
     <View style={[styles.container]}>
       <SearchBarWidget placeholder="请输入设备编号"
+        storeKey="binding-object"
         onChangeText={(text) => {
           let filtered = objects.filter(e => e.obj.indexOf(text) > -1)
           setDisplayObjs(filtered);

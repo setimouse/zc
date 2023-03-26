@@ -1,31 +1,124 @@
-import React, { useState } from "react";
-import { StyleSheet, View, TextInput, FlatList, Text, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { StyleSheet, View, TextInput, FlatList, Text, Image, Pressable, TouchableOpacity } from "react-native";
 import IconHistory from '../../assets/history.png';
 import IconCross from '../../assets/cross.png';
+import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 
-function Item({ item }) {
+function Item({ item, onDelete, onSelected }) {
+  console.log('word', item)
   return (
     <View style={styles.suggest}>
-      <View style={styles.left} >
+      <Pressable style={[styles.left, { flex: 1, height: 44 }]}
+        onPress={() => onSelected && onSelected(item.word)}
+      >
         <Image style={styles.icon} source={IconHistory} />
         <Text style={styles.text}>{item.word}</Text>
-      </View>
-      <View style={styles.right}>
+      </Pressable>
+      <Pressable style={{ padding: 8, }}
+        onPress={() => {
+          console.log('pressed remove')
+          onDelete && onDelete(item.word)
+        }}
+      >
         <Image style={styles.cross} source={IconCross} />
-      </View>
+      </Pressable>
     </View >
   )
 }
 
-export default function SearchBarWidget({ placeholder, suggests, onSubmit, onChangeText, resultPage }) {
+export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onChangeText, resultPage }) {
   const [text, setText] = useState('');
   const [searching, setSearching] = useState(false);
   const [result, setResult] = useState(false);
+  const [suggests, setSuggests] = useState([]);
+  const [history, setHistory] = useState([]);
+  const storage = useAsyncStorage(`searchbar-suggest-${storeKey}`)
 
+  let makeHistory = (word) => {
+    return { word: word }
+  }
+  console.log('storeKey', storeKey)
+
+  let addHistory = async (word) => {
+    if (storeKey == undefined) {
+      return
+    }
+    if (word == '') {
+      return
+    }
+    var history = await loadHistory()
+    console.log('history', history)
+    history = history.filter(e => e.word != word)
+    history.unshift(makeHistory(word))
+    history = history.splice(0, 100)
+    await storage.setItem(JSON.stringify(history))
+    setHistory(history)
+  }
+
+  let loadHistory = async () => {
+    if (storeKey == undefined) {
+      return []
+    }
+    let string = await storage.getItem()
+    if (null == string) {
+      return []
+    }
+    try {
+      return JSON.parse(string)
+    } catch (e) {
+      return []
+    }
+  }
+
+  let removeHistory = async (word) => {
+    console.log('remove')
+    if (storeKey == undefined) {
+      return
+    }
+    var history = await loadHistory()
+    console.log('before remove', history)
+    history = history.filter(e => e.word != word)
+    console.log('after remove', history)
+    await storage.setItem(JSON.stringify(history))
+    setHistory(history)
+  }
+
+  let clearHistory = async () => {
+    if (storeKey == undefined) {
+      return
+    }
+    storage.removeItem()
+    setHistory([])
+  }
+
+  useEffect(() => {
+    loadHistory()
+      .then(history => {
+        setHistory(history)
+        console.log(history)
+      })
+  }, [])
+
+  function search(word) {
+    addHistory(word)
+    onSubmit && onSubmit(word);
+    setSearching(false);
+    setResult(true);
+    setText(word)
+  }
+
+  useEffect(() => {
+    setSuggests(history.filter(e => e.word.indexOf(text) > -1).splice(0, 10))
+  }, [text, history])
+
+  var searchBox;
+  console.log("show result", result)
   return (
     <View style={styles.container}>
       <View style={styles.bar} ref={bar => this.bar = bar}>
         <TextInput style={styles.search}
+          value={text}
+          ref={c => searchBox = c}
           placeholder={placeholder ?? '搜索词'}
           clearButtonMode='always'
           onChangeText={(text) => {
@@ -36,17 +129,11 @@ export default function SearchBarWidget({ placeholder, suggests, onSubmit, onCha
           onFocus={() => {
             setSearching(true);
           }}
-          onBlur={() => {
-            setSearching(false);
-            setResult(true);
-          }}
-          onSubmitEditing={() => {
-            onSubmit && onSubmit(text);
-          }}
+          onSubmitEditing={() => search(text)}
         />
       </View>
       {result &&
-        <View style={styles.mainpage}>
+        <View style={[styles.mainpage]}>
           {resultPage}
         </View>
       }
@@ -54,17 +141,36 @@ export default function SearchBarWidget({ placeholder, suggests, onSubmit, onCha
         <View style={styles.history}>
           <FlatList
             data={suggests}
-            keyExtractor={({ id }) => id}
-            renderItem={({ item }) => <Item item={item} />}
+            keyExtractor={({ word }) => word}
+            renderItem={({ item }) => <Item
+              item={item}
+              onDelete={word => {
+                removeHistory(word)
+                searchBox.focus()
+              }}
+              onSelected={word => search(word)}
+            />}
+            scrollEnabled={false}
           />
           {suggests && suggests.length > 0 &&
-            <View style={styles.clearView}>
-              <Text style={styles.clear}>清空历史</Text>
+            <View>
+              <Pressable style={styles.clearView}
+                onPress={() => clearHistory()}
+              >
+                <Text style={styles.clear}>清空历史</Text>
+              </Pressable>
+              <Pressable style={{ height: 1024 }}
+                onPress={() => {
+                  searchBox.blur()
+                  setSearching(false);
+                  setResult(true);
+                }}
+              ></Pressable>
             </View>
           }
         </View>
       }
-    </View>
+    </View >
   )
 }
 
@@ -88,7 +194,7 @@ const styles = StyleSheet.create({
   },
   history: {
     position: 'absolute',
-    top: 45, left: 0,
+    top: 44, left: 0,
     zIndex: 0,
     width: '100%',
     backgroundColor: 'white',
@@ -119,6 +225,7 @@ const styles = StyleSheet.create({
   },
   mainpage: {
     backgroundColor: '#F7F8F8',
+    flex: 1,
   },
   clearView: {
     marginVertical: 16,

@@ -107,6 +107,12 @@
       }
       move(devices[d['deviceId']], d)
     });
+    const deviceListIdSet = new Set(deviceList.map(e => e['deviceId']))
+    for (key in devices) {
+      if (!deviceListIdSet.has(key)) {
+        delete devices[key]
+      }
+    }
   }
 
   var deviceList = [

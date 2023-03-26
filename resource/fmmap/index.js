@@ -1,17 +1,12 @@
 const fmmapScript = `
 <script>
   var ready = false;
-  // window.ReactNativeWebView.postMessage("abc")
   var oriCenter = {};
   map.on('loaded', function () {
     ready = true;
     oriCenter = map.getCenter()
-    // window.postMessage(JSON.stringify(deviceList))
-    setMarkers(deviceList)
-    // setInterval(() => {
-    //   deviceList.forEach(d => { d.x += Math.random() * 100; d.y += Math.random() * 100 })
-    //   moveMarkers(deviceList)
-    // }, 1000);
+    window.ReactNativeWebView.postMessage("mapready")
+    // setMarkers(deviceList)
   })
 
   var devices = {}
@@ -53,7 +48,6 @@ const fmmapScript = `
   }
 
   function setMarkers(deviceList) {
-    // alert(deviceList)
     ClearMarkers()
     deviceList.forEach(m => addMarker(m))
   }
@@ -73,10 +67,16 @@ const fmmapScript = `
   function moveMarkers(deviceList) {
     deviceList.forEach(d => {
       if (!devices[d['deviceId']]) {
-        return
+        addMarker(d)
       }
       move(devices[d['deviceId']], d)
     });
+    const deviceListIdSet = new Set(deviceList.map(e => e['deviceId']))
+    for (key in devices) {
+      if (!deviceListIdSet.has(key)) {
+        removeMarker(devices[key])
+      }
+    }
   }
 
   function setMapCenter(x, y) {

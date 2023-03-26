@@ -6,7 +6,7 @@ import mapHtml from "../../resource/fmmap/index";
 
 var webView;
 
-function FMMapWidget({ mapInfo }) {
+function FMMapWidget({ mapInfo, onMapReady }) {
   return (
     <View style={styles.container}>
       <WebView style={styles.webview}
@@ -16,7 +16,17 @@ function FMMapWidget({ mapInfo }) {
         // nativeConfig={{ props: { webContentsDebuggingEnabled: true } }}
         javaScriptEnabled={true}
         scrollEnabled={false}
-        onMessage={event => { console.log('event') }}
+        onMessage={event => {
+          const message = event.nativeEvent.data;
+          switch (message) {
+            case "mapready":
+              onMapReady && onMapReady()
+              break;
+
+            default:
+              break;
+          }
+        }}
       />
     </View>
   )

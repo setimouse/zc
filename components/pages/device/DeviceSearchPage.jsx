@@ -20,6 +20,7 @@ export default function DeviceSearchPage(props) {
         placeholder="请输入设备编号"
         suggests={props.suggests}
         resultPage={<Page result={result} />}
+        storeKey='device-search'
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
           search(keywords)
@@ -29,7 +30,6 @@ export default function DeviceSearchPage(props) {
             })
             .then(resp => resp.data.list)
             .then(data => data.map(r => {
-              // console.log(r)
               return {
                 id: r.id,
                 items: [

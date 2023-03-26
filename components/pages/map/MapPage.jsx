@@ -12,6 +12,7 @@ export default function MapPage({ route, navigation }) {
   const [displayMap, setDisplayMap] = useState()
   const [mapInfo, setMapInfo] = useState()
   const [deviceList, setDeviceList] = useState([])
+  const [mapReady, setMapReady] = useState();
 
   const refreshDevice = () => {
     console.log('refresh device')
@@ -57,34 +58,29 @@ export default function MapPage({ route, navigation }) {
       // 获取室内地图
       requestIndoorMap({ id: displayMap.id }).then(resp => {
         setMapInfo(resp.data)
-      }).catch(error => Alert.alert("Opps", error.message))
-      // 获取设备列表
-      requestListTargetReals({ consumerStatus: 1, status: 0 }).then((resp) => {
-        let list = resp.data.map(e => e.deviceId)
-        // console.log("device list:", list)
-        // console.log('device info', resp.data)
-        setDeviceList(list)
-        console.log('webview: ', webView)
-        let deviceListJson = JSON.stringify(resp.data)
-        // console.log('device list json:', deviceListJson)
-        webView.injectJavaScript(`setMarkers(${deviceListJson})`)
-      })
+      }).catch(error => console.log("Oops", error.message))
     }
   }, [displayMap])
 
   useEffect(() => {
+    console.log("start once map ready")
+    setTimeout(() => {
+      refreshDevice()
+    }, 500);
     const timer = setInterval(() => {
       refreshDevice()
-    }, 10000);
+    }, 3000);
     return () => { clearInterval(timer) }
-  }, [])
+  }, [mapReady])
 
   return (
     // <SafeAreaView>
     <View style={styles.container}>
       <StatusBar />
       <View style={styles.map}>
-        <FMMapWidget mapInfo={mapInfo} />
+        <FMMapWidget mapInfo={mapInfo}
+          onMapReady={() => { setMapReady(new Date()) }}
+        />
       </View>
       <View style={styles.search}>
         <MapSearchWidget placeholder="请输入车号、设备编号"
@@ -96,7 +92,8 @@ export default function MapPage({ route, navigation }) {
           <MapButtonWidget title="切换" icon={<FontAwesome name="exchange" size={16} />}
             onPress={() => navigation.navigate('switchmap', {
               currentMap: displayMap
-            })} />
+            })}
+          />
         </View>
         <View style={{ height: 1, backgroundColor: '#dddedf', marginHorizontal: 4 }}></View>
         <View>

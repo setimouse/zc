@@ -116,12 +116,52 @@ export const MapProvider = ({ children }) => {
     }).catch(error => dealError(error))
   }
 
+  /**
+   * 搜索车辆、设备（地图搜索）
+   */
+  async function requestListTargetReals({ consumerName }) {
+    const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/listTargetReals`
+    return fetch_json(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        consumerName: consumerName,
+      })
+    })
+      .catch(error => dealError(error))
+  }
+
+  /**
+   * 车辆基本信息
+   * @param {carNo} param0 
+   */
+  async function requestVehicleBase({ carNo }) {
+    const url = `${baseURL}/lmsapi/lms-crrc/api/v1/crrc/vehicles/${carNo}/base`
+    return fetch_json(url)
+      .catch(error => dealError(error))
+
+  }
+
+  /**
+   * 车辆详细信息
+   * @param {carNo} param0 
+   */
+  async function requestVehicleDetail({ carNo }) {
+    const url = `${baseURL}/lmsapi/lms-crrc/api/v1/crrc/vehicles/${carNo}`
+    return fetch_json(url)
+      .catch(error => dealError(error))
+
+  }
+
   return (
     <MapContext.Provider value={{
       requestDefaultMap, requestMapList,
       requestIndoorMap, requestListTargetReals, requestTargets, requestDeviceDetail,
       requestStation, requestListTargetTypes,
       requestBind, requestUnbind,
+      requestVehicleBase, requestVehicleDetail,
     }}>
       {children}
     </MapContext.Provider>
