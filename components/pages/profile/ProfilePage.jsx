@@ -1,7 +1,7 @@
 /**
  * 我的
  */
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Image, View, Text, StyleSheet, Pressable, StatusBar, Alert } from 'react-native';
 import ProfileBg from '../../../assets/profile_bg.png';
 import AlertIcon from '../../../assets/profile_alert.png';
@@ -154,8 +154,24 @@ function FunctionsView() {
   )
 }
 
-export default function ProfilePage({ user }) {
-  const { logout } = useContext(AuthContext)
+export default function ProfilePage() {
+  const { logout, loadMe, me } = useContext(AuthContext)
+  const [avatar, setAvatar] = useState();
+  const [user, setUser] = useState({});
+
+  useEffect(() => {
+    loadMe()
+  }, [])
+
+  useEffect(() => {
+    setUser({
+      name: me.nickname,
+      department: '',
+      tel: '',
+      avatar: { uri: me.avatar },
+    })
+  }, [me])
+
   return (
     <View style={{ backgroundColor: '#F4F6F8', flex: 1 }}>
       <Image style={{ position: 'absolute', height: 220, width: '100%' }} source={ProfileBg} />

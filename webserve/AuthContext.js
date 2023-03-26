@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { baseURL } from "./http_config";
@@ -11,7 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [isLogin, setIsLogin] = useState(false);
   const [loginError, setLoginError] = useState(null);
   const [tokenType, setTokenType] = useState(null)
-
+  const [me, setMe] = useState({});
 
   async function fetch_json(url, init = {}) {
     var oriInit = {
@@ -100,8 +100,16 @@ export const AuthProvider = ({ children }) => {
       })
   }
 
+  async function loadMe() {
+    const url = `${baseURL}/lmsapi/lms-admin/api/v1/users/me`
+    return fetch_json(url)
+      .then(resp => resp.data)
+      .then(data => setMe(data))
+      .catch(error => dealError(error))
+  }
+
   return (
-    <AuthContext.Provider value={{ fetch_json, accessToken, tokenType, userInfo, isLogin, login, logout }}>
+    <AuthContext.Provider value={{ fetch_json, accessToken, tokenType, userInfo, isLogin, login, logout, loadMe, me }}>
       {children}
     </AuthContext.Provider>
   )

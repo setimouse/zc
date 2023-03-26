@@ -12,22 +12,34 @@ import TestDeviceModelSettingPage from '../../../test/TestDeviceModelSettingPage
 import TestDeviceIDSettingPage from '../../../test/TestDeviceIDSettingPage';
 import TestDeviceObjectBindingPage from '../../../test/TestDeviceObjectBindingPage';
 import TestAlertDetailPage from '../../../test/TestAlertDetailPage';
-import MainMap from '../map/MainMap';
 import headBar from '../../../common/global';
+import ProfilePage from './ProfilePage';
+import AlertDetailPage from '../message/AlertDetailPage';
+import DeviceSearchPage from '../device/DeviceSearchPage';
+import DeviceDetailPage from '../device/DeviceDetailPage';
+import DeviceModelSettingPage from '../device/DeviceModelSettingPage';
+import DeviceIDSettingPage from '../device/DeviceIDSettingPage';
+import DeviceObjectBindingPage from '../device/DeviceObjectBindingPage';
+import { AlarmProvider } from '../../../webserve/AlarmContext';
+import { MapProvider } from '../../../webserve/MapContext';
 
 const Stack = createNativeStackNavigator();
 
 export default function MainProfile(props) {
   return (
-    <Stack.Navigator initialRouteName='profile_home'>
-      <Stack.Screen name="profile_home" component={TestProfilePage} options={{ header: () => null }} />
-      <Stack.Screen name="profile_alert_list" component={TestAlertList} options={headBar({ title: '告警信息' })} />
-      <Stack.Screen name="alertdetail" component={TestAlertDetailPage} options={headBar({ title: '告警详情' })} />
-      <Stack.Screen name="profile_device_manage" component={TestDeviceSearchPage} options={headBar({ title: '设备管理' })} />
-      <Stack.Screen name="devicedetail" component={TestDeviceDetailPage} options={headBar({ title: '设备详情' })} />
-      <Stack.Screen name="devicepic" component={TestDeviceModelSettingPage} options={headBar({ title: '设置型号图片' })} />
-      <Stack.Screen name="deviceid" component={TestDeviceIDSettingPage} options={headBar({ title: '设置设备ID' })} />
-      <Stack.Screen name="objectbinding" component={TestDeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
-    </Stack.Navigator>
+    <AlarmProvider>
+      <MapProvider>
+        <Stack.Navigator initialRouteName='profile_home'>
+          <Stack.Screen name="profile_home" component={ProfilePage} options={{ header: () => null }} />
+          <Stack.Screen name="profile_alert_list" component={AlertListPage} options={headBar({ title: '告警信息' })} />
+          <Stack.Screen name="alertdetail" component={AlertDetailPage} options={headBar({ title: '告警详情' })} />
+          <Stack.Screen name="profile_device_manage" component={DeviceSearchPage} options={headBar({ title: '设备管理' })} />
+          <Stack.Screen name="devicedetail" component={DeviceDetailPage} options={headBar({ title: '设备详情' })} />
+          <Stack.Screen name="devicepic" component={DeviceModelSettingPage} options={headBar({ title: '设置型号图片' })} />
+          <Stack.Screen name="deviceid" component={DeviceIDSettingPage} options={headBar({ title: '设置设备ID' })} />
+          <Stack.Screen name="objectbinding" component={DeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
+        </Stack.Navigator>
+      </MapProvider>
+    </AlarmProvider>
   )
 }
