@@ -44,7 +44,9 @@ export const AuthProvider = ({ children }) => {
   }
 
   async function login(username, password) {
-    username = 'admin'; password = '123456';
+    if (__DEV__) {
+      username = 'admin'; password = '123456';
+    }
     const url = baseURL + '/lmsapi/lms-auth/oauth/token';
     const fetchUrl = `${url}?grant_type=captcha&username=${username}&password=${password}`
     console.log('login url=' + fetchUrl);

@@ -15,10 +15,6 @@ export default function DeviceObjectBindingPage() {
   const [displayObjs, setDisplayObjs] = useState([])
   useEffect(() => {
     requestListTargetReals({})
-      // .then(resp => {
-      //   console.log(resp);
-      //   return resp;
-      // })
       .then(resp => resp.data)
       .then(data => {
         return data.map(o => {

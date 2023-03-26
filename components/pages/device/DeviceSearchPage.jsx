@@ -24,17 +24,17 @@ export default function DeviceSearchPage(props) {
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
           search(keywords)
-            .then(resp => {
-              console.log(resp)
-              return resp;
-            })
+            // .then(resp => {
+            //   console.log(resp)
+            //   return resp;
+            // })
             .then(resp => resp.data.list)
             .then(data => data.map(r => {
               return {
                 id: r.id,
                 items: [
-                  { key: '设备编号', value: r.deviceId },
-                  { key: '设备ID', value: '-' },
+                  { key: '设备编号', value: r.deviceType },
+                  { key: '设备ID', value: r.deviceId },
                   { key: '车号', value: r.consumerName },
                 ],
                 info: r,

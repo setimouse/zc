@@ -1,4 +1,4 @@
-import { Alert, Platform, Pressable, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StatusBar, StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -19,7 +19,7 @@ export default function MapPage({ route, navigation }) {
     requestListTargetReals({ consumerStatus: 1, deviceList: deviceList }).then((resp) => {
       // console.log('list target reals:', resp)
       let list = resp.data
-      // console.log("device list:", list.map(e => e.deviceId))
+      console.log("device list:", list.map(e => e.deviceId))
       let deviceListJson = JSON.stringify(list)
       // console.log('move devices:', list)
       webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
@@ -72,7 +72,7 @@ export default function MapPage({ route, navigation }) {
     }, 500);
     const timer = setInterval(() => {
       refreshDevice()
-    }, 30000);
+    }, 3000);
     return () => { clearInterval(timer) }
   }, [mapReady])
 

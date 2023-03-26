@@ -40,9 +40,9 @@ export default function DeviceDetailPage(props) {
   }
 
   let getStation = async (data) => {
-    requestStation({ x: data.x, y: data.y })
-      .then(resp => resp.data)
+    requestStation({ x: data.x, y: data.y }).then(resp => resp.data)
       .then(data => {
+        console.log('stage info', data)
         if (data.length > 0) {
           setStage({ currentStage: data[0].fenceName })
         }
@@ -50,8 +50,7 @@ export default function DeviceDetailPage(props) {
   }
 
   let getDeviceDetail = async (targetId) => {
-    requestDeviceDetail({ targetId: targetId })
-      .then(result => result.data)
+    requestDeviceDetail({ targetId: targetId }).then(result => result.data)
       .then(data => {
         getStation(data)
         getImage(data)

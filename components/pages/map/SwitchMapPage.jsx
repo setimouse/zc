@@ -112,6 +112,7 @@ const styles = StyleSheet.create({
     alignContent: 'stretch',
     width: '100%',
     paddingLeft: 12,
+    flex: 1,
   },
   list: {
     width: '100%', height: '100%'

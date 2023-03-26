@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
 import { MapContext } from "../../../webserve/MapContext";
 import SearchBarWidget from "../../widgets/SearchBarWidget";
 import SearchResultItemWidget from '../../widgets/SearchResultItemWidget';
 
 export default function MapSearchPage() {
-  const { requestListTargetReals } = useContext(MapContext)
+  const { requestListTargetReals, requestStation } = useContext(MapContext)
   const [searchResult, setSearchResult] = useState([]);
 
   let search = async ({ consumerName }) => {
@@ -21,10 +21,47 @@ export default function MapSearchPage() {
             { key: '设备编号', value: e.deviceId },
           ],
           info: e,
+          stage: null, // 台位信息
         }
       }))
-      .then(result => setSearchResult({ result: result }))
+      .then(result => {
+        setSearchResult(result)
+        return result
+      })
+      .then(result => {
+        result.forEach(element => {
+
+        });
+        return result;
+      })
       .catch(console.log)
+  }
+
+  useEffect(() => {
+    let changed = false
+    searchResult.forEach(e => {
+      if (e.stage !== null) {
+        return
+      }
+      e.stage = 1
+      changed |= true
+      requestStation({ x: e.info.x, y: e.info.y }).then(resp => resp.data)
+        .then(data => {
+          const stage = data.length > 0 ? data[0].fenceName : '-'
+          console.log('stage', stage)
+          e.items.forEach((e, i) => {
+            if (e.key == '当前台位') e.value = stage
+          })
+          console.log(e.items)
+          updateStage(searchResult)
+        })
+    })
+    changed && setSearchResult(searchResult)
+  }, [searchResult])
+
+  function updateStage(searchResult) {
+    console.log(searchResult)
+    setSearchResult(searchResult)
   }
 
   return (
@@ -37,14 +74,18 @@ export default function MapSearchPage() {
     }}>
       <SearchBarWidget
         storeKey="map-search"
-        resultPage={<Page result={searchResult} />}
+        resultPage={<Page result={searchResult}
+          onRequestStation={({ item }) => {
+
+          }}
+        />}
         onSubmit={(keyword) => search({ consumerName: keyword })}
       />
     </View >
   )
 }
 
-function Page({ result }) {
+function Page({ result, onRequestStation }) {
   const navigation = useNavigation();
   const styles = StyleSheet.create({
     container: {
@@ -53,25 +94,30 @@ function Page({ result }) {
     },
   });
 
-  console.log("page result:", result);
+  // console.log("page result:", result);
   return (
     <View style={[{ width: '100%' }]}>
       <FlatList style={{ height: '100%' }}
-        data={result.result}
-        renderItem={({ item }) => (
-          <SearchResultItemWidget item={item}
-            detailText="车辆详情"
-            onTargetPress={() => {
-              navigation.navigate('mapmain', {
-                deviceId: item.info.deviceId
-              })
-            }}
-            onDetailPress={() => {
-              navigation.navigate('vehicledetail', {
-                vehicle: item.info
-              })
-            }}
-          />)}
+        data={result}
+        renderItem={({ item }) => {
+          if (item.stage === null) {
+            onRequestStation && onRequestStation({ item })
+          }
+          return (
+            <SearchResultItemWidget item={item}
+              detailText="车辆详情"
+              onTargetPress={() => {
+                navigation.navigate('mapmain', {
+                  deviceId: item.info.deviceId
+                })
+              }}
+              onDetailPress={() => {
+                navigation.navigate('vehicledetail', {
+                  vehicle: item.info
+                })
+              }}
+            />)
+        }}
         keyExtractor={item => item.id}
       />
     </View>
