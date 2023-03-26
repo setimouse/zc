@@ -10,20 +10,9 @@ export const AlarmProvider = ({ children }) => {
   const [alarmItems, setAlarmItems] = useState([])
   const { fetch_json, tokenType, accessToken } = useContext(AuthContext);
 
-  useEffect(function () {
-    console.log('start interval')
-    reminder();
-    // const timer = setInterval(() => {
-    //   reminder()
-    // }, 3000);
-    return function () {
-      // clearInterval(timer);
-    }
-  }, [tokenType])
-
   async function reminder() {
     console.log('alarm reminder')
-    axios.get('/lmsapi/lms-admin/api/v1/reminder', {
+    return axios.get('/lmsapi/lms-admin/api/v1/reminder', {
       baseURL: baseURL,
       headers: { Authorization: `${tokenType} ${accessToken}` }
     })
@@ -38,7 +27,7 @@ export const AlarmProvider = ({ children }) => {
         console.log(data);
       })
       .catch(error => {
-        console.log(error)
+        console.log('reminder error', error)
       });
     // const url = `${baseURL}/lmsapi/lms-admin/api/v1/reminder`
     // fetch_json(url)

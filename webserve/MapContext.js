@@ -119,7 +119,7 @@ export const MapProvider = ({ children }) => {
   /**
    * 搜索车辆、设备（地图搜索）
    */
-  async function requestListTargetReals({ consumerName }) {
+  async function requestListTargetReals({ consumerStatus = 1, consumerName }) {
     const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/listTargetReals`
     return fetch_json(url, {
       method: 'POST',
@@ -128,6 +128,7 @@ export const MapProvider = ({ children }) => {
       },
       body: JSON.stringify({
         consumerName: consumerName,
+        consumerStatus: consumerStatus,
       })
     })
       .catch(error => dealError(error))

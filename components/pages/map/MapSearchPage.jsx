@@ -1,4 +1,3 @@
-import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
 import { View, FlatList, StyleSheet } from "react-native";
@@ -25,6 +24,7 @@ export default function MapSearchPage() {
         }
       }))
       .then(result => setSearchResult({ result: result }))
+      .catch(console.log)
   }
 
   return (

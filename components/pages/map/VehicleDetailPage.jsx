@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, SectionList, Pressable, ScrollView } from "react-native";
+import { View, ScrollView } from "react-native";
 import { MapContext } from "../../../webserve/MapContext";
 import ButtonWidget from "../../widgets/ButtonWidget";
 import SectionGroupList from "../../widgets/SectionGroupList";
@@ -10,43 +10,57 @@ export default function VehicleDetailPage() {
   const navigation = useNavigation();
   const route = useRoute();
 
-  const [vehicleBase, setVehicleBase] = useState([]);
-  const [vehicleDetail, setVehicleDetail] = useState([]);
-  const [vehicle, setVehicle] = useState([
-    // {
-    //   title: '基础信息',
-    //   data: [
-    //     { key: '车号', value: '' },
-    //     { key: '设备编号', value: '' },
-    //     { key: '检修情况', value: '' },
-    //     { key: '当前台位', value: '' },
-    //   ],
-    // },
-    // {
-    //   title: '车辆信息',
-    //   data: [
-    //     { key: '合并车型', value: '' },
-    //     { key: '全场', value: '' },
-    //     { key: '制造厂', value: '' },
-    //     { key: '制造年月', value: '' },
-    //   ],
-    // },
-  ]);
+  const [vehicleBase, setVehicleBase] = useState({ title: '', data: [] });
+  const [vehicleDetail, setVehicleDetail] = useState({ title: '', data: [] });
+  const [vehicle, setVehicle] = useState([]);
 
+  useEffect(() => {
+    // console.log(vehicleBase)
+    // console.log(vehicleDetail)
+    setVehicle([vehicleBase, vehicleDetail])
+  }, [vehicleBase, vehicleDetail])
+
+  function baseArrived(data) {
+    // console.log('base', data);
+    data = data.map(e => {
+      return { key: e.label, value: e.val }
+    })
+    setVehicleBase({
+      title: '基础信息',
+      data: data,
+    })
+  }
+
+  function detailArrived(data) {
+    // console.log('detail', data);
+    data = data.map(e => {
+      return { key: e.label, value: e.val }
+    })
+    setVehicleDetail({
+      title: '车辆信息',
+      data: data,
+    })
+  }
 
   useEffect(() => {
     const param = route.params.vehicle;
     console.log('param', param)
-    const carNo = param.consumerId;
-    requestVehicleBase({ carNo: carNo })
-      .then(resp => console.log('resp', resp))
+    const carNo = param.consumerName;
+    requestVehicleBase({ carNo: carNo }).then(resp => resp.data).then(baseArrived)
+    requestVehicleDetail({ carNo: carNo }).then(resp => resp.data).then(detailArrived)
   }, [])
 
   return (
-    <View style={{ flex: 1, padding: 12, backgroundColor: '#F4F6F8' }}>
-      <ScrollView>
+    <View style={{ flex: 1, backgroundColor: '#F4F6F8' }}>
+      <ScrollView style={{ paddingHorizontal: 12, flex: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
         <SectionGroupList data={vehicle} />
-        <ButtonWidget title="定位" onPress={() => navigation.navigate('mapmain')} />
+        <ButtonWidget title="定位"
+          onPress={() => navigation.navigate('mapmain', {
+            deviceId: route.params.vehicle.deviceId
+          })}
+        />
       </ScrollView>
     </View>
   )

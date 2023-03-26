@@ -1,9 +1,10 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect } from "react";
-import { ActivityIndicator, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import AlertImage from "../../../assets/alert.png"
 // import TaskImage from "../../../assets/task.png"
 import { AlarmContext } from "../../../webserve/AlarmContext";
+import { AuthContext } from "../../../webserve/AuthContext";
 
 const styles = StyleSheet.create({
   item: {
@@ -75,7 +76,8 @@ function Item({ barge, icon, title, subtitle, onPress }) {
 
 export default function MessagePage() {
   const navigation = useNavigation();
-  const { alarmCount, alarmItems } = useContext(AlarmContext)
+  const { alarmCount, alarmItems, reminder, } = useContext(AlarmContext)
+  const { fetch_json, tokenType, accessToken } = useContext(AuthContext);
   const itemMap = {
     'alarm': {
       title: '告警提醒',
@@ -84,6 +86,20 @@ export default function MessagePage() {
       onPress: () => { navigation.navigate('alertlist') },
     }
   }
+
+  useEffect(function () {
+    console.log('start interval')
+    reminder()
+      .catch(error => Alert.alert(error));
+    // const timer = setInterval(() => {
+    //   reminder()
+    // }, 3000);
+    return function () {
+      // clearInterval(timer);
+    }
+  }, [tokenType])
+
+
   alarmItems.map(item => {
     let info = itemMap[item.module];
     if (info === undefined) {

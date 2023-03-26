@@ -76,7 +76,6 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
       return
     }
     var history = await loadHistory()
-    console.log('before remove', history)
     history = history.filter(e => e.word != word)
     console.log('after remove', history)
     await storage.setItem(JSON.stringify(history))
@@ -95,7 +94,6 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
     loadHistory()
       .then(history => {
         setHistory(history)
-        console.log(history)
       })
   }, [])
 
@@ -112,7 +110,6 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
   }, [text, history])
 
   var searchBox;
-  console.log("show result", result)
   return (
     <View style={styles.container}>
       <View style={styles.bar} ref={bar => this.bar = bar}>

@@ -63,13 +63,16 @@ export default function MapPage({ route, navigation }) {
   }, [displayMap])
 
   useEffect(() => {
-    console.log("start once map ready")
+    if (mapReady === undefined) {
+      return
+    }
+    console.log("start once map ready, map=", mapReady)
     setTimeout(() => {
       refreshDevice()
     }, 500);
     const timer = setInterval(() => {
       refreshDevice()
-    }, 3000);
+    }, 30000);
     return () => { clearInterval(timer) }
   }, [mapReady])
 

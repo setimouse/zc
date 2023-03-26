@@ -30,11 +30,16 @@ export const AuthProvider = ({ children }) => {
           // console.log('json', json)
           if (json.code && json.code == '00000') {
             resolve(json)
+          } else if (json.code && json.code === 'A0230') {
+            // token无效或已过期
+            setAccessToken(null)
+            reject(json)
           } else {
             console.log('fetch json error:', json)
             reject(json)
           }
         })
+        .catch(error => console.log('fetch json error url:', url, '\n==========\n', 'error', error))
     })
   }
 

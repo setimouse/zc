@@ -110,7 +110,7 @@
     const deviceListIdSet = new Set(deviceList.map(e => e['deviceId']))
     for (key in devices) {
       if (!deviceListIdSet.has(key)) {
-        delete devices[key]
+        removeMarker(devices[key])
       }
     }
   }

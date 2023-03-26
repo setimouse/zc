@@ -30,12 +30,12 @@ const Item = ({ info, index }) => {
   )
 };
 
-export default function SectionGroupList(props) {
+export default function SectionGroupList({ data }) {
   return (
     <SectionList
       scrollEnabled={false}
       style={{ marginBottom: 24, }}
-      sections={props.data}
+      sections={data}
       keyExtractor={(item, index) => item + index}
       renderItem={({ item, index }) => <Item info={item} index={index} />}
       renderSectionHeader={({ section: { title } }) => (
