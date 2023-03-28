@@ -3,10 +3,10 @@
  */
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, SectionList, ScrollView, Image, Pressable, Alert } from "react-native";
+import { StyleSheet, View, Text, ScrollView, Image, Pressable, Alert } from "react-native";
 import { MapContext } from "../../../webserve/MapContext";
 import ButtonWidget from "../../widgets/ButtonWidget";
-import SectionGroupList from "../../widgets/SectionGroupList";
+import { baseURL } from "../../../webserve/http_config";
 
 export default function DeviceDetailPage(props) {
   const navigation = useNavigation();
@@ -36,7 +36,8 @@ export default function DeviceDetailPage(props) {
       .then(data => data.filter(e => e.deviceType == deviceData.deviceType)[0])
       .then(data => { console.log('list target types: ', data); return data })
       .then(data => data.featureImage)
-      .then(image => setImage({ img: image }))
+      .then(image => `${baseURL}${image}`)
+      .then(uri => setImage({ img: { uri: uri } }))
   }
 
   let getStation = async (data) => {
