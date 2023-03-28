@@ -29,7 +29,7 @@ export default function LoginPage(props) {
       >
         <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>登录</Text>
       </Pressable>
-      <Text style={{ fontSize: 14, color: '#3E4146', fontWeight: 'bold' }}>忘记密码？</Text>
+      {/* <Text style={{ fontSize: 14, color: '#3E4146', fontWeight: 'bold' }}>忘记密码？</Text> */}
       <StatusBar translucent={true} />
     </View>
   );

@@ -72,9 +72,10 @@ export default function MapPage({ route, navigation }) {
     setTimeout(() => {
       refreshDevice()
     }, 500);
+    console.log("reload interval:", siteSetting.realDataLoopInterval)
     const timer = setInterval(() => {
       refreshDevice()
-    }, siteSetting.realDataLoopInterval);
+    }, parseFloat(siteSetting.realDataLoopInterval));
     return () => { clearInterval(timer) }
   }, [mapReady])
 
