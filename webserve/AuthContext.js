@@ -96,7 +96,10 @@ export const AuthProvider = ({ children }) => {
       return encrypted.toString();
     }
 
-    // password = encode(password)
+    if (siteSetting.encryptPwd) {
+      password = encode(password)
+    }
+
     const url = baseURL + '/lmsapi/lms-auth/oauth/token';
     const fetchUrl = `${url}?grant_type=captcha&username=${username}&password=${password}`
     console.log('login url=' + fetchUrl);
