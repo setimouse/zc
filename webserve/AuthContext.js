@@ -126,7 +126,7 @@ export const AuthProvider = ({ children }) => {
       .then((data) => {
         console.log(data);
         const storage = useAsyncStorage("token");
-        setUserInfo(JSON.stringify(data))
+        setUserInfo(data)
         setAccessToken(data['access_token'])
         setTokenType(data['token_type'])
         storage.setItem(data["access_token"]).then(() => {
@@ -153,12 +153,12 @@ export const AuthProvider = ({ children }) => {
       })
   }
 
-  async function loadMe() {
-    const url = `${baseURL}/lmsapi/lms-admin/api/v1/users/me`
+  async function loadMe({ userId, }) {
+    const url = `${baseURL}/lmsapi/lms-admin/api/v1/users/detail/${userId}`
     return fetch_json(url)
       .then(resp => resp.data)
       .then(data => setMe(data))
-      .catch(error => dealError(error))
+      .catch(console.log)
   }
 
   return (

@@ -65,11 +65,15 @@ function UserView({ user }) {
       <View style={styles.infoView}>
         <View style={styles.namedep}>
           <Text style={styles.name}>{user.name}</Text>
-          <Text style={styles.department}>/{user.department}</Text>
+          {user.department &&
+            <Text style={styles.department}>/{user.department}</Text>
+          }
         </View>
-        <View style={styles.telView}>
-          <Text style={styles.tel}>{user.tel}</Text>
-        </View>
+        {user.tel &&
+          <View style={styles.telView}>
+            <Text style={styles.tel}>{user.tel}</Text>
+          </View>
+        }
       </View>
     </View>
   )
@@ -155,19 +159,19 @@ function FunctionsView() {
 }
 
 export default function ProfilePage() {
-  const { logout, loadMe, me } = useContext(AuthContext)
+  const { logout, loadMe, me, userInfo } = useContext(AuthContext)
   const [avatar, setAvatar] = useState();
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    loadMe()
+    loadMe({ userId: userInfo.userId })
   }, [])
 
   useEffect(() => {
     setUser({
       name: me.nickname,
-      department: '',
-      tel: '',
+      department: me.deptName,
+      tel: me.mobile,
       avatar: { uri: me.avatar },
     })
   }, [me])

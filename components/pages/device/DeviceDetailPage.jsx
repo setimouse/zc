@@ -231,7 +231,9 @@ function BaseInfoView({ device }) {
           <View><Text style={styles.text}>型号图片</Text></View>
           <View><Image source={device.img} style={{ width: 60, height: 60 }} /></View>
         </CellView>
-        <CellView onPress={() => navigation.navigate('deviceid')}>
+        <CellView
+        // onPress={() => navigation.navigate('deviceid')}
+        >
           <View><Text style={styles.text}>设备ID</Text></View>
           <View><Text>{device.deviceId}</Text></View>
         </CellView>
