@@ -9,6 +9,22 @@ const fmmapScript = `
     // setMarkers(deviceList)
   })
 
+  map.on('loaded', function() {
+         var scrollFloorCtlOpt = {
+                position: fengmap.FMControlPosition.RIGHT_TOP,
+                floorButtonCount: 5,
+                offset: {
+                    x: -10,
+                    y: 260
+                },
+                viewModeControl: true,
+                floorModeControl: true,
+                needAllLayerBtn: true
+            };
+            var scrollFloorControl = new fengmap.FMToolbar(scrollFloorCtlOpt);
+            scrollFloorControl.addTo(map)
+    });
+
   var devices = {}
   function addMarker(device) {
     var marker = new fengmap.FMImageMarker({
