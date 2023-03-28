@@ -35,8 +35,7 @@ export const MapProvider = ({ children }) => {
    */
   async function requestIndoorMap({ id }) {
     const url = `${baseURL}/lmsapi/lms-map/api/v1/maps/indoorMap/${id}`
-    return fetch_json(url)
-      .catch(error => dealError(error))
+    return fetch_json(url).catch(dealError)
   }
 
   /**
