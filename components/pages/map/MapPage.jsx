@@ -5,10 +5,12 @@ import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import FMMapWidget, { webView } from '../../widgets/FMMapWidget';
 import { useContext, useEffect, useState } from 'react';
 import { MapContext } from '../../../webserve/MapContext';
+import { AuthContext } from '../../../webserve/AuthContext';
 
 export default function MapPage({ route, navigation }) {
   const { requestDefaultMap, requestIndoorMap,
     requestListTargetReals } = useContext(MapContext)
+  const { siteSetting } = useContext(AuthContext)
   const [displayMap, setDisplayMap] = useState()
   const [mapInfo, setMapInfo] = useState()
   const [deviceList, setDeviceList] = useState([])
@@ -72,7 +74,7 @@ export default function MapPage({ route, navigation }) {
     }, 500);
     const timer = setInterval(() => {
       refreshDevice()
-    }, 3000);
+    }, siteSetting.realDataLoopInterval);
     return () => { clearInterval(timer) }
   }, [mapReady])
 
