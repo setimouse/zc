@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from "react";
 
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
 import { baseURL } from "./http_config";
+import CryptoJS from "crypto-js";
 
 export const AuthContext = createContext();
 
@@ -12,6 +13,24 @@ export const AuthProvider = ({ children }) => {
   const [loginError, setLoginError] = useState(null);
   const [tokenType, setTokenType] = useState(null)
   const [me, setMe] = useState({});
+  const [siteSetting, setSiteSetting] = useState({});
+  const [secretKeySpec, setSecretKeySpec] = useState();
+  const [ivParameterSpec, setIvParameterSpec] = useState();
+
+  useEffect(() => {
+    console.log('setting', siteSetting)
+    if (typeof siteSetting !== 'object') {
+      return
+    }
+    setSecretKeySpec(siteSetting.secretKeySpec)
+    setIvParameterSpec(siteSetting.ivParameterSpec)
+  }, [siteSetting])
+
+
+  useEffect(() => {
+    requestSiteSetting().then(setting => setSiteSetting(setting))
+      .catch(error => console.log('request site setting error:', error))
+  }, [])
 
   async function fetch_json(url, init = {}) {
     var oriInit = {
@@ -43,10 +62,41 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
+  async function requestSiteSetting() {
+    const url = `${baseURL}/lmsapi/lms-admin/api/v1/siteSetting`
+    console.log('request site setting', url)
+    return fetch(url)
+      .then(resp => resp.json())
+      .then(json => {
+        console.log('json', json)
+        if (json.code && json.code == '00000') {
+          return json
+        } else {
+          console.log('fetch json error:', json)
+          throw json
+        }
+      })
+      .then(json => json.data)
+  }
+
   async function login(username, password) {
     if (__DEV__) {
       username = 'admin'; password = '123456';
     }
+
+    const encode = (data) => {
+      console.log('key:', secretKeySpec, 'iv:', ivParameterSpec)
+      var key = CryptoJS.enc.Latin1.parse(secretKeySpec);
+      var iv = CryptoJS.enc.Latin1.parse(ivParameterSpec);
+      var encrypted = CryptoJS.AES.encrypt(data, key, {
+        iv: iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.ZeroPadding
+      });
+      return encrypted.toString();
+    }
+
+    // password = encode(password)
     const url = baseURL + '/lmsapi/lms-auth/oauth/token';
     const fetchUrl = `${url}?grant_type=captcha&username=${username}&password=${password}`
     console.log('login url=' + fetchUrl);
