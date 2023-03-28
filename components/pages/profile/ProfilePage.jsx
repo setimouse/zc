@@ -9,6 +9,7 @@ import DeviceIcon from '../../../assets/profile_device.png';
 import { useNavigation } from '@react-navigation/native';
 import ButtonWidget from '../../widgets/ButtonWidget';
 import { AuthContext } from '../../../webserve/AuthContext';
+import { FontAwesome } from '@expo/vector-icons';
 
 function UserView({ user }) {
   const styles = StyleSheet.create({
@@ -25,12 +26,15 @@ function UserView({ user }) {
     },
     iconView: {
       marginRight: 10,
+      width: 60,
+      height: 60,
+      borderRadius: 30,
+      overflow: "hidden",
+      borderColor: '#FFFFFF',
+      borderWidth: 2,
     },
     avatar: {
       width: 60, height: 60,
-      borderColor: '#FFFFFF',
-      borderWidth: 2,
-      borderRadius: 30,
     },
     infoView: {
       marginVertical: 5,
@@ -50,6 +54,7 @@ function UserView({ user }) {
     },
     telView: {
       flexDirection: 'row',
+      alignItems: 'center',
     },
     tel: {
       color: '#fff',
@@ -71,6 +76,13 @@ function UserView({ user }) {
         </View>
         {user.tel &&
           <View style={styles.telView}>
+            <View style={{
+              width: 14, height: 14, borderColor: '#fff', borderWidth: 1, borderRadius: 7,
+              alignContent: 'center', justifyContent: 'center', alignItems: 'center',
+              marginRight: 4,
+            }}>
+              <FontAwesome name="mobile" size={12} color="white" />
+            </View>
             <Text style={styles.tel}>{user.tel}</Text>
           </View>
         }
@@ -82,7 +94,7 @@ function UserView({ user }) {
 function FunctionButton({ icon, title, onPress }) {
   const styles = StyleSheet.create({
     container: {
-      width: 88,
+      width: 84,
       alignItems: 'center',
       justifyContent: 'space-evenly',
       marginBottom: 8,
