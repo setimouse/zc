@@ -53,11 +53,37 @@
   })
   var devices = {}
   function addMarker(device) {
+    const consumerTypeIcon = device.consumerTypeIcon;
+    device.fengGLBIcon = consumerTypeIcon;
+    if (consumerTypeIcon !== null) {
+      device.fengGLBIcon = "/static/images/pages/"
+        + consumerTypeIcon.substring(consumerTypeIcon.lastIndexOf('/'), consumerTypeIcon.lastIndexOf('.')).substring(1)
+        + "_model" + ".glb";
+    }
+
+    /*
     var marker = new fengmap.FMImageMarker({
       url: './orangeCone.png',
       x: device.x,
       y: device.y
     });
+    /*/
+    // const imageurl = 'https://developer.fengmap.com/fmAPI/images/gongren.gltf'
+    device.fengGLBIcon = 'http://47.94.249.77' + device.fengGLBIcon
+    const imageurl = device.fengGLBIcon
+    var marker = new fengmap.FMDynamicModel({
+      // url: 'http://47.94.249.77' + device.fengGLBIcon,
+      url: imageurl,
+      id: 'uuid',
+      height: 0,
+      scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
+        device.consumerEntityExtend.scale : 8,
+      heading: 90,
+      fadeIn: false, fadeOut: false,
+      x: device.x,
+      y: device.y
+    });
+    //*/
     var level = map.getLevel()
     var floor = map.getFloor(level);
     /* 将 Marker 添加到地图的指定楼层上 */

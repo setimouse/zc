@@ -153,8 +153,8 @@ export const AuthProvider = ({ children }) => {
       })
   }
 
-  async function loadMe({ userId, }) {
-    const url = `${baseURL}/lmsapi/lms-admin/api/v1/users/detail/${userId}`
+  async function loadMe() {
+    const url = `${baseURL}/lmsapi/lms-admin/api/v1/users/me`
     return fetch_json(url)
       .then(resp => resp.data)
       .then(data => setMe(data))

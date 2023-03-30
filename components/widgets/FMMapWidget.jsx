@@ -18,12 +18,14 @@ function FMMapWidget({ mapInfo, onMapReady }) {
         scrollEnabled={false}
         onMessage={event => {
           const message = event.nativeEvent.data;
+          console.log("webview message received:", message)
           switch (message) {
             case "mapready":
               onMapReady && onMapReady()
               break;
 
             default:
+              console.log("webview message received:", message)
               break;
           }
         }}

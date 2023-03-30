@@ -6,6 +6,7 @@ import FMMapWidget, { webView } from '../../widgets/FMMapWidget';
 import { useContext, useEffect, useState } from 'react';
 import { MapContext } from '../../../webserve/MapContext';
 import { AuthContext } from '../../../webserve/AuthContext';
+import { Dimensions } from 'react-native';
 
 export default function MapPage({ route, navigation }) {
   const { requestDefaultMap, requestIndoorMap,
@@ -82,7 +83,7 @@ export default function MapPage({ route, navigation }) {
   return (
     // <SafeAreaView>
     <View style={styles.container}>
-      <StatusBar />
+      <StatusBar translucent={true} />
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo}
           onMapReady={() => { setMapReady(new Date()) }}
@@ -121,14 +122,15 @@ export default function MapPage({ route, navigation }) {
     // </SafeAreaView>
   );
 }
-
+const { height } = Dimensions.get('screen')
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     backgroundColor: "#F4F6F8",
+    height: height - 40,
   },
   map: {
-    flex: 1,
+    // flex: 1,
     width: '100%',
     height: '100%',
     backgroundColor: 'lightgrey',
@@ -152,7 +154,8 @@ const styles = StyleSheet.create({
   },
   locate: {
     position: 'absolute',
-    right: 12, bottom: 64,
+    right: 12,
+    bottom: Platform.OS == 'android' ? 120 : 64,
     backgroundColor: '#fff',
     width: 40, height: 40,
     borderRadius: 20,

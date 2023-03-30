@@ -3,12 +3,12 @@ import React from 'react';
 import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 
 export default function SearchResultItemWidget({ item, detailText, onTargetPress, onDetailPress }) {
-  const navigation = useNavigation()
   return (
     <View style={styles.searchbox}>
       <View style={styles.left}>
         {
           item.items.map(info => {
+            console.log(info)
             return (
               <Text key={info.key} style={styles.infoText}>
                 {info.key}: {info.value}

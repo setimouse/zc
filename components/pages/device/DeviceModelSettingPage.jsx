@@ -22,9 +22,9 @@ export default function DeviceModelSettingPage() {
       <View style={{ marginBottom: 44, }}>
         <Image source={device.img} style={styles.image} />
       </View>
-      <View style={{ paddingHorizontal: 12 }}>
+      {/* <View style={{ paddingHorizontal: 12 }}>
         <ButtonWidget title="上传图片" />
-      </View>
+      </View> */}
     </View>
   )
 }

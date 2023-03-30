@@ -41,7 +41,10 @@ export default function DeviceSearchPage(props) {
               }
             })
             )
-            .then(results => setResult(results))
+            .then(results => {
+              setResult(results)
+              // console.log(results);
+            })
             .catch(error => console.log('error', error.message))
         }}
       />
@@ -53,7 +56,7 @@ function Page({ result }) {
   const navigation = useNavigation();
 
   return (
-    <View style={{ width: '100%', flex: 1 }}>
+    <View style={{ width: '100%', flex: 1, }}>
       <FlatList style={{}}
         data={result}
         renderItem={({ item }) => (

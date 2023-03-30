@@ -178,6 +178,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255 255 255 / .15)',
     backgroundColor: '#2882FF',
     width: '100%',
+    flex: 1,
   },
   bar: {
     flexDirection: 'row',

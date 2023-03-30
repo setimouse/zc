@@ -2,6 +2,11 @@ const fmmapScript = `
 <script>
   var ready = false;
   var oriCenter = {};
+  if (window.postMessage === undefined) {
+    window.postMessage = (data) => {
+      window.ReactNativeWebView.postMessage(data)
+    }
+  }
   map.on('loaded', function () {
     ready = true;
     oriCenter = map.getCenter()
@@ -27,16 +32,36 @@ const fmmapScript = `
 
   var devices = {}
   function addMarker(device) {
+    const consumerTypeIcon = device.consumerTypeIcon;
+    device.fengGLBIcon = consumerTypeIcon;
+    if (consumerTypeIcon !== null) {
+      device.fengGLBIcon = "/static/images/pages/" 
+        + consumerTypeIcon.substring(consumerTypeIcon.lastIndexOf('/'), consumerTypeIcon.lastIndexOf('.')).substring(1)
+        + "_model" + ".glb";
+    }
+    window.ReactNativeWebView.postMessage("glb icon: " + device.fengGLBIcon)
+    /*
     var marker = new fengmap.FMImageMarker({
       url: 'https://developer.fengmap.com/fmAPI/images/blueImageMarker.png',
       x: device.x,
       y: device.y
     });
-    // var marker = new fengmap.FMDynamicModel({
-    //   url: 'http://47.94.249.77/static/images/pages/orangeCone_model.glb',
-    //   x: device.x,
-    //   y: device.y
-    // });
+    /*/
+    // http://47.94.249.77/static/images/pages/orangeCone_model.glb
+    const imageurl = 'https://developer.fengmap.com/fmAPI/images/gongren.gltf'
+    var marker = new fengmap.FMDynamicModel({
+      // url: 'http://47.94.249.77' + device.fengGLBIcon,
+      url: imageurl,
+      id: 'uuid',
+      height: 0,
+      scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
+        device.consumerEntityExtend.scale : 8,
+      heading: 90,
+      fadeIn: false, fadeOut: false,
+      x: device.x,
+      y: device.y
+    });
+    //*/
     var level = map.getLevel()
     var floor = map.getFloor(level);
     /* 将 Marker 添加到地图的指定楼层上 */

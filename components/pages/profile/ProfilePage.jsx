@@ -32,6 +32,8 @@ function UserView({ user }) {
       overflow: "hidden",
       borderColor: '#FFFFFF',
       borderWidth: 2,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     avatar: {
       width: 60, height: 60,
@@ -176,7 +178,7 @@ export default function ProfilePage() {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    loadMe({ userId: userInfo.userId })
+    loadMe()
   }, [])
 
   useEffect(() => {
@@ -184,7 +186,7 @@ export default function ProfilePage() {
       name: me.nickname,
       department: me.deptName,
       tel: me.mobile,
-      avatar: { uri: me.avatar },
+      avatar: me.avatar ? { uri: me.avatar } : require('../../../assets/default_avatar.png'),
     })
   }, [me])
 
