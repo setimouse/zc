@@ -3,6 +3,7 @@ import { StyleSheet, View, TextInput, FlatList, Text, Image, Pressable, Touchabl
 import IconHistory from '../../assets/history.png';
 import IconCross from '../../assets/cross.png';
 import { useAsyncStorage } from "@react-native-async-storage/async-storage";
+import { EvilIcons } from '@expo/vector-icons';
 
 function Item({ item, onDelete, onSelected }) {
   console.log('word', item)
@@ -113,6 +114,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
   return (
     <View style={styles.container}>
       <View style={styles.bar} ref={bar => this.bar = bar}>
+        <EvilIcons name="search" size={22} color="white" />
         <TextInput style={styles.search}
           value={text}
           ref={c => searchBox = c}
@@ -172,20 +174,25 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
 }
 
 const styles = StyleSheet.create({
-
+  container: {
+    backgroundColor: 'rgba(255 255 255 / .15)',
+    backgroundColor: '#2882FF',
+    width: '100%',
+  },
   bar: {
     flexDirection: 'row',
-    height: 44,
-    width: '100%',
-    backgroundColor: '#2882FF',
+    height: 32,
     paddingHorizontal: 12,
+    alignItems: 'center',
+    backgroundColor: 'rgba(255 255 255 / .15)',
+    margin: 6,
+    borderRadius: 4,
   },
   search: {
     flex: 1,
     width: '100%',
     fontSize: 14,
-    paddingLeft: 25,
-    backgroundColor: 'rgba(255 255 255 / .15)',
+    paddingLeft: 4,
     marginVertical: 8,
     color: 'white',
   },
