@@ -40,7 +40,7 @@ const fmmapScript = `
         + "_model" + ".glb";
     }
     window.ReactNativeWebView.postMessage("glb icon: " + device.fengGLBIcon)
-    /*
+    //*
     var marker = new fengmap.FMImageMarker({
       url: 'https://developer.fengmap.com/fmAPI/images/blueImageMarker.png',
       x: device.x,
