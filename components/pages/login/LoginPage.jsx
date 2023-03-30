@@ -1,18 +1,20 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Alert, Text, View, TextInput, Pressable, Image, ImageBackground, Dimensions } from 'react-native';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import BackgroundImage from '../../../assets/login_bg.png';
 import { AuthContext } from '../../../webserve/AuthContext';
 import IconUser from '../../../assets/login_icon_user.png';
 import IconPassword from '../../../assets/login_icon_password.png';
+import { Ionicons } from '@expo/vector-icons';
 
-function InputIconBox({ placeholder, source, onChangeText, value, secureTextEntry = false }) {
+function InputIconBox({ placeholder, maxLength = 9999, source, onChangeText, value, secureTextEntry = false, tip }) {
   const s = StyleSheet.create({
     container: {
       flexDirection: 'row',
       backgroundColor: '#F7F8F8',
       height: 48,
       paddingVertical: 12,
+      paddingLeft: 20,
       borderRadius: 24,
       marginBottom: 16,
       justifyContent: 'flex-start',
@@ -21,14 +23,21 @@ function InputIconBox({ placeholder, source, onChangeText, value, secureTextEntr
     icon: {
       width: 16,
       resizeMode: 'contain',
-      marginLeft: 20,
       marginRight: 10,
     },
     input: {
       fontSize: 14,
       color: '#B0B1B3',
       fontWeight: '500',
-      // backgroundColor: 'red',
+      height: 44,
+      flex: 1,
+    },
+    tip: {
+      height: 44,
+      alignItems: 'center',
+      alignContent: 'center',
+      flexDirection: 'row',
+      paddingHorizontal: 18,
     }
   });
 
@@ -36,7 +45,10 @@ function InputIconBox({ placeholder, source, onChangeText, value, secureTextEntr
     <View style={s.container}>
       <Image source={source} style={s.icon} />
       <TextInput placeholder={placeholder} secureTextEntry={secureTextEntry}
-        onChangeText={onChangeText} value={value} style={s.input} />
+        onChangeText={onChangeText} value={value} style={s.input} maxLength={maxLength} />
+      <View style={s.tip}>
+        {tip}
+      </View>
     </View>
   )
 }
@@ -46,6 +58,13 @@ export default function LoginPage() {
   const [phoneNumber, setPhoneNumbers] = useState('');
   const [password, setPassword] = useState('');
   const { width, height } = Dimensions.get('screen');
+  const [hidePassword, setHidePassword] = useState()
+
+  const usernameMaxLength = 30
+
+  useEffect(() => {
+    setHidePassword(true)
+  }, [])
 
   return (
     <View style={styles.container}>
@@ -54,8 +73,23 @@ export default function LoginPage() {
           <Text style={styles.title}>欢迎登录</Text>
         </View>
         <View style={styles.inputbox}>
-          <InputIconBox placeholder="请输入帐号" source={IconUser} value={phoneNumber} onChangeText={setPhoneNumbers} />
-          <InputIconBox placeholder="请输入密码" secureTextEntry={true} source={IconPassword} value={password} onChangeText={setPassword} />
+          <InputIconBox placeholder="请输入帐号" source={IconUser} value={phoneNumber} onChangeText={setPhoneNumbers}
+            tip={
+              <Text style={{ fontSize: 10, color: 'lightgrey' }}>
+                {phoneNumber.length}/{usernameMaxLength}
+              </Text>
+            }
+            maxLength={30}
+          />
+          <InputIconBox placeholder="请输入密码" secureTextEntry={hidePassword} source={IconPassword} value={password} onChangeText={setPassword}
+            tip={
+              <Pressable onPressIn={() => {
+                setHidePassword(!hidePassword)
+              }} >
+                <Ionicons name={hidePassword ? 'eye-off' : 'eye'} size={16} color="black" />
+              </Pressable>
+            }
+          />
         </View>
         <Pressable style={styles.loginButton}
           onPress={() => {
