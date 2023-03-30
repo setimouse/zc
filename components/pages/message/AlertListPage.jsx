@@ -130,27 +130,44 @@ function AlertList(props) {
   const { alarmEvent, alarmItems } = useContext(AlarmContext)
   const params = props.route.params;
   const [data, setData] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
+  const [loadError, setLoadError] = useState()
 
   useEffect(function () {
+    setIsLoading(true)
     alarmEvent({ processingStatus: params.processingStatus, pageSize: 1000, })
       .then(resp => setData(resp.list))
-      .catch(error => console.log(error))
+      .then(() => setIsLoading(false))
+      .catch(error => {
+        console.log(error)
+        setLoadError(error.message)
+        setIsLoading(false)
+      })
     return () => {
     }
   }, [alarmItems])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
-      {data.length > 0 &&
-        <FlatList
-          data={data}
-          keyExtractor={item => item.alarmEventId}
-          renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
-        />
-        ||
-        <View style={{ flex: 1, justifyContent: 'center' }}>
+      {isLoading
+        && <View style={{ flex: 1, justifyContent: 'center' }}>
           <ActivityIndicator></ActivityIndicator>
         </View>
+        || (data.length > 0 &&
+          <FlatList
+            data={data}
+            keyExtractor={item => item.alarmEventId}
+            renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
+          />)
+        || (loadError &&
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text style={{ color: '#f00', textAlign: 'center', marginHorizontal: 24, }}>{loadError}</Text>
+          </View>)
+        || (data.length == 0 &&
+          <View style={{ flex: 1, justifyContent: 'center' }}>
+            <Text style={{ textAlign: 'center', marginHorizontal: 24 }}>没有告警信息</Text>
+          </View>)
+
       }
     </View>
   )
