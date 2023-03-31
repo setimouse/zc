@@ -9,7 +9,7 @@ import { AuthContext } from '../../../webserve/AuthContext';
 import { Dimensions } from 'react-native';
 
 export default function MapPage({ route, navigation }) {
-  const { requestDefaultMap, requestIndoorMap,
+  const { requestDefaultMap, requestMapList, requestIndoorMap,
     requestListTargetReals } = useContext(MapContext)
   const { siteSetting } = useContext(AuthContext)
   const [displayMap, setDisplayMap] = useState()
@@ -50,9 +50,19 @@ export default function MapPage({ route, navigation }) {
           }
         })
     } else {
-      requestDefaultMap().then(resp => {
-        setDisplayMap(resp.data)
-      }).catch(error => console.log('request default map failed. error:', error))
+      requestMapList({ pageNum: 1, pageSize: 1000 })
+        .then(response => response.data.list)
+        .then(list => list.filter(e => e.id != '-101'))
+        .then(list => {
+          if (list.length < 1) {
+            return
+          }
+          let map = list[0]
+          let defaultMaps = list.filter(e => e.defaultFlag)
+          console.log('default maps:', defaultMaps);
+          map = defaultMaps.length > 0 ? defaultMaps[0] : map;
+          setDisplayMap(map);
+        })
     }
   }, [route.params])
 

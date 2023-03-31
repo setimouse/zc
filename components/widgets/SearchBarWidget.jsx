@@ -113,26 +113,28 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
   var searchBox;
   return (
     <View style={styles.container}>
-      <View style={styles.bar} ref={bar => this.bar = bar}>
-        <EvilIcons name="search" size={22} color="white" />
-        <TextInput style={styles.search}
-          value={text}
-          ref={c => searchBox = c}
-          placeholder={placeholder ?? '搜索词'}
-          clearButtonMode='always'
-          onChangeText={(text) => {
-            setText(text)
-            onChangeText && onChangeText(text)
-          }}
-          autoFocus={true}
-          onFocus={() => {
-            setSearching(true);
-          }}
-          onSubmitEditing={() => search(text)}
-        />
+      <View style={styles.bground}>
+        <View style={styles.bar} ref={bar => this.bar = bar}>
+          <EvilIcons name="search" size={22} color="white" />
+          <TextInput style={styles.search}
+            value={text}
+            ref={c => searchBox = c}
+            placeholder={placeholder ?? '搜索词'}
+            clearButtonMode='always'
+            onChangeText={(text) => {
+              setText(text)
+              onChangeText && onChangeText(text)
+            }}
+            autoFocus={true}
+            onFocus={() => {
+              setSearching(true);
+            }}
+            onSubmitEditing={() => search(text)}
+          />
+        </View>
       </View>
-      {result &&
-        <View style={[styles.mainpage]}>
+      {result
+        && <View style={[styles.mainpage]}>
           {resultPage}
         </View>
       }
@@ -176,9 +178,11 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'rgba(255 255 255 / .15)',
-    backgroundColor: '#2882FF',
     width: '100%',
     flex: 1,
+  },
+  bground: {
+    backgroundColor: '#2882FF',
   },
   bar: {
     flexDirection: 'row',

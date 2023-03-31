@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "zc",
-    "slug": "zc",
-    "version": "1.0.0.4",
+    "name": "智能车辆调度",
+    "slug": "crrc",
+    "version": "0.0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -22,7 +22,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.setimouse.zc"
+      "package": "com.lms.crrc.android"
     },
     "web": {
       "favicon": "./assets/favicon.png"
