@@ -40,7 +40,7 @@ const fmmapScript = `
         + "_model" + ".glb";
     }
     window.ReactNativeWebView.postMessage("glb icon: " + device.fengGLBIcon)
-    //*
+    /*
     var marker = new fengmap.FMImageMarker({
       url: 'https://developer.fengmap.com/fmAPI/images/blueImageMarker.png',
       x: device.x,
@@ -50,8 +50,8 @@ const fmmapScript = `
     // http://47.94.249.77/static/images/pages/orangeCone_model.glb
     const imageurl = 'https://developer.fengmap.com/fmAPI/images/gongren.gltf'
     var marker = new fengmap.FMDynamicModel({
-      // url: 'http://47.94.249.77' + device.fengGLBIcon,
-      url: imageurl,
+      url: 'http://47.94.249.77' + device.fengGLBIcon,
+      // url: imageurl,
       id: 'uuid',
       height: 0,
       scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?

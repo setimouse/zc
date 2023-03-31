@@ -28,12 +28,6 @@ export default function MapSearchPage() {
         setSearchResult(result)
         return result
       })
-      .then(result => {
-        result.forEach(element => {
-
-        });
-        return result;
-      })
       .catch(console.log)
   }
 
@@ -52,7 +46,6 @@ export default function MapSearchPage() {
           e.items.forEach((e, i) => {
             if (e.key == '当前台位') e.value = stage
           })
-          console.log(e.items)
           updateStage(searchResult)
         })
     })
@@ -60,7 +53,6 @@ export default function MapSearchPage() {
   }, [searchResult])
 
   function updateStage(searchResult) {
-    console.log(searchResult)
     setSearchResult(searchResult)
   }
 
@@ -75,9 +67,7 @@ export default function MapSearchPage() {
       <SearchBarWidget
         storeKey="map-search"
         resultPage={<Page result={searchResult}
-          onRequestStation={({ item }) => {
-
-          }}
+          onRequestStation={({ item }) => { }}
         />}
         onSubmit={(keyword) => search({ consumerName: keyword })}
       />
@@ -94,7 +84,6 @@ function Page({ result, onRequestStation }) {
     },
   });
 
-  // console.log("page result:", result);
   return (
     <View style={[{ width: '100%' }]}>
       <FlatList style={{ height: '100%' }}
