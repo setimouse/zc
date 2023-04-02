@@ -1,3 +1,5 @@
+import { Platform } from "react-native";
+
 const fmmapScript = `
 <script>
   var ready = false;
@@ -12,23 +14,88 @@ const fmmapScript = `
     oriCenter = map.getCenter()
     window.ReactNativeWebView.postMessage("mapready")
     // setMarkers(deviceList)
+    map.pickFilterFunction = function (event) {
+      if (event.type == fengmap.FMType.DYNAMIC_MODEL_MARKER) {
+        return true;
+      }
+    }
   })
 
   map.on('loaded', function() {
-         var scrollFloorCtlOpt = {
-                position: fengmap.FMControlPosition.RIGHT_TOP,
-                floorButtonCount: 5,
-                offset: {
-                    x: -10,
-                    y: 260
-                },
-                viewModeControl: true,
-                floorModeControl: true,
-                needAllLayerBtn: true
-            };
-            var scrollFloorControl = new fengmap.FMToolbar(scrollFloorCtlOpt);
-            scrollFloorControl.addTo(map)
-    });
+    var scrollFloorCtlOpt = {
+      position: fengmap.FMControlPosition.RIGHT_TOP,
+      floorButtonCount: 3,
+      offset: {
+          x: {{floorControlPositionX}},
+          y: {{floorControlPositionY}}
+      },
+      viewModeControl: false,
+      floorModeControl: true,
+      needAllLayerBtn: true
+    };
+    var scrollFloorControl = new fengmap.FMToolbar(scrollFloorCtlOpt);
+    scrollFloorControl.addTo(map)
+
+    //生成自定义视图模式切换按钮
+    function renderViewModeBtn() {
+      console.log('viewMode', map.getViewMode())
+      let mapEl = document.querySelector('.fm-control-groups')
+      console.log(mapEl);
+      let viewModeDom = document.createElement("div");
+      viewModeDom.id = 'customViewMode'
+      viewModeDom.classList.add('fm-view');
+      viewModeDom.style = 'width: 36px; height: 36px;'
+      mapEl.appendChild(viewModeDom);
+      function renderText() {
+        let el = document.querySelector('#customViewMode')
+        el.innerHTML = map.getViewMode() == fengmap.FMViewMode.MODE_2D
+          ? '2D' : '3D';
+      }
+      renderText()
+      viewModeDom.addEventListener('touchstart', () => {
+        const viewMode = map.getViewMode() == fengmap.FMViewMode.MODE_2D
+          ? fengmap.FMViewMode.MODE_3D : fengmap.FMViewMode.MODE_2D
+        map.setViewMode({
+          mode: viewMode,
+          finish: () => {
+            renderText()
+          }
+        })
+      })
+    }
+    renderViewModeBtn()
+    const width = '37px';
+    document.querySelector('div.fm-control-groups').style.width = width
+    document.querySelector('div.fm-layer').setAttribute('style', 'width: 37px;height:37px;border-radius:7px;')
+    document.querySelector('div.fm-floor-list-group').style.width = width
+    document.querySelector('div.fm-floor-list').style.width = width
+    // document.querySelector('div.fm-floor-list').style.height = '100px';
+    // document.querySelectorAll('div.fm-floor-name-container')
+    //   .forEach(e => e.style.padding = '0px 0px')
+    document.querySelectorAll('div.fm-scroll')
+      .forEach(e => e.style.height = '10px')
+  });
+
+  map.on('loaded', function () {
+    var scrollZoomCtlOpt = {
+      position: fengmap.FMControlPosition.RIGHT_BOTTOM,
+      offset: {
+        x: {{zoomControlPositionX}},
+        y: {{zoomControlPositionY}},
+      },
+
+    };
+    var toolbar = new fengmap.FMZoomBar(scrollZoomCtlOpt);
+    toolbar.addTo(map)
+    {
+      var e = document.querySelector('.fm-control-zoom-bar')
+      e.setAttribute('style', e.getAttribute('style') + 'width:37px;')
+    }
+    {
+      document.querySelectorAll('div.fm-control-zoom-bar-button')
+        .forEach(e => e.setAttribute('style', 'width:37px;height:32px;'))
+    }
+  });
 
   var devices = {}
   function addMarker(device) {
@@ -140,9 +207,9 @@ const template = `
 <html lang="en">
 
 <head>
-  <title></title>
+  <title>地图</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <script src="https://developer.fengmap.com/fmAPI/demos/libs/js/fengmap.map.min.js"></script>
   <script src="https://developer.fengmap.com/fmAPI/demos/libs/js/fengmap.plugin.min.js"></script>
   <link rel="stylesheet" href="https://developer.fengmap.com/fmAPI/demos/libs/css/index.css">
@@ -189,11 +256,15 @@ export default function mapHtml(mapInfo) {
     themeId: mapInfo.configs.mapThemeCode,
     level: 1,
     mapZoom: mapInfo.configs.zoomLevel,
+    floorControlPositionX: Platform.OS == 'android' ? -11 : -11,
+    floorControlPositionY: Platform.OS == 'android' ? 180 : 240,
+    zoomControlPositionX: Platform.OS == 'android' ? -11 : -11,
+    zoomControlPositionY: Platform.OS == 'android' ? -165 : -150,
   }
   let html = template;
   for (var key in map) {
     html = html.replace(`{{${key}}}`, map[key])
   }
-  // console.log(html)
+  console.log(html)
   return html
 }

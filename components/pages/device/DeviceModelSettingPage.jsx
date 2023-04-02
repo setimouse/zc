@@ -7,9 +7,13 @@ import { StyleSheet, Image, View, Text, SectionList, ScrollView } from "react-na
 import ButtonWidget from "../../widgets/ButtonWidget";
 
 const styles = StyleSheet.create({
+  frame: {
+    height: '61.8%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   image: {
-    width: '100%',
-    height: undefined,
+    width: '85.4%',
     aspectRatio: 1,
   }
 });
@@ -19,7 +23,7 @@ export default function DeviceModelSettingPage() {
 
   return (
     <View style={{ width: '100%', flex: 1, backgroundColor: '#F4F6F8' }}>
-      <View style={{ marginBottom: 44, }}>
+      <View style={styles.frame}>
         <Image source={device.img} style={styles.image} />
       </View>
       {/* <View style={{ paddingHorizontal: 12 }}>

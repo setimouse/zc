@@ -1,4 +1,4 @@
-import { Platform, Pressable, StatusBar, StyleSheet, View } from 'react-native';
+import { Alert, Platform, Pressable, StatusBar, StyleSheet, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -63,6 +63,7 @@ export default function MapPage({ route, navigation }) {
           map = defaultMaps.length > 0 ? defaultMaps[0] : map;
           setDisplayMap(map);
         })
+        .catch(error => Alert.alert(error.message))
     }
   }, [route.params])
 
@@ -93,7 +94,7 @@ export default function MapPage({ route, navigation }) {
   return (
     // <SafeAreaView>
     <View style={styles.container}>
-      <StatusBar translucent={true} />
+      <StatusBar />
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo}
           onMapReady={() => { setMapReady(new Date()) }}
@@ -157,15 +158,16 @@ const styles = StyleSheet.create({
   },
   sidebar: {
     position: 'absolute',
-    right: 12, top: 128,
+    right: 12,
+    top: Platform.OS == 'android' ? 80 : 128,
     width: 36, height: 88,
     backgroundColor: '#FFFFFF',
     borderRadius: 4,
   },
   locate: {
     position: 'absolute',
-    right: 12,
-    bottom: Platform.OS == 'android' ? 120 : 64,
+    right: 9,
+    bottom: Platform.OS == 'android' ? 110 : 64,
     backgroundColor: '#fff',
     width: 40, height: 40,
     borderRadius: 20,
