@@ -16,7 +16,8 @@
 </body>
 <script>
   var map;
-  var mapId = '0ubgbw7385supty';
+  // var mapId = '0ubgbw7385supty';
+  var mapId = 'qk0dyuqja7sr7mq';
   var mapUrl = 'http://47.94.249.77/mediaresource/admin/';
   var themeID = '2000';
   var options = {
@@ -34,6 +35,15 @@
   }
   map = new fengmap.FMMap(options);
 </script>
+<style>
+  .markerText {
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100px;
+    text-align: center;
+  }
+</style>
 <script>
   var ready = false;
   var oriCenter = {}
@@ -134,33 +144,41 @@
     }
 
     /*
-    var marker = new fengmap.FMImageMarker({
-      url: './orangeCone.png',
-      x: device.x,
-      y: device.y
-    });
+        var marker = new fengmap.FMImageMarker({
+          url: './orangeCone.png',
+          x: device.x,
+          y: device.y
+        });
     /*/
     // const imageurl = 'https://developer.fengmap.com/fmAPI/images/gongren.gltf'
     device.fengGLBIcon = 'http://47.94.249.77' + device.fengGLBIcon
     const imageurl = device.fengGLBIcon
-    var marker = new fengmap.FMDynamicModel({
-      // url: 'http://47.94.249.77' + device.fengGLBIcon,
-      url: imageurl,
-      id: 'uuid',
-      height: 0,
-      scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
-        device.consumerEntityExtend.scale : 8,
-      heading: 90,
-      fadeIn: false, fadeOut: false,
-      x: device.x,
-      y: device.y
-    });
+    var combineMarker = [
+      new fengmap.FMDynamicModel({
+        // url: 'http://47.94.249.77' + device.fengGLBIcon,
+        url: imageurl,
+        id: 'uuid',
+        height: 0,
+        scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
+          device.consumerEntityExtend.scale : 8,
+        heading: 90,
+        fadeIn: false, fadeOut: false,
+        x: device.x,
+        y: device.y
+      }),
+      new fengmap.FMDomMarker({
+        content: `<span class='markerText'>${device.consumerName ? device.consumerName : device.deviceId}</span>`,
+        x: device.x,
+        y: device.y,
+      })
+    ];
     //*/
     var level = map.getLevel()
     var floor = map.getFloor(level);
     /* 将 Marker 添加到地图的指定楼层上 */
-    marker.addTo(floor);
-    devices[device['deviceId']] = marker
+    combineMarker.forEach(e => e.addTo(floor))
+    // dyMarker.addTo(floor);
+    devices[device['deviceId']] = combineMarker
   }
 
   function removeMarker(device) {

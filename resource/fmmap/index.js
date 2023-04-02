@@ -69,9 +69,6 @@ const fmmapScript = `
     document.querySelector('div.fm-layer').setAttribute('style', 'width: 37px;height:37px;border-radius:7px;')
     document.querySelector('div.fm-floor-list-group').style.width = width
     document.querySelector('div.fm-floor-list').style.width = width
-    // document.querySelector('div.fm-floor-list').style.height = '100px';
-    // document.querySelectorAll('div.fm-floor-name-container')
-    //   .forEach(e => e.style.padding = '0px 0px')
     document.querySelectorAll('div.fm-scroll')
       .forEach(e => e.style.height = '10px')
   });
@@ -114,27 +111,33 @@ const fmmapScript = `
       y: device.y
     });
     /*/
-    // http://47.94.249.77/static/images/pages/orangeCone_model.glb
-    const imageurl = 'https://developer.fengmap.com/fmAPI/images/gongren.gltf'
-    var marker = new fengmap.FMDynamicModel({
-      url: 'http://47.94.249.77' + device.fengGLBIcon,
-      // url: imageurl,
-      id: 'uuid',
-      height: 0,
-      scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
-        device.consumerEntityExtend.scale : 8,
-      heading: 90,
-      fadeIn: false, fadeOut: false,
-      x: device.x,
-      y: device.y
-    });
+    var combineMarker = [
+      new fengmap.FMDynamicModel({
+        url: 'http://47.94.249.77' + device.fengGLBIcon,
+        // url: imageurl,
+        id: 'uuid',
+        height: 0,
+        scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
+          device.consumerEntityExtend.scale : 8,
+        heading: 90,
+        fadeIn: false, fadeOut: false,
+        x: device.x,
+        y: device.y
+      }),
+      new fengmap.FMTextMarker({
+        text: device.consumerName ? device.consumerName : device.deviceId,
+        content: '<span style="background-color: red;">' + device.consumerName ? device.consumerName : device.deviceId + "</span>",
+        fontsize: 12,
+        x: device.x,
+        y: device.y,
+      }),
+    ];
     //*/
     var level = map.getLevel()
     var floor = map.getFloor(level);
     /* 将 Marker 添加到地图的指定楼层上 */
-    marker.addTo(floor);
-    console.log("device ", device)
-    devices[device['deviceId']] = marker
+    combineMarker.forEach(e => e.addTo(floor))
+    devices[device['deviceId']] = combineMarker
   }
 
   function removeMarker(device) {
@@ -161,7 +164,7 @@ const fmmapScript = `
   }
 
   function move(marker, device) {
-    marker.moveTo({
+    marker.forEach(e => e.moveTo({
       x: device.x,
       y: device.y,
       animate: true,
@@ -169,7 +172,7 @@ const fmmapScript = `
       finish: function () {
         console.log('finished')
       }
-    })
+    }))
   }
 
   function moveMarkers(deviceList) {
