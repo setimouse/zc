@@ -126,7 +126,7 @@ const fmmapScript = `
       }),
       new fengmap.FMTextMarker({
         text: device.consumerName ? device.consumerName : device.deviceId,
-        content: '<span style="background-color: red;">' + device.consumerName ? device.consumerName : device.deviceId + "</span>",
+        // content: '<span style="background-color: red;">' + device.consumerName ? device.consumerName : device.deviceId + "</span>",
         fontsize: 12,
         x: device.x,
         y: device.y,
