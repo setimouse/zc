@@ -36,8 +36,8 @@ export default function DeviceDetailPage(props) {
       .then(data => data.filter(e => e.deviceType == deviceData.deviceType)[0])
       .then(data => { console.log('list target types: ', data); return data })
       .then(data => data.featureImage)
-      .then(image => `${baseURL}${image}`)
-      .then(uri => setImage({ img: { uri: uri } }))
+      .then(image => image ? { uri: `${baseURL}${image}` } : require('../../../assets/default_image.png'))
+      .then(img => setImage({ img: img }))
   }
 
   let getStation = async (data) => {
