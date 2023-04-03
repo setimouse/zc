@@ -33,27 +33,30 @@ export default function DeviceObjectBindingPage() {
 
   return (
     <View style={[styles.container]}>
-      <SearchBarWidget placeholder="请输入设备编号"
+      <SearchBarWidget placeholder="请输入对象名称"
         storeKey="binding-object"
+        initStatus={{ isSearching: false, isResult: true }}
         onChangeText={(text) => {
           let filtered = objects.filter(e => e.obj.indexOf(text) > -1)
           setDisplayObjs(filtered);
+          return { isSearching: false, isResult: true, }
         }}
+        resultPage={<View style={styles.objects}>
+          <FlatList
+            data={displayObjs}
+            keyExtractor={item => item.id}
+            renderItem={({ item }) => <Item
+              object={item}
+              onPress={() => {
+                navigation.navigate('devicedetail', {
+                  item: item,
+                })
+              }}
+            />}
+          />
+        </View>}
       />
-      <View style={styles.objects}>
-        <FlatList
-          data={displayObjs}
-          keyExtractor={item => item.id}
-          renderItem={({ item }) => <Item
-            object={item}
-            onPress={() => {
-              navigation.navigate('devicedetail', {
-                item: item,
-              })
-            }}
-          />}
-        />
-      </View>
+
 
     </View>
   );

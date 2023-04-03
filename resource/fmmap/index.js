@@ -257,7 +257,7 @@ export default function mapHtml(mapInfo) {
     baseURL: baseURL,
     mapId: mapInfo.configs.mapCode,
     themeId: mapInfo.configs.mapThemeCode,
-    level: 1,
+    level: mapInfo.configs.defaultFloor,
     mapZoom: mapInfo.configs.zoomLevel,
     floorControlPositionX: Platform.OS == 'android' ? -11 : -11,
     floorControlPositionY: Platform.OS == 'android' ? 180 : 240,
@@ -268,6 +268,6 @@ export default function mapHtml(mapInfo) {
   for (var key in map) {
     html = html.replace(`{{${key}}}`, map[key])
   }
-  console.log(html)
+  // console.log(html)
   return html
 }

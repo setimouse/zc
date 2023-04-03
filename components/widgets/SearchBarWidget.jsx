@@ -27,7 +27,7 @@ function Item({ item, onDelete, onSelected }) {
   )
 }
 
-export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onChangeText, resultPage }) {
+export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onChangeText, resultPage, initStatus }) {
   const [text, setText] = useState('');
   const [searching, setSearching] = useState(false);
   const [result, setResult] = useState(false);
@@ -96,6 +96,12 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
       .then(history => {
         setHistory(history)
       })
+    if (initStatus) {
+      let { isSearching, isResult } = initStatus;
+      isSearching !== null && setSearching(isSearching)
+      isResult !== null && setResult(isResult)
+    }
+
   }, [])
 
   function search(word) {
@@ -123,7 +129,11 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
             clearButtonMode='always'
             onChangeText={(text) => {
               setText(text)
-              onChangeText && onChangeText(text)
+              if (onChangeText) {
+                let { isSearching, isResult } = onChangeText(text)
+                isSearching !== null && setSearching(isSearching)
+                isResult !== null && setResult(isResult)
+              }
             }}
             autoFocus={true}
             onFocus={() => {

@@ -31,7 +31,6 @@ export default function SearchResultItemWidget({ item, detailText, onTargetPress
 
 const styles = StyleSheet.create({
   searchbox: {
-    // flex: 10,
     justifyContent: 'space-between',
     flexDirection: 'row',
     padding: 12,
@@ -41,16 +40,20 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   left: {
-    // flex: 6
+    flex: 3,
+    overflow: 'hidden',
   },
   right: {
-    // flex: 4
+    flex: 1,
     justifyContent: 'space-between',
     alignItems: 'flex-end',
   },
   infoText: {
     fontSize: 12,
+    overflow: 'hidden',
+    flexWrap: 'nowrap',
     marginBottom: 4,
+    overflow: 'hidden',
   },
   icon: {
     width: 40,
