@@ -101,7 +101,7 @@ export default function MapPage({ route, navigation }) {
         />
       </View>
       <View style={styles.search}>
-        <MapSearchWidget placeholder="请输入车号、设备编号"
+        <MapSearchWidget placeholder="请输入车号"
           onFocus={e => { navigation.navigate('mapsearch') }}
         />
       </View>

@@ -26,7 +26,7 @@ export default function MainMap() {
     <MapProvider>
       <Stack.Navigator initialRouteName='mapmain'>
         <Stack.Screen name="mapmain" component={MapPage} options={headBar({ header: () => null })} />
-        <Stack.Screen name="mapsearch" component={MapSearchPage} options={headBar({ title: '搜索车号及设备' })} />
+        <Stack.Screen name="mapsearch" component={MapSearchPage} options={headBar({ title: '搜索车号' })} />
         <Stack.Screen name="switchmap" component={SwitchMapPage} options={headBar({ title: '地图', })} />
         <Stack.Screen name="vehicledetail" component={VehicleDetailPage} options={headBar({ title: '车辆详情' })} />
         <Stack.Screen name="devicesearch" component={DeviceSearchPage} options={headBar({ title: '设备' })} />

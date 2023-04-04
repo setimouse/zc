@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View, Text, Image, Pressable } from "react-native";
 
@@ -21,9 +20,11 @@ export default function SearchResultItemWidget({ item, detailText, onTargetPress
         <Pressable onPress={() => onDetailPress && onDetailPress()}>
           <Text style={{ color: '#B0B1B3', fontSize: 14 }}>{detailText} &raquo;</Text>
         </Pressable>
-        <Pressable onPress={() => onTargetPress && onTargetPress()}>
-          <Image style={styles.icon} source={require('../../assets/locate.png')} />
-        </Pressable>
+        {item.info.consumerName &&
+          <Pressable onPress={() => onTargetPress && onTargetPress()}>
+            <Image style={styles.icon} source={require('../../assets/locate.png')} />
+          </Pressable>
+        }
       </View>
     </View >
   )

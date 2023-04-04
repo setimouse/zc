@@ -31,7 +31,7 @@ export default function DeviceSearchPage(props) {
                 items: [
                   { key: '设备型号', value: r.deviceType },
                   { key: '设备ID', value: r.deviceId },
-                  { key: '车号', value: r.consumerName },
+                  { key: '车号', value: r.consumerName ?? '-' },
                 ],
                 info: r,
               }
