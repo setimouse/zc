@@ -24,10 +24,6 @@ export default function DeviceSearchPage(props) {
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
           search(keywords)
-            // .then(resp => {
-            //   console.log(resp)
-            //   return resp;
-            // })
             .then(resp => resp.data.list)
             .then(data => data.map(r => {
               return {
@@ -41,10 +37,7 @@ export default function DeviceSearchPage(props) {
               }
             })
             )
-            .then(results => {
-              setResult(results)
-              // console.log(results);
-            })
+            .then(setResult)
             .catch(error => console.log('error', error.message))
         }}
       />
@@ -57,25 +50,31 @@ function Page({ result }) {
 
   return (
     <View style={{ width: '100%', flex: 1, }}>
-      <FlatList style={{}}
-        data={result}
-        renderItem={({ item }) => (
-          <SearchResultItemWidget item={item}
-            detailText="设备详情"
-            onTargetPress={() => {
-              navigation.navigate('mapmain', {
-                deviceId: item.info.deviceId
-              })
-            }}
-            onDetailPress={() => {
-              navigation.navigate('devicedetail', {
-                targetId: item.info.id
-              })
-            }}
-          />
-        )}
-        keyExtractor={item => item.id}
-      />
+      {result.length > 0 &&
+        <FlatList style={{}}
+          data={result}
+          renderItem={({ item }) => (
+            <SearchResultItemWidget item={item}
+              detailText="设备详情"
+              onTargetPress={() => {
+                navigation.navigate('mapmain', {
+                  deviceId: item.info.deviceId
+                })
+              }}
+              onDetailPress={() => {
+                navigation.navigate('devicedetail', {
+                  targetId: item.info.id
+                })
+              }}
+            />
+          )}
+          keyExtractor={item => item.id}
+        />
+        ||
+        <View style={{ flex: 0.618, justifyContent: 'center', alignItems: 'center' }}>
+          <Text style={{ color: '#666' }}>暂无信息</Text>
+        </View>
+      }
     </View>
   );
 }

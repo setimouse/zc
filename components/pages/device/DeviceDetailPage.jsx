@@ -127,6 +127,11 @@ export default function DeviceDetailPage(props) {
               ], { cancelable: false })
             }} />
             || <ButtonWidget title='绑定' onPress={() => {
+              if (!device.consumerId) {
+                Alert.alert('请选择要绑定的对象')
+                return;
+              }
+              console.log(device.consumerId)
               Alert.alert('确认绑定该设备吗？', '', [
                 {
                   text: '确认', onPress: () => bind({ targetId: device.id, consumerId: device.consumerId })

@@ -111,12 +111,15 @@ const fmmapScript = `
       y: device.y
     });
     /*/
+    const maxLength = 15
+    let markerText = device.consumerName ? device.consumerName : device.deviceId
+    markerText = markerText.length > maxLength ? markerText.substr(0, maxLength) + '...' : markerText
     var combineMarker = [
       new fengmap.FMDynamicModel({
         url: 'http://47.94.249.77' + device.fengGLBIcon,
         // url: imageurl,
         id: 'uuid',
-        height: 0,
+        height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
         scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
           device.consumerEntityExtend.scale : 8,
         heading: 90,
@@ -125,9 +128,10 @@ const fmmapScript = `
         y: device.y
       }),
       new fengmap.FMTextMarker({
-        text: device.consumerName ? device.consumerName : device.deviceId,
-        // content: '<span style="background-color: red;">' + device.consumerName ? device.consumerName : device.deviceId + "</span>",
+        text: markerText,
         fontsize: 12,
+        fillColor: device.consumerEntityExtend && device.consumerEntityExtend.color || '#ccc',
+        height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
         x: device.x,
         y: device.y,
       }),
