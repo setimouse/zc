@@ -8,6 +8,21 @@ import SearchResultItemWidget from '../../widgets/SearchResultItemWidget';
 export default function MapSearchPage() {
   const { requestListTargetReals, requestStation } = useContext(MapContext)
   const [searchResult, setSearchResult] = useState([]);
+  const [stageInfo, setStageInfo] = useState({ id: '', stage: null })
+
+  useEffect(() => {
+    console.log('stage info', stageInfo)
+    searchResult.forEach(e => {
+      if (e.id !== stageInfo.id) {
+        return
+      }
+      e.items.forEach(kv => {
+        if (kv.key == '当前台位') kv.value = stageInfo.stage === '' ? '-' : stageInfo.stage
+      })
+    })
+    setSearchResult(searchResult)
+    console.log('after', stageInfo)
+  }, [stageInfo])
 
   let search = async ({ consumerName }) => {
     requestListTargetReals({ consumerName: consumerName })
@@ -21,39 +36,10 @@ export default function MapSearchPage() {
             { key: '设备编号', value: e.deviceId },
           ],
           info: e,
-          stage: null, // 台位信息
+          stageTag: null,
         }
       }))
-      .then(result => {
-        setSearchResult(result)
-        return result
-      })
-      .catch(console.log)
-  }
-
-  useEffect(() => {
-    let changed = false
-    searchResult.forEach(e => {
-      if (e.stage !== null) {
-        return
-      }
-      e.stage = 1
-      changed |= true
-      requestStation({ x: e.info.x, y: e.info.y }).then(resp => resp.data)
-        .then(data => {
-          const stage = data.length > 0 ? data[0].fenceName : '-'
-          console.log('stage', stage)
-          e.items.forEach((e, i) => {
-            if (e.key == '当前台位') e.value = stage
-          })
-          updateStage(searchResult)
-        })
-    })
-    changed && setSearchResult(searchResult)
-  }, [searchResult])
-
-  function updateStage(searchResult) {
-    setSearchResult(searchResult)
+      .then(setSearchResult)
   }
 
   return (
@@ -67,7 +53,22 @@ export default function MapSearchPage() {
       <SearchBarWidget
         storeKey="map-search"
         resultPage={<Page result={searchResult}
-          onRequestStation={({ item }) => { }}
+          onRequestStation={({ item }) => {
+            if (item.stageTag) {
+              return
+            }
+            item.stageTag = 1
+            // console.log(item)
+            const info = item.info
+            requestStation({ x: info.x, y: info.y }).then(resp => resp.data)
+              .then(data => {
+                const stage = data.length > 0 ? data[0].fenceName ?? '-' : '-'
+                console.log('stage', stage, info.deviceId, info.x, info.y)
+                setStageInfo({ id: item.id, stage: stage })
+                setStageInfo({ id: '------------', stage: stage })
+              })
+              .catch(console.log)
+          }}
         />}
         onSubmit={(keyword) => search({ consumerName: keyword })}
       />
@@ -89,9 +90,7 @@ function Page({ result, onRequestStation }) {
       <FlatList style={{ height: '100%' }}
         data={result}
         renderItem={({ item }) => {
-          if (item.stage === null) {
-            onRequestStation && onRequestStation({ item })
-          }
+          onRequestStation && onRequestStation({ item })
           return (
             <SearchResultItemWidget item={item}
               detailText="车辆详情"

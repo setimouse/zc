@@ -7,7 +7,7 @@ export default function SearchResultItemWidget({ item, detailText, onTargetPress
       <View style={styles.left}>
         {
           item.items.map(info => {
-            console.log(info)
+            // console.log(info)
             return (
               <Text key={info.key} style={styles.infoText}>
                 {info.key}: {info.value}
