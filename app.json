@@ -2,12 +2,12 @@
   "expo": {
     "name": "智能车辆调度",
     "slug": "zc",
-    "version": "0.0.0.1",
+    "version": "0.0.0.2",
     "orientation": "portrait",
-    "icon": "./assets/app-icon.png",
+    "icon": "./assets/app-icon_1024.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/splash_1284.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
