@@ -48,7 +48,7 @@ const fmmapScript = `
       mapEl.appendChild(viewModeDom);
       function renderText() {
         let el = document.querySelector('#customViewMode')
-        el.innerHTML = map.getViewMode() == fengmap.FMViewMode.MODE_2D
+        el.innerHTML = map.getViewMode() == fengmap.FMViewMode.MODE_3D
           ? '2D' : '3D';
       }
       renderText()
@@ -119,7 +119,8 @@ const fmmapScript = `
         url: 'http://47.94.249.77' + device.fengGLBIcon,
         // url: imageurl,
         id: 'uuid',
-        height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
+        // height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
+        height: 0,
         scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
           device.consumerEntityExtend.scale : 8,
         heading: 90,

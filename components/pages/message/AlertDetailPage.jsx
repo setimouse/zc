@@ -109,6 +109,7 @@ function DealBox({ id, onClose, onSave }) {
             <TextInput multiline={true} textAlignVertical="top"
               style={styles.opinionText}
               onChangeText={setOpinion}
+              maxLength={100}
             />
           </View>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>

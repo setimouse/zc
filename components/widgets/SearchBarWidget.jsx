@@ -124,6 +124,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
           <EvilIcons name="search" size={22} color="white" />
           <TextInput style={styles.search}
             value={text}
+            maxLength={100}
             ref={c => searchBox = c}
             placeholder={placeholder ?? '搜索词'}
             clearButtonMode='always'
@@ -205,11 +206,13 @@ const styles = StyleSheet.create({
   },
   search: {
     flex: 1,
+    height: 32,
     width: '100%',
     fontSize: 14,
     paddingLeft: 4,
     marginVertical: 8,
     color: 'white',
+    alignContent: 'center'
   },
   history: {
     position: 'absolute',

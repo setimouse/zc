@@ -8,10 +8,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingVertical: 13,
     paddingHorizontal: 12,
-    alignItems: 'center',
   },
   textMiddle: {
     fontSize: 14,
+    textAlign: "right",
   }
 })
 
@@ -25,7 +25,9 @@ const Item = ({ info, index }) => {
   return (
     <View style={styles.item}>
       <Text style={styles.textMiddle}>{info.key}</Text>
-      {value}
+      <View style={{ marginLeft: 12, flex: 1 }}>
+        {value}
+      </View>
     </View>
   )
 };
