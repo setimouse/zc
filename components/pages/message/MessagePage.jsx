@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#DDDEDF',
     borderBottomWidth: 0.5,
     flex: 1,
+    justifyContent: 'center',
   },
   title: {
     paddingTop: 11,
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingBottom: 4,
     color: '#3E4146',
-
+    flex: 0.618,
   },
   subtitle: {
     color: '#B0B1B3',
@@ -67,7 +68,7 @@ function Item({ barge, icon, title, subtitle, onPress }) {
         </View>
         <View style={styles.info}>
           <Text style={styles.title}>{title}</Text>
-          <Text style={styles.subtitle}>{subtitle}</Text>
+          {/* <Text style={styles.subtitle}>{subtitle}</Text> */}
         </View>
       </View>
     </Pressable>

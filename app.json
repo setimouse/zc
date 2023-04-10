@@ -8,8 +8,11 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash_1284.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
+    },
+    "androidStatusBar": {
+      "hidden": true
     },
     "assetBundlePatterns": [
       "**/*"
