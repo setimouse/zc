@@ -119,6 +119,7 @@ function DealBox({ id, onClose, onSave }) {
                 onChange={() => setOpinionError('')}
                 maxLength={maxLength}
                 style={{ height: '100%' }}
+                value={opinion}
               />
               <Text style={{
                 flexDirection: 'row',
@@ -147,6 +148,10 @@ function DealBox({ id, onClose, onSave }) {
               <ButtonWidget title="保存" onPress={() => {
                 if (opinion.length < 1) {
                   setOpinionError('请输入处理信息')
+                  return
+                }
+                if (opinion.trim() == '') {
+                  setOpinionError('处理信息不能是空格')
                   return
                 }
                 onSave(opinion, isMisinformation)
