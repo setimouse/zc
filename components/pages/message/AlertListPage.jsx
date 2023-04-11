@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { FlatList, Image, StyleSheet, Text, View, Pressable, ActivityIndicator } from "react-native";
+import { FlatList, Image, StyleSheet, Text, View, Pressable, ActivityIndicator, RefreshControl } from "react-native";
 import AlertPending from '../../../assets/alert_pending.png';
 import AlertDone from '../../../assets/alert_done.png';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -131,31 +131,48 @@ function AlertList(props) {
   const params = props.route.params;
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [isRefreshing, setIsRefreshing] = useState(false)
   const [loadError, setLoadError] = useState()
 
-  useEffect(function () {
+  const loadAlarmEvent = () => {
     setIsLoading(true)
     alarmEvent({ processingStatus: params.processingStatus, pageSize: 1000, })
       .then(resp => setData(resp.list))
-      .then(() => setIsLoading(false))
+      .then(() => {
+        setIsLoading(false)
+        setIsRefreshing(false)
+      })
       .catch(error => {
         console.log(error)
         setLoadError(error.message)
         setIsLoading(false)
+        setIsRefreshing(false)
       })
+  }
+
+  useEffect(function () {
+    loadAlarmEvent()
     return () => {
     }
   }, [alarmItems])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
-      {isLoading
+      {(isLoading && !isRefreshing)
         && <View style={{ flex: 1, justifyContent: 'center' }}>
           <ActivityIndicator></ActivityIndicator>
         </View>
         || (data.length > 0 &&
           <FlatList
             data={data}
+            refreshControl={
+              <RefreshControl refreshing={isRefreshing}
+                onRefresh={() => {
+                  setIsRefreshing(true)
+                  loadAlarmEvent()
+                }}
+              />
+            }
             keyExtractor={item => item.alarmEventId}
             renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
           />)
@@ -167,7 +184,6 @@ function AlertList(props) {
           <View style={{ flex: 1, justifyContent: 'center' }}>
             <Text style={{ textAlign: 'center', marginHorizontal: 24 }}>没有告警信息</Text>
           </View>)
-
       }
     </View>
   )
