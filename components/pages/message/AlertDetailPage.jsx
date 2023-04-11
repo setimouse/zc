@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { ActivityIndicator, Alert, Keyboard, Pressable, Switch, TextInput } from "react-native";
+import { ActivityIndicator, Alert, Keyboard, Platform, Pressable, Switch, TextInput } from "react-native";
 import { StyleSheet, View, Text, ScrollView, Modal } from "react-native";
 import { AlarmContext } from "../../../webserve/AlarmContext";
 import ButtonWidget from "../../widgets/ButtonWidget";
@@ -83,22 +83,29 @@ function DealBox({ id, onClose, onSave }) {
       shadowOffset: { width: 0, height: 0 },
       shadowOpacity: 1,
       shadowRadius: 5,
-      elevation: 5,
+      elevation: 100,
     },
     opinion: {
-      marginBottom: 12,
+      marginBottom: Platform.OS == 'ios' ? 12 : 0,
     },
-    opinionText: {
+    opinionTextView: {
       borderColor: '#ccc',
       borderWidth: 1,
       height: 128,
+      justifyContent: 'space-between',
+    },
+    errorText: {
+      color: '#f00', fontSize: 12
     }
   })
 
   const [isMisinformation, setIsMisinformation] = useState(false);
   const [opinion, setOpinion] = useState('');
+  const [opinionError, setOpinionError] = useState('');
 
   const toggleSwitch = () => setIsMisinformation(isMisinformation => !isMisinformation);
+
+  const maxLength = 100
 
   return (
     <Pressable onPress={() => Keyboard.dismiss()}>
@@ -106,25 +113,45 @@ function DealBox({ id, onClose, onSave }) {
         <View style={styles.window}>
           <View style={styles.opinion}>
             <Text style={{ marginBottom: 8 }}>处理意见</Text>
-            <TextInput multiline={true} textAlignVertical="top"
-              style={styles.opinionText}
-              onChangeText={setOpinion}
-              maxLength={100}
-            />
+            <View style={styles.opinionTextView}>
+              <TextInput multiline={true} textAlignVertical="top"
+                onChangeText={setOpinion}
+                onChange={() => setOpinionError('')}
+                maxLength={maxLength}
+                style={{ height: '100%' }}
+              />
+              <Text style={{
+                flexDirection: 'row',
+                textAlign: 'right',
+                fontSize: 12,
+                color: '#666'
+              }}>{opinion.length}/{maxLength}</Text>
+            </View>
+            <Text style={styles.errorText}>{opinionError !== '' && opinionError}</Text>
           </View>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12 }}>
-            <Text style={{ marginRight: 12 }}>是否误报</Text>
-            <Switch trackColor={{ true: '#2882FF' }}
-              value={isMisinformation}
-              onValueChange={toggleSwitch}
-            />
+          <View style={{ marginBottom: 12 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+              <Text style={{ marginRight: 12 }}>是否误报</Text>
+              <Switch trackColor={{ true: '#2882FF' }}
+                value={isMisinformation}
+                onValueChange={toggleSwitch}
+              />
+            </View>
+            {/* <Text style={styles.errorText}>请选择是否误报</Text> */}
           </View>
           <View style={{ marginTop: 12, flexDirection: 'row', justifyContent: 'space-around' }}>
             <View style={{ width: '40%' }}>
               <ButtonWidget title="关闭" onPress={onClose} />
             </View>
             <View style={{ width: '40%' }}>
-              <ButtonWidget title="保存" onPress={() => onSave(opinion, isMisinformation)} />
+              <ButtonWidget title="保存" onPress={() => {
+                if (opinion.length < 1) {
+                  setOpinionError('请输入处理信息')
+                  return
+                }
+                onSave(opinion, isMisinformation)
+              }
+              } />
             </View>
           </View>
         </View>
