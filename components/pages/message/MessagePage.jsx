@@ -89,7 +89,7 @@ export default function MessagePage() {
   }
 
   useEffect(function () {
-    console.log('start interval')
+    // console.log('start interval')
     reminder()
       .catch(error => Alert.alert(error));
     // const timer = setInterval(() => {

@@ -71,6 +71,9 @@ const fmmapScript = `
     document.querySelector('div.fm-floor-list').style.width = width
     document.querySelectorAll('div.fm-scroll')
       .forEach(e => e.style.height = '10px')
+    document.querySelector('.fm-floor-list').style.padding="0 0 0 0"
+    document.querySelectorAll('.fm-floor-name-container').forEach(e => e.style.padding = "0 0 0 0")
+    document.querySelectorAll('.fm-floor-name').forEach(e => e.style.height = '48px')
   });
 
   map.on('loaded', function () {

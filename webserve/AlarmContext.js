@@ -22,9 +22,9 @@ export const AlarmProvider = ({ children }) => {
           return Promise.reject(response);
         }
         let data = respData.data;
+        console.log('alarm data', data);
         setAlarmCount(data.count);
         setAlarmItems(data.items)
-        console.log(data);
       })
       .catch(error => {
         console.log('reminder error', error)
