@@ -41,7 +41,7 @@ export const MapProvider = ({ children }) => {
   /**
    * 获取设备实时位置
    */
-  async function requestListTargetReals({ consumerStatus = 1, deviceList = [], status = 0 }) {
+  async function requestListTargetRealsDevice({ consumerStatus = 1, deviceList = [], status = 0 }) {
     const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/listTargetReals`
     return fetch_json(url, {
       method: 'POST',
@@ -162,6 +162,7 @@ export const MapProvider = ({ children }) => {
       requestStation, requestListTargetTypes,
       requestBind, requestUnbind,
       requestVehicleBase, requestVehicleDetail,
+      requestListTargetRealsDevice,
     }}>
       {children}
     </MapContext.Provider>

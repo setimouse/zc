@@ -10,7 +10,7 @@ import { Dimensions } from 'react-native';
 
 export default function MapPage({ route, navigation }) {
   const { requestDefaultMap, requestMapList, requestIndoorMap,
-    requestListTargetReals } = useContext(MapContext)
+    requestListTargetRealsDevice } = useContext(MapContext)
   const { siteSetting } = useContext(AuthContext)
   const [displayMap, setDisplayMap] = useState()
   const [mapInfo, setMapInfo] = useState()
@@ -19,7 +19,7 @@ export default function MapPage({ route, navigation }) {
 
   const refreshDevice = () => {
     console.log('refresh device')
-    requestListTargetReals({ consumerStatus: 1, deviceList: deviceList }).then((resp) => {
+    requestListTargetRealsDevice({ consumerStatus: 1, deviceList: deviceList }).then((resp) => {
       // console.log('list target reals:', resp)
       let list = resp.data
       console.log("device list:", list.map(e => e.deviceId))
@@ -37,7 +37,7 @@ export default function MapPage({ route, navigation }) {
     } else if (route.params && route.params.deviceId) {
       console.log('deviceId:', route.params.deviceId)
       const deviceId = route.params.deviceId
-      requestListTargetReals({ deviceList: [deviceId] })
+      requestListTargetRealsDevice({ deviceList: [deviceId] })
         .then(resp => resp.data.filter(e => e.deviceId == deviceId))
         .then(list => {
           console.log(list)
