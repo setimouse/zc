@@ -17,6 +17,8 @@ export const AuthProvider = ({ children }) => {
   const [secretKeySpec, setSecretKeySpec] = useState();
   const [ivParameterSpec, setIvParameterSpec] = useState();
 
+  const [captcha, setCaptcha] = useState();
+
   useEffect(() => {
     console.log('setting', siteSetting)
     if (typeof siteSetting !== 'object') {
@@ -79,7 +81,7 @@ export const AuthProvider = ({ children }) => {
       .then(json => json.data)
   }
 
-  async function login(username, password) {
+  async function login(username, password, code = null) {
     if (__DEV__) {
       username = 'admin'; password = '123456';
       // username = 'lichao'; password = 'admin123!';
@@ -103,18 +105,18 @@ export const AuthProvider = ({ children }) => {
 
     const url = baseURL + '/lmsapi/lms-auth/oauth/token';
     const fetchUrl = `${url}?grant_type=captcha&username=${username}&password=${password}`
-    console.log('login url=' + fetchUrl);
+    let params = { username: username, password: password, grant_type: 'captcha' }
+    if (captcha) {
+      params.code = code
+      params.uuid = captcha.uuid
+    }
+    console.log('login url=' + fetchUrl, 'params', params);
     return await fetch(fetchUrl, {
       method: 'POST',
       headers: {
         Authorization: 'Basic bWFsbC1hZG1pbi13ZWI6MTIzNDU2',
       },
-      params: JSON.stringify({
-        username: username,
-        password: password,
-        grant_type: 'captcha',
-        uuid: '',
-      })
+      params: JSON.stringify(params)
     }).then(resp => resp.json())
       .then(json => {
         if (json.code === 'B0001') {
@@ -136,6 +138,7 @@ export const AuthProvider = ({ children }) => {
         setTokenType(data['token_type'])
         storage.setItem(data["access_token"]).then(() => {
         })
+        setCaptcha(null)
       })
   }
 
@@ -166,11 +169,32 @@ export const AuthProvider = ({ children }) => {
       .catch(console.log)
   }
 
+  async function requestCaptcha() {
+    const url = baseURL + '/lmsapi/captcha?t=' + new Date().getUTCMilliseconds()
+    const fetchUrl = `${url}`
+    console.log('captcha url=' + fetchUrl);
+    return await fetch(fetchUrl).then(resp => resp.json())
+      .then(json => {
+        console.log('captcha json', json)
+        if (!json.code || json.code !== '00000') {
+          console.log('jsoncode', json.code)
+          throw new Error(json.msg)
+        }
+        return json.data
+      })
+      .then(data => {
+        console.log('captcha', data)
+        setCaptcha(data)
+      })
+      .catch(error => console.log('captcha error', error))
+  }
+
   return (
     <AuthContext.Provider value={{
       fetch_json, accessToken, tokenType,
       userInfo, isLogin, login, logout, loadMe, me,
       siteSetting,
+      requestCaptcha, captcha
     }}>
       {children}
     </AuthContext.Provider>

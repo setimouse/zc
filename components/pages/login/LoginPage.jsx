@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Alert, Text, View, TextInput, Pressable, Image, ImageBackground, Dimensions } from 'react-native';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import BackgroundImage from '../../../assets/login_bg.png';
 import { AuthContext } from '../../../webserve/AuthContext';
 import IconUser from '../../../assets/login_icon_user.png';
@@ -54,17 +54,29 @@ function InputIconBox({ placeholder, maxLength = 9999, source, onChangeText, val
 }
 
 export default function LoginPage() {
-  const { login } = useContext(AuthContext)
+  const { login, captcha, requestCaptcha } = useContext(AuthContext)
   const [phoneNumber, setPhoneNumbers] = useState('');
   const [password, setPassword] = useState('');
   const { width, height } = Dimensions.get('screen');
   const [hidePassword, setHidePassword] = useState()
-
+  const [wrongTimes, setWrongTimes] = useState(0);
+  const [verifyCode, setVerifyCode] = useState('');
   const usernameMaxLength = 30
 
   useEffect(() => {
     setHidePassword(true)
   }, [])
+
+  useEffect(() => {
+    if (wrongTimes > 2) {
+      console.log('wrong time over', wrongTimes)
+      requestCaptcha()
+    }
+  }, [wrongTimes])
+
+  useEffect(() => {
+    console.log('captcha', captcha)
+  }, [captcha])
 
   return (
     <View style={styles.container}>
@@ -90,11 +102,34 @@ export default function LoginPage() {
               </Pressable>
             }
           />
+          {captcha &&
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+              <TextInput style={{
+                borderColor: '#ccc', borderWidth: 1,
+                width: '50%', height: 32,
+                flex: 0.5
+                // backgroundColor: 'red',
+              }}
+                placeholder='请输入验证码'
+                onChangeText={setVerifyCode}
+                value={verifyCode}
+              />
+              <Pressable onPress={() => requestCaptcha()} style={{ flex: 0.45, borderColor: '#ccc', borderWidth: 1, }}>
+                <Image source={{ uri: captcha.img }} style={{ flex: 1 }} />
+              </Pressable>
+            </View>
+          }
         </View>
         <Pressable style={styles.loginButton}
           onPress={() => {
-            login(phoneNumber, password)
+            if (captcha && verifyCode == '') {
+              Alert.alert('', '请输入验证码')
+              return
+            }
+            login(phoneNumber, password, verifyCode)
               .catch((error) => {
+                console.log(wrongTimes)
+                setWrongTimes(wrongTimes + 1)
                 Alert.alert('', error.message);
               })
           }}
@@ -103,8 +138,8 @@ export default function LoginPage() {
         </Pressable>
         {/* <Text style={{ fontSize: 14, color: '#3E4146', fontWeight: 'bold' }}>忘记密码？</Text> */}
         <StatusBar translucent={true} />
-      </ImageBackground>
-    </View>
+      </ImageBackground >
+    </View >
   );
 }
 
