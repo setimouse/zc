@@ -50,7 +50,7 @@ export default function SwitchMapPage({ route }) {
         <Text style={styles.currentMap}>当前地图</Text>
         <View style={styles.currentName}>
           <Image style={styles.locateIcon} source={CurrentImage} />
-          <Text style={styles.currentText}>{currentMap.name}</Text>
+          <Text style={styles.currentText}>{currentMap ? currentMap.name : '[当前地图未知]'}</Text>
         </View>
       </View>
       <View style={styles.listView}>

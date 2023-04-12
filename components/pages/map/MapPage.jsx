@@ -54,6 +54,7 @@ export default function MapPage({ route, navigation }) {
         .then(response => response.data.list)
         .then(list => list.filter(e => e.id != '-101'))
         .then(list => {
+          // console.log('map list', list)
           if (list.length < 1) {
             return
           }

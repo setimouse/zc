@@ -82,6 +82,7 @@ export const AuthProvider = ({ children }) => {
   async function login(username, password) {
     if (__DEV__) {
       username = 'admin'; password = '123456';
+      // username = 'lichao'; password = 'admin123!';
     }
 
     const encode = (data) => {
