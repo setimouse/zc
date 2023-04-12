@@ -206,7 +206,7 @@ function alertInfo2listData(alert) {
       title: '处理信息',
       data: [
         { key: '处理方式', value: handleMap[alert['handleWay']] ? handleMap[alert['handleWay']].title : '未知' },
-        { key: '处理意见', value: alert['opinion'] },
+        { key: '处理意见', value: (alert['opinion'] ?? "").length > 19 ? <Text style={{ textAlign: 'left' }}>{alert['opinion']}</Text> : alert['opinion'] },
         { key: '处理时间', value: alert['misinformationTime'] },
         { key: '是否误报', value: alert['isMisinformation'] ? '是' : '否' },
         { key: '处理状态', value: processingStatusMap[alert['processingStatus']] ? processingStatusMap[alert['processingStatus']].title : '未知' },
