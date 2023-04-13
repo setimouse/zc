@@ -64,6 +64,9 @@ export const AuthProvider = ({ children }) => {
     })
   }
 
+  /**
+   * 获取配置信息
+   */
   async function requestSiteSetting() {
     const url = `${baseURL}/lmsapi/lms-admin/api/v1/siteSetting`
     console.log('request site setting', url)
@@ -81,6 +84,9 @@ export const AuthProvider = ({ children }) => {
       .then(json => json.data)
   }
 
+  /**
+   * 登录
+   */
   async function login(username, password, code = null) {
     if (__DEV__) {
       username = 'admin'; password = '123456';
@@ -142,6 +148,9 @@ export const AuthProvider = ({ children }) => {
       })
   }
 
+  /**
+   * 登出
+   */
   async function logout() {
     const url = baseURL + '/lmsapi/lms-auth/oauth/logout';
     const fetchUrl = `${url}`
@@ -161,6 +170,9 @@ export const AuthProvider = ({ children }) => {
       })
   }
 
+  /**
+   * 获取我的信息
+   */
   async function loadMe() {
     const url = `${baseURL}/lmsapi/lms-admin/api/v1/users/me`
     return fetch_json(url)
@@ -169,6 +181,9 @@ export const AuthProvider = ({ children }) => {
       .catch(console.log)
   }
 
+  /**
+   * 获取验证码
+   */
   async function requestCaptcha() {
     const url = baseURL + '/lmsapi/captcha?t=' + new Date().getUTCMilliseconds()
     const fetchUrl = `${url}`

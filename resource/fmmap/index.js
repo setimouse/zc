@@ -141,10 +141,11 @@ const fmmapScript = `
       }),
     ];
     //*/
-    var level = map.getLevel()
-    var floor = map.getFloor(level);
     /* 将 Marker 添加到地图的指定楼层上 */
-    combineMarker.forEach(e => e.addTo(floor))
+    if (map.getLevels().includes(device.baseFloor)) {
+      var floor = map.getFloor(device.baseFloor);
+      combineMarker.forEach(e => e.addTo(floor))
+    }
     devices[device['deviceId']] = combineMarker
   }
 
