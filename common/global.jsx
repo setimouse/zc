@@ -1,3 +1,4 @@
+import { Alert } from 'react-native';
 import IconBack from '../assets/back.png';
 
 const headBar = (options) => {
@@ -14,3 +15,14 @@ const headBar = (options) => {
 };
 
 export default headBar;
+
+export function CommonAlert(title, message) {
+  Alert.alert(title, message, [{ text: '确定' }])
+}
+export function SimpleAlert(message) {
+  CommonAlert('', message)
+}
+
+export function AlertError(error) {
+  SimpleAlert(error.message)
+}

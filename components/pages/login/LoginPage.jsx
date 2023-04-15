@@ -6,6 +6,7 @@ import { AuthContext } from '../../../webserve/AuthContext';
 import IconUser from '../../../assets/login_icon_user.png';
 import IconPassword from '../../../assets/login_icon_password.png';
 import { Ionicons } from '@expo/vector-icons';
+import { AlertError, SimpleAlert } from '../../../common/global';
 
 function InputIconBox({ placeholder, maxLength = 9999, source, onChangeText, value, secureTextEntry = false, tip }) {
   const s = StyleSheet.create({
@@ -86,11 +87,11 @@ export default function LoginPage() {
         </View>
         <View style={styles.inputbox}>
           <InputIconBox placeholder="请输入帐号" source={IconUser} value={phoneNumber} onChangeText={setPhoneNumbers}
-            tip={
-              <Text style={{ fontSize: 10, color: 'lightgrey' }}>
-                {phoneNumber.length}/{usernameMaxLength}
-              </Text>
-            }
+            // tip={
+            //   <Text style={{ fontSize: 10, color: 'lightgrey' }}>
+            //     {phoneNumber.length}/{usernameMaxLength}
+            //   </Text>
+            // }
             maxLength={30}
           />
           <InputIconBox placeholder="请输入密码" secureTextEntry={hidePassword} source={IconPassword} value={password} onChangeText={setPassword}
@@ -123,14 +124,17 @@ export default function LoginPage() {
         <Pressable style={styles.loginButton}
           onPress={() => {
             if (captcha && verifyCode == '') {
-              Alert.alert('', '请输入验证码')
+              SimpleAlert('请输入验证码')
               return
             }
             login(phoneNumber, password, verifyCode)
               .catch((error) => {
-                console.log(wrongTimes)
+                if (error.message === "Network request failed") {
+                  SimpleAlert("网络请求失败")
+                  return
+                }
                 setWrongTimes(wrongTimes + 1)
-                Alert.alert('', error.message);
+                AlertError(error)
               })
           }}
         >

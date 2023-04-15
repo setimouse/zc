@@ -5,6 +5,7 @@ import AlertImage from "../../../assets/alert.png"
 // import TaskImage from "../../../assets/task.png"
 import { AlarmContext } from "../../../webserve/AlarmContext";
 import { AuthContext } from "../../../webserve/AuthContext";
+import { AlertError } from "../../../common/global";
 
 const styles = StyleSheet.create({
   item: {
@@ -91,7 +92,7 @@ export default function MessagePage() {
   useEffect(function () {
     // console.log('start interval')
     reminder()
-      .catch(error => Alert.alert(error));
+      .catch(AlertError);
     // const timer = setInterval(() => {
     //   reminder()
     // }, 3000);

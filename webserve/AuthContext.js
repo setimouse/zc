@@ -127,7 +127,7 @@ export const AuthProvider = ({ children }) => {
       .then(json => {
         if (json.code === 'B0001') {
           console.log(json)
-          throw new Error('请输入用户名密码')
+          throw new Error('请输入帐号名和密码')
         }
         if (json.code !== '00000') {
           console.log(json)

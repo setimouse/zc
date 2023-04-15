@@ -7,6 +7,7 @@ import { StyleSheet, View, Text, ScrollView, Image, Pressable, Alert } from "rea
 import { MapContext } from "../../../webserve/MapContext";
 import ButtonWidget from "../../widgets/ButtonWidget";
 import { baseURL } from "../../../webserve/http_config";
+import { SimpleAlert } from "../../../common/global";
 
 export default function DeviceDetailPage(props) {
   const navigation = useNavigation();
@@ -119,7 +120,8 @@ export default function DeviceDetailPage(props) {
               Alert.alert('确认解绑该设备吗？', '', [
                 {
                   text: '确认', onPress: () => unbind({ targetId: device.id })
-                    .then(() => Alert.alert('解绑成功'))
+                    .then(() => { setStage('') })
+                    .then(() => SimpleAlert('解绑成功'))
                 },
                 {
                   text: '取消'
@@ -128,14 +130,14 @@ export default function DeviceDetailPage(props) {
             }} />
             || <ButtonWidget title='绑定' onPress={() => {
               if (!device.consumerId) {
-                Alert.alert('请选择要绑定的对象')
+                SimpleAlert('请选择要绑定的对象')
                 return;
               }
               console.log(device.consumerId)
               Alert.alert('确认绑定该设备吗？', '', [
                 {
                   text: '确认', onPress: () => bind({ targetId: device.id, consumerId: device.consumerId })
-                    .then(() => Alert.alert('绑定成功'))
+                    .then(() => SimpleAlert('绑定成功'))
                 },
                 {
                   text: '取消'
@@ -276,7 +278,7 @@ function BindInfoView({ device }) {
           targetId: device.id,
         })}>
           <View><Text style={styles.text}>绑定对象</Text></View>
-          <View><Text>{device.bindObject}</Text></View>
+          <View style={{ flex: 1, marginLeft: 12, alignItems: 'flex-end' }}><Text>{device.bindObject}</Text></View>
         </CellView>
         <CellView>
           <View><Text style={styles.text}>当前台位</Text></View>

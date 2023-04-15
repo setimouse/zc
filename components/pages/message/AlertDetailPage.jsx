@@ -5,6 +5,7 @@ import { StyleSheet, View, Text, ScrollView, Modal } from "react-native";
 import { AlarmContext } from "../../../webserve/AlarmContext";
 import ButtonWidget from "../../widgets/ButtonWidget";
 import SectionGroupList from "../../widgets/SectionGroupList";
+import { CommonAlert, SimpleAlert } from "../../../common/global";
 
 export default function AlertDetailPage(props) {
   const { reminder, alarmDetail, alarmDeal } = useContext(AlarmContext)
@@ -53,11 +54,11 @@ export default function AlertDetailPage(props) {
             alarmDeal({ idList: [id], opinion, isMisinformation })
               .then(() => {
                 loadDetail({ id })
-                Alert.alert('处理完成')
+                SimpleAlert('处理完成')
                 setDealModal(false)
                 reminder()
               })
-              .catch(error => Alert.alert('处理失败', error.message))
+              .catch(error => CommonAlert('处理失败', error.message))
           }}
         />
       </Modal>

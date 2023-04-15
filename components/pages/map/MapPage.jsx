@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from 'react';
 import { MapContext } from '../../../webserve/MapContext';
 import { AuthContext } from '../../../webserve/AuthContext';
 import { Dimensions } from 'react-native';
+import { AlertError } from '../../../common/global';
 
 export default function MapPage({ route, navigation }) {
   const { requestDefaultMap, requestMapList, requestIndoorMap,
@@ -64,7 +65,7 @@ export default function MapPage({ route, navigation }) {
           map = defaultMaps.length > 0 ? defaultMaps[0] : map;
           setDisplayMap(map);
         })
-        .catch(error => Alert.alert(error.message))
+        .catch(AlertError)
     }
   }, [route.params])
 
