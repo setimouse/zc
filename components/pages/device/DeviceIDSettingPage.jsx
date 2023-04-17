@@ -1,5 +1,5 @@
 /**
- * 设置设备ID
+ * 设置标签编码
  */
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
@@ -21,7 +21,7 @@ export default function DeviceIDSettingPage(props) {
   return (
     <View style={{ width: '100%', flex: 1, backgroundColor: '#F4F6F8' }}>
       <View style={{ marginBottom: 44, }}>
-        <TextInput style={styles.input} clearButtonMode='always' placeholder="设置设备ID" />
+        <TextInput style={styles.input} clearButtonMode='always' placeholder="设置标签编码" />
       </View>
       <View style={{ marginHorizontal: 12 }}>
         <ButtonWidget title="保存" onPress={() => navigation.goBack()} />

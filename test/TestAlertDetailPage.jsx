@@ -8,7 +8,7 @@ const device = [
     data: [
       { key: '告警对象', value: '周生生' },
       { key: '对象部门', value: '一车间' },
-      { key: '设备编号', value: 'CN-2389471' },
+      { key: '标签编码', value: 'CN-2389471' },
     ],
   },
   {

@@ -36,7 +36,7 @@ export default function MainProfile(props) {
           <Stack.Screen name="profile_device_manage" component={DeviceSearchPage} options={headBar({ title: '设备管理' })} />
           <Stack.Screen name="devicedetail" component={DeviceDetailPage} options={headBar({ title: '设备详情' })} />
           <Stack.Screen name="devicepic" component={DeviceModelSettingPage} options={headBar({ title: '设置型号图片' })} />
-          <Stack.Screen name="deviceid" component={DeviceIDSettingPage} options={headBar({ title: '设置设备ID' })} />
+          <Stack.Screen name="deviceid" component={DeviceIDSettingPage} options={headBar({ title: '设置标签编码' })} />
           <Stack.Screen name="objectbinding" component={DeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
         </Stack.Navigator>
       </MapProvider>

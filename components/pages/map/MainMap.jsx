@@ -32,7 +32,7 @@ export default function MainMap() {
         <Stack.Screen name="devicesearch" component={DeviceSearchPage} options={headBar({ title: '设备' })} />
         <Stack.Screen name="devicedetail" component={DeviceDetailPage} options={headBar({ title: '设备详情' })} />
         <Stack.Screen name="devicepic" component={TestDeviceModelSettingPage} options={headBar({ title: '设置型号图片' })} />
-        <Stack.Screen name="deviceid" component={TestDeviceIDSettingPage} options={headBar({ title: '设置设备ID' })} />
+        <Stack.Screen name="deviceid" component={TestDeviceIDSettingPage} options={headBar({ title: '设置标签编码' })} />
         <Stack.Screen name="objectbinding" component={DeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
       </Stack.Navigator>
     </MapProvider>

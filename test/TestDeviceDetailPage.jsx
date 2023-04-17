@@ -11,7 +11,7 @@ import { Image } from "react-native";
 //         id: 'image'
 //       },
 //       {
-//         key: '设备ID', value: 'CU-XXXX-382A8832',
+//         key: '标签编码', value: 'CU-XXXX-382A8832',
 //         id: 'deviceId',
 //       },
 //       { key: '设备型号', value: '检修中', id: 'deviceModel' },

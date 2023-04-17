@@ -188,7 +188,7 @@ function alertInfo2listData(alert) {
       data: [
         { key: '告警对象', value: alert['targetName'] },
         { key: '对象部门', value: alert['targetGroupName'] },
-        { key: '设备编号', value: alert['terminalSn'] },
+        { key: '标签编码', value: alert['terminalSn'] },
       ],
     },
     {

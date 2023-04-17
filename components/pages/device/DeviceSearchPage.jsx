@@ -17,7 +17,7 @@ export default function DeviceSearchPage(props) {
   return (
     <View style={[styles.container]}>
       <SearchBarWidget
-        placeholder="请输入设备编号"
+        placeholder="请输入标签编码"
         suggests={props.suggests}
         resultPage={<Page result={result} />}
         storeKey='device-search'
@@ -30,7 +30,7 @@ export default function DeviceSearchPage(props) {
                 id: r.id,
                 items: [
                   { key: '设备型号', value: r.deviceType },
-                  { key: '设备ID', value: r.deviceId },
+                  { key: '标签编码', value: r.deviceId },
                   { key: '车号', value: r.consumerName ?? '-' },
                 ],
                 info: r,

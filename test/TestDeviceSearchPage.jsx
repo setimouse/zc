@@ -11,24 +11,24 @@ const searchResult = [
   {
     id: 1,
     items: [
-      { key: '设备编号', value: 'CU-XXXX-3894' },
-      { key: '设备ID', value: '---' },
+      { key: '标签编码', value: 'CU-XXXX-3894' },
+      { key: '标签编码', value: '---' },
       { key: '车号', value: '330033' },
     ],
   },
   {
     id: 2,
     items: [
-      { key: '设备编号', value: 'CU-XXXX-383495' },
-      { key: '设备ID', value: '---' },
+      { key: '标签编码', value: 'CU-XXXX-383495' },
+      { key: '标签编码', value: '---' },
       { key: '车号', value: '330123' },
     ],
   },
   {
     id: 3,
     items: [
-      { key: '设备编号', value: 'CU-XXXX-3833' },
-      { key: '设备ID', value: '---' },
+      { key: '标签编码', value: 'CU-XXXX-3833' },
+      { key: '标签编码', value: '---' },
       { key: '车号', value: '330045' },
     ],
   },

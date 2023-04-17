@@ -244,7 +244,7 @@ function BaseInfoView({ device }) {
         <CellView
         // onPress={() => navigation.navigate('deviceid')}
         >
-          <View><Text style={styles.text}>设备ID</Text></View>
+          <View><Text style={styles.text}>标签编码</Text></View>
           <View><Text>{device.deviceId}</Text></View>
         </CellView>
         <CellView>

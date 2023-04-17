@@ -33,7 +33,7 @@ export default function MapSearchPage() {
           items: [
             { key: '车号', value: e.consumerName },
             { key: '当前台位', value: '' },
-            { key: '设备编号', value: e.deviceId },
+            { key: '标签编码', value: e.deviceId },
           ],
           info: e,
           stageTag: null,

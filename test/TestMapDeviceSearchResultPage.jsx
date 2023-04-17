@@ -13,7 +13,7 @@ const searchResult = [
     items: [
       { key: '车号', value: '330033' },
       { key: '当前台位', value: '台位1' },
-      { key: '设备编号', value: 'CU-XXXX-3894' },
+      { key: '标签编码', value: 'CU-XXXX-3894' },
     ],
   },
   {
@@ -21,7 +21,7 @@ const searchResult = [
     items: [
       { key: '车号', value: '330123' },
       { key: '当前台位', value: '台位2' },
-      { key: '设备编号', value: 'CU-XXXX-3895' },
+      { key: '标签编码', value: 'CU-XXXX-3895' },
     ],
   },
   {
@@ -29,7 +29,7 @@ const searchResult = [
     items: [
       { key: '车号', value: '330045' },
       { key: '当前台位', value: '台位3' },
-      { key: '设备编号', value: 'CU-XXXX-3833' },
+      { key: '标签编码', value: 'CU-XXXX-3833' },
     ],
   },
 ]
