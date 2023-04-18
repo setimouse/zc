@@ -140,8 +140,8 @@ export const AuthProvider = ({ children }) => {
         console.log(data);
         const storage = useAsyncStorage("token");
         setUserInfo(data)
-        setAccessToken(data['access_token'])
         setTokenType(data['token_type'])
+        setAccessToken(data['access_token'])
         storage.setItem(data["access_token"]).then(() => {
         })
         setCaptcha(null)

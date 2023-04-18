@@ -11,6 +11,9 @@ function FMMapWidget({ mapInfo, onMapReady }) {
     <View style={styles.container}>
       <WebView style={styles.webview}
         allowUniversalAccessFromFileURLs={true}
+        allowingReadAccessToURL={true}
+        allowFileAccess={true}
+        allowFileAccessFromFileURLs={true}
         ref={c => webView = c}
         source={{ html: mapHtml(mapInfo) }}
         // source={{ uri: '../../resource/fmmap/test.html' }}

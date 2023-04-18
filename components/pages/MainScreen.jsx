@@ -36,7 +36,7 @@ export default function MainScreen() {
 
   return (
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="message"
+      <Tab.Navigator initialRouteName="map"
         screenOptions={({ route }) => {
           return ({
             tabBarIcon: ({ focused, size, color }) => {

@@ -250,6 +250,7 @@ const template = `
     mapZoom: {{mapZoom}},
     externalModelURL: mapUrl + "" + mapId + "/",
   }
+  window.ReactNativeWebView.postMessage(JSON.stringify(options))
   map = new fengmap.FMMap(options);
 </script>
 ${fmmapScript}
@@ -263,12 +264,12 @@ export default function mapHtml(mapInfo) {
   if (!mapInfo) {
     return '';
   }
-  const url = mapUrlPrefix + '/testadmin'
+  const url = mapUrlPrefix
   // + mapInfo.filePath + '/'
   console.log('url ' + url)
   const map = {
-    // baseURL: url,
-    baseURL: baseURL,
+    baseURL: url,
+    // baseURL: baseURL,
     mapId: mapInfo.configs.mapCode,
     themeId: mapInfo.configs.mapThemeCode,
     level: mapInfo.configs.defaultFloor,
