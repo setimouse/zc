@@ -1,4 +1,5 @@
 import { Platform } from "react-native";
+import { mapUrlPrefix } from "../../webserve/http_config";
 
 const fmmapScript = `
 <script>
@@ -262,7 +263,11 @@ export default function mapHtml(mapInfo) {
   if (!mapInfo) {
     return '';
   }
+  const url = mapUrlPrefix + '/testadmin'
+  // + mapInfo.filePath + '/'
+  console.log('url ' + url)
   const map = {
+    // baseURL: url,
     baseURL: baseURL,
     mapId: mapInfo.configs.mapCode,
     themeId: mapInfo.configs.mapThemeCode,

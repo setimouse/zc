@@ -19,21 +19,22 @@
   // var mapId = '0ubgbw7385supty';
   // var mapId = 'qk0dyuqja7sr7mq';
   // var mapId = '0ubgbw7385supty';
-  var mapId = 'nk8h6ha27sfggrk';
+  // var mapId = 'nk8h6ha27sfggrk';
+  var mapId = 'z21gtwbyf5a65rh';
 
-  var mapUrl = 'http://47.94.249.77/mediaresource/admin/';
-  var themeID = '2000';
+  var mapUrl = 'http://101.200.150.143:8880/mediaresource/testadmin/';
+  // var themeID = '2000';
+  var themeID = '1602863199339343873';
   var options = {
     container: document.getElementById('fengmap'),
     appName: '综合位置服务',
     key: 'f8101cef78a7bf9fc49881036b18f61c',
     mapID: mapId,
     themeID: themeID,
-    // viewMode: fengmap.FMViewMode.MODE_3D,
     mapURL: mapUrl,
     themeURL: mapUrl + "" + mapId + '/',
     level: 1,
-    mapZoom: 17,
+    mapZoom: 17.5,
     externalModelURL: mapUrl + "" + mapId + "/",
   }
   map = new fengmap.FMMap(options);
