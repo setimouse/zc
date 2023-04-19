@@ -1,6 +1,5 @@
 import React from "react";
 import DeviceDetailPage from "../components/pages/device/DeviceDetailPage";
-import { Image } from "react-native";
 
 // const device = [
 //   {
@@ -32,7 +31,7 @@ import { Image } from "react-native";
 
 const device = {
   // 基础信息
-  'img': require('../assets/device.png'),
+  // 'img': require('../assets/device.png'),
   'deviceId': 'CU-XXXX-382A8832',
   'deviceModel': 'xxx',
   'desc': 'xxx',
