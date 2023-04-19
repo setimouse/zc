@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, TextInput, Pressable, Image, ImageBackground, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Keyboard, Pressable, Image, ImageBackground, SafeAreaView } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import BackgroundImage from '../../../assets/login_bg.png';
 import { AuthContext } from '../../../webserve/AuthContext';
@@ -58,7 +58,6 @@ export default function LoginPage() {
   const { login, captcha, requestCaptcha } = useContext(AuthContext)
   const [phoneNumber, setPhoneNumbers] = useState('');
   const [password, setPassword] = useState('');
-  const { width, height } = Dimensions.get('screen');
   const [hidePassword, setHidePassword] = useState()
   const [wrongTimes, setWrongTimes] = useState(0);
   const [verifyCode, setVerifyCode] = useState('');
@@ -80,89 +79,87 @@ export default function LoginPage() {
   }, [captcha])
 
   return (
-    <View style={styles.container}>
-      <ImageBackground source={BackgroundImage} resizeMode="cover" style={[{ width, height }, styles.bgimg]}>
-        <View style={styles.welcome}>
-          <Text style={styles.title}>欢迎登录</Text>
-        </View>
-        <View style={styles.inputbox}>
-          <InputIconBox placeholder="请输入帐号" source={IconUser} value={phoneNumber} onChangeText={setPhoneNumbers}
-            // tip={
-            //   <Text style={{ fontSize: 10, color: 'lightgrey' }}>
-            //     {phoneNumber.length}/{usernameMaxLength}
-            //   </Text>
-            // }
-            maxLength={30}
-          />
-          <InputIconBox placeholder="请输入密码" secureTextEntry={hidePassword} source={IconPassword} value={password} onChangeText={setPassword}
-            tip={
-              <Pressable onPressIn={() => {
-                setHidePassword(!hidePassword)
-              }} >
-                <Ionicons name={hidePassword ? 'eye-off' : 'eye'} size={16} color="black" />
-              </Pressable>
-            }
-          />
-          {captcha &&
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <TextInput style={{
-                borderColor: '#ccc', borderWidth: 1,
-                width: '50%', height: 32,
-                flex: 0.5
-                // backgroundColor: 'red',
-              }}
-                placeholder='请输入验证码'
-                onChangeText={setVerifyCode}
-                value={verifyCode}
+
+
+    <ImageBackground source={BackgroundImage} resizeMethod="resize" style={[styles.container,]}>
+      <StatusBar translucent={true} />
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={{ flex: 1, justifyContent: 'space-between' }}>
+          <View style={{ paddingHorizontal: 29, flex: 1, justifyContent: 'center' }}>
+            <View style={{ marginBottom: 60, }}>
+              <Text style={styles.title}>欢迎登录</Text>
+            </View>
+            <View style={styles.inputbox}>
+              <InputIconBox placeholder="请输入帐号" source={IconUser} value={phoneNumber} onChangeText={setPhoneNumbers}
+                // tip={
+                //   <Text style={{ fontSize: 10, color: 'lightgrey' }}>
+                //     {phoneNumber.length}/{usernameMaxLength}
+                //   </Text>
+                // }
+                maxLength={30}
               />
-              <Pressable onPress={() => requestCaptcha()} style={{ flex: 0.45, borderColor: '#ccc', borderWidth: 1, }}>
-                <Image source={{ uri: captcha.img }} style={{ flex: 1 }} />
+              <InputIconBox placeholder="请输入密码" secureTextEntry={hidePassword} source={IconPassword} value={password} onChangeText={setPassword}
+                tip={
+                  <Pressable onPressIn={() => {
+                    setHidePassword(!hidePassword)
+                  }} >
+                    <Ionicons name={hidePassword ? 'eye-off' : 'eye'} size={16} color="black" />
+                  </Pressable>
+                }
+              />
+              {captcha &&
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: 16, }}>
+                  <TextInput style={{
+                    borderColor: '#ccc', borderWidth: 1,
+                    width: '50%', height: 32, paddingHorizontal: 8,
+                    flex: 0.5
+                    // backgroundColor: 'red',
+                  }}
+                    placeholder='请输入验证码'
+                    onChangeText={setVerifyCode}
+                    value={verifyCode}
+                  />
+                  <Pressable onPress={() => requestCaptcha()} style={{ flex: 0.45, borderColor: '#ccc', borderWidth: 1, }}>
+                    <Image source={{ uri: captcha.img }} style={{ flex: 1 }} />
+                  </Pressable>
+                </View>
+              }
+              <Pressable style={styles.loginButton}
+                onPress={() => {
+                  if (captcha && verifyCode == '') {
+                    SimpleAlert('请输入验证码')
+                    return
+                  }
+                  login(phoneNumber, password, verifyCode)
+                    .catch((error) => {
+                      if (error.message === "Network request failed") {
+                        SimpleAlert("网络请求失败")
+                        return
+                      }
+                      setWrongTimes(wrongTimes + 1)
+                      AlertError(error)
+                    })
+                }}
+              >
+                <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>登录</Text>
               </Pressable>
             </View>
-          }
+          </View>
+          <SafeAreaView >
+            <View style={{
+            }}>
+              <Image source={require('../../../assets/logo.png')} style={{ height: 63, alignSelf: 'center', }} resizeMode='contain' />
+            </View>
+          </SafeAreaView>
         </View>
-        <Pressable style={styles.loginButton}
-          onPress={() => {
-            if (captcha && verifyCode == '') {
-              SimpleAlert('请输入验证码')
-              return
-            }
-            login(phoneNumber, password, verifyCode)
-              .catch((error) => {
-                if (error.message === "Network request failed") {
-                  SimpleAlert("网络请求失败")
-                  return
-                }
-                setWrongTimes(wrongTimes + 1)
-                AlertError(error)
-              })
-          }}
-        >
-          <Text style={{ color: 'white', fontSize: 16, textAlign: 'center' }}>登录</Text>
-        </Pressable>
-        {/* <Text style={{ fontSize: 14, color: '#3E4146', fontWeight: 'bold' }}>忘记密码？</Text> */}
-        <StatusBar translucent={true} />
-      </ImageBackground >
-      <View style={{
-        // backgroundColor: 'pink',
-        position: "absolute", bottom: 44, width: '100%', alignItems: 'center'
-      }}>
-        <Image source={require('../../../assets/logo.png')} style={{ height: 63 }} resizeMode="contain" />
-      </View>
-    </View >
+      </TouchableWithoutFeedback>
+    </ImageBackground >
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  bgimg: {
-    flex: 1,
-    paddingHorizontal: 29,
-    // backgroundColor: 'red'
   },
   welcome: {
     marginTop: 139,
@@ -181,6 +178,6 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderRadius: 24,
     backgroundColor: '#2882FF',
-    marginVertical: 24,
+    // marginVertical: 24,
   }
 });

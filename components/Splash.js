@@ -9,7 +9,7 @@ function SplashScreen() {
   console.log('width', width, 'heigth', height)
 
   return (
-    <View style={{ backgroundColor: 'red', flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <StatusBar hidden={true} />
       {/* <Image style={{ width: width, height: height, }}
         source={require('../assets/splash_1284.png')}
