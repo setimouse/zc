@@ -1,13 +1,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { AuthContext } from "./AuthContext";
-import { baseURL } from "./http_config";
+import { baseURL, dealError } from "./http_config";
 
 export const MapContext = createContext();
-
-function dealError(error) {
-  console.log('Oops', error.message)
-}
 
 export const MapProvider = ({ children }) => {
   const { fetch_json } = useContext(AuthContext);

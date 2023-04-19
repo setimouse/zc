@@ -137,13 +137,13 @@ function AlertList(props) {
   const loadAlarmEvent = () => {
     setIsLoading(true)
     alarmEvent({ processingStatus: params.processingStatus, pageSize: 1000, })
-      .then(resp => setData(resp.list))
+      .then(resp => { console.log('resp', resp); setData(resp.list) })
       .then(() => {
         setIsLoading(false)
         setIsRefreshing(false)
       })
       .catch(error => {
-        console.log(error)
+        console.log('alert list error', error)
         setLoadError(error.message)
         setIsLoading(false)
         setIsRefreshing(false)

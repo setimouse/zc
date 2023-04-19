@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { AuthContext } from "./AuthContext";
-import { baseURL } from "./http_config";
+import { baseURL, dealError } from "./http_config";
 
 export const AlarmContext = createContext();
 
@@ -12,57 +12,63 @@ export const AlarmProvider = ({ children }) => {
 
   async function reminder() {
     console.log('alarm reminder')
-    return axios.get('/lmsapi/lms-admin/api/v1/reminder', {
-      baseURL: baseURL,
-      headers: { Authorization: `${tokenType} ${accessToken}` }
-    })
-      .then(response => {
-        let respData = response.data
-        if (respData['code'] !== '00000') {
-          return Promise.reject(response);
-        }
-        let data = respData.data;
+    const url = `${baseURL}/lmsapi/lms-admin/api/v1/reminder`
+    return fetch_json(url)
+      .then(resp => resp.data)
+      .then(data => {
         console.log('alarm data', data);
-        setAlarmCount(data.count);
+        setAlarmCount(data.count)
         setAlarmItems(data.items)
       })
-      .catch(error => {
-        console.log('reminder error', error)
-      });
-    // const url = `${baseURL}/lmsapi/lms-admin/api/v1/reminder`
-    // fetch_json(url)
+      .catch(error => dealError(error))
+    // return axios.get('/lmsapi/lms-admin/api/v1/reminder', {
+    //   baseURL: baseURL,
+    //   headers: { Authorization: `${tokenType} ${accessToken}` }
+    // })
     //   .then(response => {
     //     let respData = response.data
+    //     if (respData['code'] !== '00000') {
+    //       return Promise.reject(response);
+    //     }
     //     let data = respData.data;
+    //     console.log('alarm data', data);
     //     setAlarmCount(data.count);
     //     setAlarmItems(data.items)
-    //     console.log(data);
     //   })
+    //   .catch(error => {
+    //     console.log('reminder error', error)
+    //   });
   }
 
   async function alarmEvent({ processingStatus, pageSize = 10, pageNum = 1 }) {
     console.log('request alarm list, processing=', processingStatus)
-    return await axios.get('/lmsapi/lms-map/api/v1/alarmEvents/pages', {
-      baseURL: baseURL,
-      params: {
-        processingStatus: processingStatus,
-        pageSize: pageSize,
-        pageNum: pageNum,
-      },
-      headers: { Authorization: `${tokenType} ${accessToken}` },
-    })
-      .then(response => {
-        let respData = response.data
-        if (respData['code'] !== '00000') {
-          return Promise.reject(response);
-        }
-        let data = respData.data;
-        return data;
-        // console.log(data);
-      })
-      .catch(error => {
-        console.log('error', error.message)
-      });
+    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/pages?processingStatus=${processingStatus}&pageSize=${pageSize}&pageNum=${pageNum}`
+    return fetch_json(url)
+      .then(resp => resp.data)
+      .then(data => { console.log('alarm data', data); return data })
+      .catch(error => dealError(error))
+
+    // return await axios.get('/lmsapi/lms-map/api/v1/alarmEvents/pages', {
+    //   baseURL: baseURL,
+    //   params: {
+    //     processingStatus: processingStatus,
+    //     pageSize: pageSize,
+    //     pageNum: pageNum,
+    //   },
+    //   headers: { Authorization: `${tokenType} ${accessToken}` },
+    // })
+    //   .then(response => {
+    //     let respData = response.data
+    //     if (respData['code'] !== '00000') {
+    //       return Promise.reject(response);
+    //     }
+    //     let data = respData.data;
+    //     return data;
+    //     // console.log(data);
+    //   })
+    //   .catch(error => {
+    //     console.log('error', error.message)
+    //   });
   }
 
   async function alarmDetail({ id }) {

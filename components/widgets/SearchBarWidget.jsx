@@ -51,7 +51,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
     console.log('history', history)
     history = history.filter(e => e.word != word)
     history.unshift(makeHistory(word))
-    history = history.splice(0, 100)
+    history = history.splice(0, 5)
     await storage.setItem(JSON.stringify(history))
     setHistory(history)
   }
