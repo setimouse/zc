@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Alert, Text, View, TextInput, Pressable, Image, ImageBackground, Dimensions } from 'react-native';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Pressable, Image, ImageBackground, Dimensions } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
 import BackgroundImage from '../../../assets/login_bg.png';
 import { AuthContext } from '../../../webserve/AuthContext';
 import IconUser from '../../../assets/login_icon_user.png';
@@ -143,6 +143,12 @@ export default function LoginPage() {
         {/* <Text style={{ fontSize: 14, color: '#3E4146', fontWeight: 'bold' }}>忘记密码？</Text> */}
         <StatusBar translucent={true} />
       </ImageBackground >
+      <View style={{
+        // backgroundColor: 'pink',
+        position: "absolute", bottom: 44, width: '100%', alignItems: 'center'
+      }}>
+        <Image source={require('../../../assets/logo.png')} style={{ height: 63 }} resizeMode="contain" />
+      </View>
     </View >
   );
 }
