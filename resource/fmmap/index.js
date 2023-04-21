@@ -1,5 +1,5 @@
 import { Platform } from "react-native";
-import { mapUrlPrefix } from "../../webserve/http_config";
+import { mapUrlPrefix, baseURL } from "../../webserve/http_config";
 
 const fmmapScript = `
 <script>
@@ -215,6 +215,124 @@ const fmmapScript = `
 </script>
 `
 
+const indexCss = `
+    <style>
+    body,
+    html {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      margin: 0;
+      overflow: hidden;
+      font-family: MicrosoftYaHei
+    }
+
+    ul {
+      display: block;
+      list-style-type: disc;
+      margin-block-start: 0;
+      margin-block-end: 0;
+      margin-inline-start: 0;
+      margin-inline-end: 0;
+      padding-inline-start: 0
+    }
+
+    #fengmap {
+      width: 100%;
+      height: 100%
+    }
+
+    .toolBarDiv {
+      position: absolute;
+      width: 100%;
+      height: 58px;
+      background: #fff;
+      z-index: 2
+    }
+
+    .toolBarDiv>.control {
+      display: flex;
+      align-items: center;
+      height: 100%;
+      padding-left: 20px
+    }
+
+    #layers {
+      list-style: none;
+      display: flex;
+      justify-content: flex-start;
+      margin-top: 10px
+    }
+
+    #foo>li>button,
+    #layers>li>button {
+      font-size: 16px;
+      color: #fff;
+      background: #076ed7;
+      width: 110px;
+      height: 36px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      border: none;
+      margin-right: 2px
+    }
+
+    .set {
+      display: flex;
+      justify-content: center
+    }
+
+    .setup {
+      width: 60px;
+      height: 32px;
+      background: #2f65ee;
+      border-radius: 4px;
+      color: #fff;
+      font-weight: 700
+    }
+
+    .title {
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(0, 0, 0, .9);
+      margin-bottom: 16px
+    }
+
+    .blue {
+      width: 4px;
+      height: 12px;
+      background: #2776fb;
+      border-radius: 2px;
+      margin-right: 8px;
+      display: inline-block
+    }
+
+    .title>i {
+      position: absolute;
+      right: 18px;
+      display: inline-block;
+      cursor: pointer;
+      user-select: none
+    }
+
+    .sliderItem>.layui-input-block {
+      padding-top: 6px;
+      min-height: 20px
+    }
+
+    .tableInfoBox {
+      z-index: 9;
+      position: absolute;
+      width: 100%;
+      bottom: 0;
+      background: #fff;
+      padding: 24px 16px;
+      box-sizing: border-box;
+      border-radius: 8px 8px 0 0
+    }
+  </style>
+`
+
 const template = `
 <!DOCTYPE html>
 <html lang="en">
@@ -223,10 +341,16 @@ const template = `
   <title>地图</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <script src="https://developer.fengmap.com/fmAPI/demos/libs/js/fengmap.map.min.js"></script>
-  <script src="https://developer.fengmap.com/fmAPI/demos/libs/js/fengmap.plugin.min.js"></script>
-  <link rel="stylesheet" href="https://developer.fengmap.com/fmAPI/demos/libs/css/index.css">
-  <link rel="stylesheet" href="https://developer.fengmap.com/fmAPI/demos/libs/css/toolBarStyle.css">
+  <script src="http://47.94.249.77/fengmap/fengmap.map.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.analyser.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.effect.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.plugin.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.plugins-compositemarker.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.plugins-export.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.plugins-mapedit.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.plugins-track-player.min.js"></script>
+  <link rel="stylesheet" href="http://47.94.249.77/fengmap/toolBarStyle.css" />
+${indexCss}
 </head>
 
 <body>
@@ -235,7 +359,7 @@ const template = `
 <script>
   var map;
   var mapId = '{{mapId}}';
-  var mapUrl = '{{baseURL}}';
+  var mapUrl = '{{mapUrl}}';
   var themeID = '{{themeId}}';
   var options = {
     container: document.getElementById('fengmap'),
@@ -257,19 +381,15 @@ ${fmmapScript}
 </html>
 `
 
-const baseURL = 'http://47.94.249.77/mediaresource/admin/'
-
 export default function mapHtml(mapInfo) {
   console.log("mapInfo: ", mapInfo)
   if (!mapInfo) {
     return '';
   }
-  const url = mapUrlPrefix
-  // + mapInfo.filePath + '/'
-  console.log('url ' + url)
+  let prefix = mapInfo.filePath.split('/')[1]
+  const mapUrl = mapUrlPrefix + prefix + '/'
   const map = {
-    baseURL: url,
-    // baseURL: baseURL,
+    mapUrl: mapUrl,
     mapId: mapInfo.configs.mapCode,
     themeId: mapInfo.configs.mapThemeCode,
     level: mapInfo.configs.defaultFloor,
@@ -279,6 +399,7 @@ export default function mapHtml(mapInfo) {
     zoomControlPositionX: Platform.OS == 'android' ? -11 : -11,
     zoomControlPositionY: Platform.OS == 'android' ? -165 : -150,
   }
+  console.log(map)
   let html = template;
   for (var key in map) {
     html = html.replace(`{{${key}}}`, map[key])
