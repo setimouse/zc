@@ -177,7 +177,10 @@ export const AuthProvider = ({ children }) => {
     const url = `${baseURL}/lmsapi/lms-admin/api/v1/users/me`
     return fetch_json(url)
       .then(resp => resp.data)
-      .then(data => setMe(data))
+      .then(data => {
+        setMe(data)
+        console.log('me', data)
+      })
       .catch(console.log)
   }
 

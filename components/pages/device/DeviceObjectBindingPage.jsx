@@ -7,9 +7,7 @@ import SearchBarWidget from '../../widgets/SearchBarWidget';
 export default function DeviceObjectBindingPage() {
   const navigation = useNavigation();
 
-  const {
-    requestListTargetReals
-  } = useContext(MapContext)
+  const { requestListTargetReals } = useContext(MapContext)
 
   const [objects, setObjects] = useState([])
   const [displayObjs, setDisplayObjs] = useState([])

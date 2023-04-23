@@ -8,9 +8,9 @@ import { MapContext } from "../../../webserve/MapContext";
 import ButtonWidget from "../../widgets/ButtonWidget";
 import { baseURL } from "../../../webserve/http_config";
 import { SimpleAlert } from "../../../common/global";
+import { AuthContext } from "../../../webserve/AuthContext";
 
 export default function DeviceDetailPage(props) {
-  const navigation = useNavigation();
   const route = useRoute()
 
   const {
@@ -20,6 +20,8 @@ export default function DeviceDetailPage(props) {
     requestBind, // 绑定
     requestUnbind, // 解绑
   } = useContext(MapContext)
+
+  const { me } = useContext(AuthContext)
 
   const [device, setDevice] = useState({})
   const [stage, setStage] = useState()
@@ -113,39 +115,40 @@ export default function DeviceDetailPage(props) {
           <BaseInfoView device={device} />
           <BindInfoView device={device} />
         </View>
-        <View style={{ marginBottom: 24, }}>
-          {
-            binding === '已绑定'
-            && <ButtonWidget title='解绑' onPress={() => {
-              Alert.alert('确认解绑该设备吗？', '', [
-                {
-                  text: '确认', onPress: () => unbind({ targetId: device.id })
-                    .then(() => { setStage('') })
-                    .then(() => SimpleAlert('解绑成功'))
-                },
-                {
-                  text: '取消'
+        {me && me.perms && me.perms.indexOf('device:device:bindOrUnbind') > -1 &&
+          <View style={{ marginBottom: 24, }}>
+            {
+              binding === '已绑定'
+              && <ButtonWidget title='解绑' onPress={() => {
+                Alert.alert('确认解绑该设备吗？', '', [
+                  {
+                    text: '确认', onPress: () => unbind({ targetId: device.id })
+                      .then(() => { setStage('') })
+                      .then(() => SimpleAlert('解绑成功'))
+                  },
+                  {
+                    text: '取消'
+                  }
+                ], { cancelable: false })
+              }} />
+              || <ButtonWidget title='绑定' onPress={() => {
+                if (!device.consumerId) {
+                  SimpleAlert('请选择要绑定的对象')
+                  return;
                 }
-              ], { cancelable: false })
-            }} />
-            || <ButtonWidget title='绑定' onPress={() => {
-              if (!device.consumerId) {
-                SimpleAlert('请选择要绑定的对象')
-                return;
-              }
-              console.log(device.consumerId)
-              Alert.alert('确认绑定该设备吗？', '', [
-                {
-                  text: '确认', onPress: () => bind({ targetId: device.id, consumerId: device.consumerId })
-                    .then(() => SimpleAlert('绑定成功'))
-                },
-                {
-                  text: '取消'
-                }
-              ], { cancelable: false })
-            }} />
-          }
-        </View>
+                console.log(device.consumerId)
+                Alert.alert('确认绑定该设备吗？', '', [
+                  {
+                    text: '确认', onPress: () => bind({ targetId: device.id, consumerId: device.consumerId })
+                      .then(() => SimpleAlert('绑定成功'))
+                  },
+                  {
+                    text: '取消'
+                  }
+                ], { cancelable: false })
+              }} />
+            }
+          </View>}
       </ScrollView>
     </View>
   )
