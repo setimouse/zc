@@ -21,14 +21,20 @@ import TestMapSearchPage from './test/TestMapSearch';
 import TestProfilePage from './test/TestProfilePage';
 import { AuthProvider } from './webserve/AuthContext';
 import Splash from './components/Splash';
+import ErrorPage, { ErrorType } from './components/pages/common/ErrorPage';
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
+    //*
     <AuthProvider>
       <Splash />
     </AuthProvider>
+    //*/
+
+    // <ErrorPage type={ErrorType.NetworkError} />
+
     // <SafeAreaView style={{ flex: 1 }}>
     // <NavigationContainer>
     //   <Stack.Navigator initialRouteName='login'>
