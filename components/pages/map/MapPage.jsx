@@ -1,4 +1,4 @@
-import { Alert, Platform, Pressable, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StatusBar, StyleSheet, Text, View } from 'react-native';
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
@@ -108,6 +108,11 @@ export default function MapPage({ route, navigation }) {
           onFocus={e => { navigation.navigate('mapsearch') }}
         />
       </View>
+      {mapInfo && mapInfo.name &&
+        <View style={styles.current}>
+          <Text style={styles.currentText}>当前地图: {mapInfo.name}</Text>
+        </View>
+      }
       <View style={styles.sidebar}>
         <View>
           <MapButtonWidget title="切换" icon={<FontAwesome name="exchange" size={16} />}
@@ -141,13 +146,22 @@ const styles = StyleSheet.create({
   container: {
     // flex: 1,
     backgroundColor: "#F4F6F8",
-    height: height - 40,
   },
   map: {
     // flex: 1,
     width: '100%',
     height: '100%',
     backgroundColor: 'lightgrey',
+  },
+  current: {
+    position: 'absolute',
+    top: 96,
+    left: 12,
+  },
+  currentText: {
+    fontSize: 14,
+    fontWeight: 500,
+    color: '#B0B1B3',
   },
   search: {
     flex: 1,
@@ -170,7 +184,7 @@ const styles = StyleSheet.create({
   locate: {
     position: 'absolute',
     right: 9,
-    bottom: Platform.OS == 'android' ? 110 : 64,
+    bottom: Platform.OS == 'android' ? 110 : 32,
     backgroundColor: '#fff',
     width: 40, height: 40,
     borderRadius: 20,

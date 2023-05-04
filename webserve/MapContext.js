@@ -1,5 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { Alert } from "react-native";
+import React, { createContext, useContext } from "react";
 import { AuthContext } from "./AuthContext";
 import { baseURL, dealError } from "./http_config";
 
@@ -148,7 +147,15 @@ export const MapProvider = ({ children }) => {
     const url = `${baseURL}/lmsapi/lms-crrc/api/v1/crrc/vehicles/${carNo}`
     return fetch_json(url)
       .catch(error => dealError(error))
+  }
 
+  /**
+   * 查询设备所在地图
+   */
+  async function requestTargetInsideMap({ deviceId }) {
+    const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/insideMap/${deviceId}`
+    return fetch_json(url)
+      .catch(dealError)
   }
 
   return (
@@ -159,6 +166,7 @@ export const MapProvider = ({ children }) => {
       requestBind, requestUnbind,
       requestVehicleBase, requestVehicleDetail,
       requestListTargetRealsDevice,
+      requestTargetInsideMap,
     }}>
       {children}
     </MapContext.Provider>

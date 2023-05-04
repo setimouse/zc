@@ -18,6 +18,7 @@ import TestMapSearch from "../../../test/TestMapSearch";
 import VehicleDetailPage from "./VehicleDetailPage";
 import headBar from "../../../common/global";
 import { MapProvider } from "../../../webserve/MapContext";
+import VehicleMapPage from "./VehicleMapPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function MainMap() {
         <Stack.Screen name="devicepic" component={TestDeviceModelSettingPage} options={headBar({ title: '设置型号图片' })} />
         <Stack.Screen name="deviceid" component={TestDeviceIDSettingPage} options={headBar({ title: '设置标签编码' })} />
         <Stack.Screen name="objectbinding" component={DeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
+        <Stack.Screen name="vehicle_map" component={VehicleMapPage} options={headBar({ title: '车辆定位' })} />
       </Stack.Navigator>
     </MapProvider>
   )

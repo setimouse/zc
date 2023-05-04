@@ -3,7 +3,6 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, FlatList, StyleSheet, Text, Pressable, Image } from "react-native";
 import { MapContext } from "../../../webserve/MapContext";
 import SearchBarWidget from "../../widgets/SearchBarWidget";
-import SearchResultItemWidget from '../../widgets/SearchResultItemWidget';
 
 export default function MapSearchPage() {
   const { requestListTargetReals, requestStation } = useContext(MapContext)
@@ -178,7 +177,7 @@ function Page({ result, onRequestStation }) {
           onRequestStation && onRequestStation({ item })
           return (
             <Item item={item}
-              onTargetPress={() => navigation.navigate('mapmain', { deviceId: item.info.deviceId })}
+              onTargetPress={() => navigation.navigate('vehicle_map', { deviceId: item.info.deviceId })}
               onDetailPress={() => navigation.navigate('vehicledetail', { vehicle: item.info })}
             />
           )

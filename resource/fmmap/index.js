@@ -103,7 +103,9 @@ const fmmapScript = `
     const consumerTypeIcon = device.consumerTypeIcon;
     device.fengGLBIcon = consumerTypeIcon;
     if (consumerTypeIcon !== null) {
-      device.fengGLBIcon = "/static/images/pages/" 
+      device.fengGLBIcon = 'http://47.94.249.77'
+        + "/static/images/pages/"
+        // ""
         + consumerTypeIcon.substring(consumerTypeIcon.lastIndexOf('/'), consumerTypeIcon.lastIndexOf('.')).substring(1)
         + "_model" + ".glb";
     }
@@ -120,7 +122,7 @@ const fmmapScript = `
     markerText = markerText.length > maxLength ? markerText.substr(0, maxLength) + '...' : markerText
     var combineMarker = [
       new fengmap.FMDynamicModel({
-        url: 'http://47.94.249.77' + device.fengGLBIcon,
+        url:  + device.fengGLBIcon,
         // url: imageurl,
         id: 'uuid',
         // height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
@@ -207,6 +209,21 @@ const fmmapScript = `
       animate: true,
       duration: 0.35,
     })
+  }
+
+  function setMapLevel(level) {
+    map.setLevel({
+      level: level,
+      animate: true,
+    })
+  }
+
+  function focusDevice(device) {
+    map.setLevel({
+      level: device.baseFloor,
+      animate: false,
+    })
+    setMapCenter(device.x, device.y)
   }
 
   function resetMapLocation() {
@@ -341,7 +358,7 @@ const template = `
   <title>地图</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <script src="http://47.94.249.77/fengmap/fengmap.map.min.js"></script>
+  <script src="http://47.94.249.77/fengmap/fengmap.map-nologo.min.js"></script>
   <script src="http://47.94.249.77/fengmap/fengmap.analyser.min.js"></script>
   <script src="http://47.94.249.77/fengmap/fengmap.effect.min.js"></script>
   <script src="http://47.94.249.77/fengmap/fengmap.plugin.min.js"></script>
@@ -397,7 +414,7 @@ export default function mapHtml(mapInfo) {
     floorControlPositionX: Platform.OS == 'android' ? -11 : -11,
     floorControlPositionY: Platform.OS == 'android' ? 180 : 240,
     zoomControlPositionX: Platform.OS == 'android' ? -11 : -11,
-    zoomControlPositionY: Platform.OS == 'android' ? -165 : -150,
+    zoomControlPositionY: Platform.OS == 'android' ? -165 : -96,
   }
   console.log(map)
   let html = template;
