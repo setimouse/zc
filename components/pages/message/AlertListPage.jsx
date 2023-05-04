@@ -160,7 +160,7 @@ function AlertList(props) {
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
       {(isLoading && !isRefreshing)
         && <View style={{ flex: 1, justifyContent: 'center' }}>
-          <ActivityIndicator></ActivityIndicator>
+          <ActivityIndicator color="#2882FF" />
         </View>
         || (data.length > 0 &&
           <FlatList

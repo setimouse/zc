@@ -5,21 +5,20 @@ export default function SearchResultItemWidget({ item, detailText, onTargetPress
   return (
     <View style={styles.searchbox}>
       <View style={styles.left}>
-        {
-          item.items.map(info => {
-            // console.log(info)
-            return (
-              <Text key={info.key} style={styles.infoText}>
-                {info.key}: {info.value}
-              </Text>
-            )
-          })
-        }
+        <Pressable onPress={() => onDetailPress && onDetailPress()} style={{ backgroundColor: 'yellow' }}>
+          {
+            item.items.map(info => {
+              // console.log(info)
+              return (
+                <Text key={info.key} style={styles.infoText}>
+                  {info.key}: {info.value}
+                </Text>
+              )
+            })
+          }
+        </Pressable>
       </View>
       <View style={styles.right}>
-        <Pressable onPress={() => onDetailPress && onDetailPress()}>
-          <Text style={{ color: '#B0B1B3', fontSize: 14 }}>{detailText} &raquo;</Text>
-        </Pressable>
         {item.info.consumerName &&
           <Pressable onPress={() => onTargetPress && onTargetPress()}>
             <Image style={styles.icon} source={require('../../assets/locate.png')} />
@@ -41,13 +40,15 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   left: {
-    flex: 3,
+    flex: 1,
     overflow: 'hidden',
   },
   right: {
-    flex: 1,
-    justifyContent: 'space-between',
+    flex: 0,
+    justifyContent: 'center',
     alignItems: 'flex-end',
+    backgroundColor: 'red',
+    paddingLeft: 12,
   },
   infoText: {
     fontSize: 12,

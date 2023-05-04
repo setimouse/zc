@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, FlatList, StyleSheet } from "react-native";
+import { View, FlatList, StyleSheet, Text, Pressable, Image } from "react-native";
 import { MapContext } from "../../../webserve/MapContext";
 import SearchBarWidget from "../../widgets/SearchBarWidget";
 import SearchResultItemWidget from '../../widgets/SearchResultItemWidget';
@@ -30,6 +30,11 @@ export default function MapSearchPage() {
       .then(data => data.map(e => {
         return {
           id: e.deviceId,
+          vehicle: {
+            no: e.consumerName,
+            stage: '',
+            deviceId: e.deviceId,
+          },
           items: [
             { key: '车号', value: e.consumerName },
             { key: '当前台位', value: '' },
@@ -76,6 +81,85 @@ export default function MapSearchPage() {
   )
 }
 
+function Item({ item, onDetailPress, onTargetPress }) {
+  const styles = StyleSheet.create({
+    searchbox: {
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      padding: 12,
+      marginHorizontal: 12,
+      marginTop: 8,
+      backgroundColor: '#ffffff',
+      borderRadius: 12,
+    },
+    left: {
+      flex: 1,
+      overflow: 'hidden',
+      // backgroundColor: 'yellow',
+    },
+    right: {
+      flex: 0,
+      justifyContent: 'center',
+      alignItems: 'flex-end',
+      // backgroundColor: 'red',
+      paddingLeft: 12,
+    },
+    infoText: {
+      overflow: 'hidden',
+      flexWrap: 'wrap',
+      flex: 1,
+    },
+    icon: {
+      width: 40,
+      height: 24,
+    },
+    row: {
+      flexDirection: 'row',
+    },
+    vehicle: {
+      color: '#3E4146',
+      lineHeight: 22,
+    },
+    vehicleNo: {
+      color: '#2882FF',
+    },
+    vehicleFont: {
+      fontSize: 14,
+      fontWeight: 500,
+    },
+    infoFont: {
+      fontSize: 12,
+      lineHeight: 20,
+    }
+  });
+
+  return (
+    <View style={styles.searchbox}>
+      <View style={styles.left}>
+        <Pressable onPress={() => onDetailPress && onDetailPress()}>
+          <View style={[styles.row,]}>
+            <Text style={[styles.vehicle, styles.vehicleFont]}>车号：</Text>
+            <Text style={[styles.vehicle, styles.vehicleNo, styles.infoText]}>{item.vehicle.no}</Text>
+          </View>
+          <View style={[styles.row,]}>
+            <Text style={[styles.infoFont]}>当前台位：{item.vehicle.stage}</Text>
+          </View>
+          <View style={[styles.row,]}>
+            <Text style={[styles.infoFont]}>设备编号：{item.vehicle.deviceId}</Text>
+          </View>
+        </Pressable>
+      </View>
+      <View style={styles.right}>
+        {item.info.consumerName &&
+          <Pressable onPress={() => onTargetPress && onTargetPress()}>
+            <Image style={styles.icon} source={require('../../../assets/locate.png')} />
+          </Pressable>
+        }
+      </View>
+    </View>
+  )
+}
+
 function Page({ result, onRequestStation }) {
   const navigation = useNavigation();
   const styles = StyleSheet.create({
@@ -87,13 +171,26 @@ function Page({ result, onRequestStation }) {
 
   return (
     <View style={[{ width: '100%' }]}>
-      <FlatList style={{ height: '100%' }}
+      <FlatList style={{ height: '100%', }}
+        data={result}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => {
+          onRequestStation && onRequestStation({ item })
+          return (
+            <Item item={item}
+              onTargetPress={() => navigation.navigate('mapmain', { deviceId: item.info.deviceId })}
+              onDetailPress={() => navigation.navigate('vehicledetail', { vehicle: item.info })}
+            />
+          )
+        }}
+      />
+      {/* <FlatList style={{ height: '100%' }}
         data={result}
         renderItem={({ item }) => {
           onRequestStation && onRequestStation({ item })
           return (
             <SearchResultItemWidget item={item}
-              detailText="车辆详情"
+              // detailText="车辆详情"
               onTargetPress={() => {
                 navigation.navigate('mapmain', {
                   deviceId: item.info.deviceId
@@ -107,7 +204,7 @@ function Page({ result, onRequestStation }) {
             />)
         }}
         keyExtractor={item => item.id}
-      />
+      /> */}
     </View>
   )
 }
