@@ -138,7 +138,7 @@ function Item({ item, onDetailPress, onTargetPress }) {
         <Pressable onPress={() => onDetailPress && onDetailPress()}>
           <View style={[styles.row,]}>
             <Text style={[styles.vehicle, styles.vehicleFont]}>车号：</Text>
-            <Text style={[styles.vehicle, styles.vehicleNo, styles.infoText]}>{item.vehicle.no}</Text>
+            <Text style={[styles.vehicle, styles.vehicleNo, styles.vehicleFont, styles.infoText]}>{item.vehicle.no}</Text>
           </View>
           <View style={[styles.row,]}>
             <Text style={[styles.infoFont]}>当前台位：{item.vehicle.stage}</Text>
