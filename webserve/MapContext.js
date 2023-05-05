@@ -63,6 +63,15 @@ export const MapProvider = ({ children }) => {
   }
 
   /**
+   * 获取已绑定设备
+   */
+  async function requestBindedTargets({ keywords, pageNum = 1, pageSize = 5000, }) {
+    const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/pages?keywords=${keywords}&pageNum=${pageNum}&pageSize=${pageSize}&blackStatus=0&consumerStatus=1&orderField=consumerTime&sort=desc`
+    return fetch_json(url)
+      .catch(dealError)
+  }
+
+  /**
    * 获取设备详情
    */
   async function requestDeviceDetail({ targetId }) {
@@ -161,7 +170,8 @@ export const MapProvider = ({ children }) => {
   return (
     <MapContext.Provider value={{
       requestDefaultMap, requestMapList,
-      requestIndoorMap, requestListTargetReals, requestTargets, requestDeviceDetail,
+      requestIndoorMap, requestListTargetReals, requestDeviceDetail,
+      requestTargets, requestBindedTargets,
       requestStation, requestListTargetTypes,
       requestBind, requestUnbind,
       requestVehicleBase, requestVehicleDetail,

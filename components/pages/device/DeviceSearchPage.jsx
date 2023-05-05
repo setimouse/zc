@@ -4,7 +4,7 @@ import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { MapContext } from '../../../webserve/MapContext';
 
-export default function DeviceSearchPage(props) {
+export default function DeviceSearchPage() {
   const navigation = useNavigation();
 
   const { requestTargets } = useContext(MapContext)
@@ -18,8 +18,7 @@ export default function DeviceSearchPage(props) {
   return (
     <View style={[styles.container]}>
       <SearchBarWidget
-        placeholder="请输入标签编码"
-        suggests={props.suggests}
+        placeholder="请输入设备编号"
         resultPage={<Page result={result} />}
         storeKey='device-search'
         onSubmit={(keywords) => {
@@ -169,21 +168,6 @@ function Page({ result }) {
               onDetailPress={() => navigation.navigate('devicedetail', { targetId: item.info.id })}
             />
           )}
-          // renderItem={({ item }) => (
-          //   <SearchResultItemWidget item={item}
-          //     detailText="设备详情"
-          //     onTargetPress={() => {
-          //       navigation.navigate('mapmain', {
-          //         deviceId: item.info.deviceId
-          //       })
-          //     }}
-          //     onDetailPress={() => {
-          //       navigation.navigate('devicedetail', {
-          //         targetId: item.info.id
-          //       })
-          //     }}
-          //   />
-          // )}
           keyExtractor={item => item.id}
         />
         ||

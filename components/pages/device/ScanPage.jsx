@@ -43,7 +43,6 @@ export default function ScanPage() {
   }
 
   useEffect(() => {
-    console.log(navigation)
     askForCameraPermission()
   }, [])
 

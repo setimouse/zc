@@ -108,6 +108,7 @@ export default function DeviceDetailPage(props) {
   }, [route.params])
 
   console.log('detail, target id =', route.params)
+  console.log('perms', me)
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8' }}>
       <ScrollView style={{ paddingHorizontal: 12, marginBottom: 0 }} showsVerticalScrollIndicator={false}>
