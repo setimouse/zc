@@ -27,7 +27,8 @@ function Item({ item, onDelete, onSelected }) {
   )
 }
 
-export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onChangeText, resultPage, initStatus }) {
+export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onChangeText,
+  resultPage, initStatus, rightButton }) {
   const [text, setText] = useState('');
   const [searching, setSearching] = useState(false);
   const [result, setResult] = useState(false);
@@ -143,6 +144,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
             onSubmitEditing={() => search(text)}
           />
         </View>
+        {rightButton}
       </View>
       {result
         && <View style={[styles.mainpage]}>
@@ -194,19 +196,20 @@ const styles = StyleSheet.create({
   },
   bground: {
     backgroundColor: '#2882FF',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   bar: {
     flexDirection: 'row',
-    height: 32,
     paddingHorizontal: 12,
     alignItems: 'center',
     backgroundColor: 'rgba(255 255 255 / .15)',
     margin: 6,
     borderRadius: 4,
+    flex: 1,
   },
   search: {
     flex: 1,
-    height: 32,
     width: '100%',
     fontSize: 14,
     paddingLeft: 4,
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
   },
   history: {
     position: 'absolute',
-    top: 44, left: 0,
+    top: 49, left: 0,
     zIndex: 0,
     width: '100%',
     backgroundColor: 'white',

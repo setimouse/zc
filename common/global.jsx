@@ -10,7 +10,6 @@ const headBar = (options) => {
     headerTitleAlign: "center",
     headerBackTitleVisible: false,
     headerTintColor: '#fff',
-
   }, options);
 };
 
