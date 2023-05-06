@@ -3,6 +3,7 @@ import { useContext, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native';
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { MapContext } from '../../../webserve/MapContext';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function DeviceSearchPage() {
   const navigation = useNavigation();
@@ -65,7 +66,7 @@ function BindHistory({ }) {
   return (
     <View style={styles.container}>
       <Pressable onPress={() => { navigation.navigate('device_bind_history') }}>
-        <Text style={{ fontSize: 14, color: '#2882FF', fontWeight: 400 }}>绑定记录</Text>
+        <Text style={{ fontSize: 14, color: '#2882FF', fontWeight: 400 }}><FontAwesome name="history" size={14} color="#2882FF" /> 绑定记录</Text>
       </Pressable>
     </View>
   )
