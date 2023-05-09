@@ -1,6 +1,6 @@
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Pressable, Keyboard } from 'react-native';
 import { MapContext } from '../../../webserve/MapContext';
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -11,119 +11,87 @@ const Stack = createNativeStackNavigator();
 
 export default function DeviceObjectBindingPage() {
   const navigation = useNavigation();
-
-  const { department, requestDepartment,
-    requestListTargetReals } = useContext(MapContext)
-
-  const [objects, setObjects] = useState([])
-  const [displayObjs, setDisplayObjs] = useState([])
+  const { requestUnbindDevice } = useContext(MapContext);
+  const [objects, setObjects] = useState([]);
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
-    requestListTargetReals({})
-      .then(resp => resp.data)
-      .then(data => {
-        return data.map(o => {
-          return {
-            id: o.consumerId,
-            obj: o.consumerName,
-          }
-        }).filter(o => o.id && o.obj)
-      })
-      .then(objects => {
-        // console.log(objects)
-        setObjects(objects)
-        setDisplayObjs(objects)
-      })
+    requestUnbindDevice({}).then(resp => resp.data.list)
+      .then(setObjects)
   }, [])
 
-  useEffect(() => {
-    requestDepartment()
-  }, [])
-
-  useEffect(() => {
-    // console.log('department', department)
-
-  }, [department])
+  let onSelected = (node) => {
+    node.title = node.name
+    console.log('selected', node)
+    navigation.navigate('devicedetail', { item: node, })
+  }
 
   return (
     <View style={[styles.container]}>
       <SearchBarWidget placeholder="请输入对象名称"
-        storeKey="binding-object"
+        // storeKey="binding-object"
         initStatus={{ isSearching: false, isResult: true }}
         onChangeText={(text) => {
-          let filtered = objects.filter(e => e.obj.indexOf(text) > -1)
-          setDisplayObjs(filtered);
+          let filtered = objects.filter(e => e.name.indexOf(text) > -1)
+          setResults(filtered);
+          console.log(filtered);
           return { isSearching: false, isResult: true, }
         }}
         resultPage={
-          <NavigationContainer independent={true}>
-            <Stack.Navigator initialRouteName='tree'
-              screenOptions={{
-                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
-              }}
-            >
-              <Stack.Screen name="tree" component={DepartmentTreeWidget} options={{
-                title: '组织架构', headerShown: false,
-                // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
-              }}
-                initialParams={{
-                  onSelected: (node) => {
-                    console.log('va', node)
-                    navigation.navigate('devicedetail', {
-                      item: node,
-                    })
-                  }
-                }}
-              />
-            </Stack.Navigator>
-          </NavigationContainer>
+          results.length > 0
+          && <ResultPage data={results} onSelected={onSelected} />
+          || <Department
+            onSelected={(node) => onSelected(node)}
+            onChanged={(node) => { }}
+          />
         }
       />
     </View>
   );
 }
 
-function Page({ displayObjs }) {
-  const navigation = useNavigation();
-
+function ResultPage({ data, onSelected }) {
   return (
     <View style={styles.objects}>
       <FlatList
-        data={displayObjs}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => <Item
-          object={item}
-          onPress={() => {
-            navigation.navigate('devicedetail', {
-              item: item,
-            })
-          }}
-        />}
+        data={data}
+        // keyExtractor={({ item }) => item.id}
+        renderItem={({ item }) => (
+          <Pressable style={{ height: 44, justifyContent: 'center', marginLeft: 12 }}
+            onPress={() => { onSelected(item) }}>
+            <View>
+              <Text style={{ color: '#2882FF', }}>{item.name}</Text>
+            </View>
+          </Pressable>
+        )}
+        ItemSeparatorComponent={<View style={{
+          backgroundColor: '#DDDEDF', marginHorizontal: 12, height: 1,
+        }}></View>}
+        onScroll={() => { Keyboard.dismiss() }}
       />
     </View>
   )
 }
 
-function Item({ object, onPress }) {
-  const styles = StyleSheet.create({
-    item: {
-      height: 44,
-      marginLeft: 12,
-      justifyContent: 'center',
-      borderBottomColor: '#DDDEDF', borderBottomWidth: 0.5,
-    },
-    text: {
-      fontSize: 14, fontWeight: 400,
-      flexDirection: 'row',
-      color: '#3E4146',
-    }
-  });
+function Department({ onSelected, onChanged }) {
   return (
-    <Pressable onPress={onPress}>
-      <View style={styles.item}>
-        <Text style={styles.text}>{object.obj}</Text>
-      </View>
-    </Pressable>
+    <NavigationContainer independent={true}>
+      <Stack.Navigator initialRouteName='tree'
+        screenOptions={{
+          cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS
+        }}
+      >
+        <Stack.Screen name="tree" component={DepartmentTreeWidget} options={{
+          title: '组织架构', headerShown: false,
+          // cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
+        }}
+          initialParams={{
+            onSelected: onSelected,
+            onChanged: onChanged,
+          }}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
   )
 }
 

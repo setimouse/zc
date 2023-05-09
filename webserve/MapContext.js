@@ -101,6 +101,22 @@ export const MapProvider = ({ children }) => {
   }
 
   /**
+   * 获取部门下未绑定设备
+   */
+  async function requestUnbindDevice({ deptId, value }) {
+    let url = `${baseURL}/lmsapi/lms-device/api/v1/localConsumers/pages/all?onlineStatus=4&pageNum=1&pageSize=1000`
+    if (deptId !== undefined) {
+      url += `&deptId=${deptId}`
+    }
+    if (value !== undefined) {
+      url += `&value=${value}`
+    }
+    console.log('ddd request unbind device', url)
+    return fetch_json(url)
+      .catch(dealError)
+  }
+
+  /**
    * 获取台位信息
    */
   async function requestStation({ x, y }) {
@@ -200,6 +216,7 @@ export const MapProvider = ({ children }) => {
       requestTargetInsideMap,
       requestDepartment,
       requestDeviceDetailByNo,
+      requestUnbindDevice,
     }}>
       {children}
     </MapContext.Provider>

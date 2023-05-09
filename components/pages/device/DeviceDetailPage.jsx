@@ -139,7 +139,7 @@ export default function DeviceDetailPage(props) {
     }
     if (route.params.item) {
       let item = route.params.item;
-      setDevice(Object.assign({}, device, { consumerId: item.value, bindObject: item.title }))
+      setDevice(Object.assign({}, device, { consumerId: item.id, bindObject: item.title }))
     }
   }, [route.params])
 

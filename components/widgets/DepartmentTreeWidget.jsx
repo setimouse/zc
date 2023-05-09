@@ -4,57 +4,77 @@
 import React from 'react';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Pressable, Image, Keyboard } from 'react-native';
 import { MapContext } from '../../webserve/MapContext';
 
 export default function DepartmentTreeWidget() {
   const navigation = useNavigation();
   const route = useRoute();
   // console.log('route', route, 'navigation')
-  const [stack, setStack] = useState([])
-  onSelected = route.params.onSelected
+
+  const { department, requestDepartment, requestUnbindDevice } = useContext(MapContext)
+
+  const [depts, setDepts] = useState([]);
+  const [consumers, setConsumers] = useState([]);
+  const [tree, setTree] = useState({});
+
+  const dept = route.params.dept
+  const onSelected = route.params.onSelected
+  const onChanged = route.params.onChanged
 
   useEffect(() => {
-    if (stack.length > 0) {
-      return
+    console.log('dept', dept)
+    let deptId = undefined
+    if (dept == undefined) {
+      requestDepartment()
+    } else {
+      setDepts(dept.children)
+      // console.log(tree)
+      deptId = dept.id
     }
-    setStack(route.params ? (route.params.stack ?? []) : [])
+    requestUnbindDevice({ deptId: deptId }).then(json => json.data)
+      // .then(data => { console.log(data); return data })
+      .then(data => setConsumers(data.list))
   }, [])
 
-  const { department } = useContext(MapContext)
-  let tree = department
-  stack.forEach(e => {
-    const nodes = tree.filter(n => n.value == e)
-    if (nodes.length < 1) {
-      return;
+  useEffect(() => {
+    if (dept == undefined) {
+      setDepts(department)
     }
-    tree = nodes[0].children
-  });
-  tree.sort((a, b) => {
-    if (a.children === undefined && b.children !== undefined) return 1
-    if (a.children !== undefined && b.children === undefined) return -1
-    return 0
-  })
+  }, [department])
+
+  useEffect(() => {
+    let c = []
+    if (depts) {
+      depts.forEach(e => { e.type = 'dept'; e.id = e.value })
+      c = c.concat(depts)
+    }
+    if (consumers) {
+      consumers.forEach(e => { e.type = 'consumer'; e.title = e.name })
+      c = c.concat(consumers)
+    }
+    console.log('ddd', depts, consumers, c)
+    setTree(c)
+  }, [depts, consumers])
 
   return (
     <View>
       <FlatList
         data={tree}
-        keyExtractor={item => item.value}
-        renderItem={({ item }) => <Cell node={item} onPress={(value) => {
-          if (item.children !== undefined) {
-            // 进到下一级
-            let s = new Array(...stack)
-            s.push(value)
-            navigation.push('tree', Object.assign({}, route.params, { stack: s }))
+        keyExtractor={item => item.id + item.title}
+        renderItem={({ item }) => <Cell node={item} onPress={(node) => {
+          console.log('pressed unbind', node)
+          if (node.type === 'dept') {
+            onChanged && onChanged(node)
+            navigation.push('tree', Object.assign({}, route.params, { dept: node }))
           } else {
-            // console.log(onSelected)
-            onSelected && onSelected(item)
+            onSelected && onSelected(node)
           }
         }} />}
         ItemSeparatorComponent={<View style={{
           backgroundColor: '#DDDEDF', marginHorizontal: 12, height: 1,
         }}></View>}
+        onScroll={() => { Keyboard.dismiss() }}
       />
     </View>
   )
@@ -80,11 +100,11 @@ function Cell({ node, onPress }) {
 
   return (
     <Pressable style={{}} onPress={() => {
-      onPress && onPress(node.value)
+      onPress && onPress(node)
     }}>
       <View style={styles.container}>
-        <Text style={[styles.text, node.children ? styles.textDir : null]}>{node.title}</Text>
-        {node.children &&
+        <Text style={[styles.text, node.type == 'dept' ? styles.textDir : null]}>{node.title}</Text>
+        {node.type == 'dept' &&
           <Image source={require('../../assets/right-arrow.png')} style={{ width: 16, height: 16 }} />
         }
       </View>
