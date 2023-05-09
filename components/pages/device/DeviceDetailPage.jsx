@@ -15,6 +15,7 @@ export default function DeviceDetailPage(props) {
 
   const {
     requestDeviceDetail, // 详情
+    requestDeviceDetailByNo, // 详情（通过设备编码）
     requestStation, // 台位
     requestListTargetTypes, // 图片
     requestBind, // 绑定
@@ -81,6 +82,34 @@ export default function DeviceDetailPage(props) {
       .then(device => setDevice(device))
   }
 
+  let getDeviceDetailByNo = async (deviceId) => {
+    requestDeviceDetailByNo({ deviceId: deviceId }).then(result => result.data)
+      .then(data => {
+        getStation(data)
+        getImage(data)
+        return data
+      })
+      .then(data => {
+        console.log(data)
+        setBinding(data.consumerStatusLabel)
+        return {
+          id: data.id,
+          // 'img': image,
+          deviceId: data.deviceId,
+          deviceModel: data.deviceType,
+          desc: data.description,
+          // 绑定信息
+          bindStatus: data.consumerStatusLabel,
+          bindObject: data.consumerName,
+          consumerId: data.consumerId,
+          // currentStage: '',
+          bindTime: data.consumerTime,
+          power: data.qoe + '%'
+        }
+      })
+      .then(device => setDevice(device))
+  }
+
   let unbind = async ({ targetId }) => {
     return requestUnbind({ targetId: targetId })
       .then(data => console.log(data))
@@ -93,7 +122,14 @@ export default function DeviceDetailPage(props) {
   }
 
   useEffect(() => {
-    getDeviceDetail(route.params.targetId)
+    if (route.params == undefined) {
+      return;
+    }
+    if (route.params.targetId) {
+      getDeviceDetail(route.params.targetId)
+    } else if (route.params.deviceId) {
+      getDeviceDetailByNo(route.params.deviceId)
+    }
   }, [])
 
   useEffect(() => {
@@ -103,7 +139,7 @@ export default function DeviceDetailPage(props) {
     }
     if (route.params.item) {
       let item = route.params.item;
-      setDevice(Object.assign({}, device, { consumerId: item.id, bindObject: item.obj }))
+      setDevice(Object.assign({}, device, { consumerId: item.value, bindObject: item.title }))
     }
   }, [route.params])
 

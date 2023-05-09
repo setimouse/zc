@@ -1,4 +1,4 @@
-import React, { createContext, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { AuthContext } from "./AuthContext";
 import { baseURL, dealError } from "./http_config";
 
@@ -6,6 +6,17 @@ export const MapContext = createContext();
 
 export const MapProvider = ({ children }) => {
   const { fetch_json } = useContext(AuthContext);
+  const [department, setDepartment] = useState([]);
+
+  /**
+   * 获取组织架构
+   */
+  async function requestDepartment() {
+    const url = `${baseURL}/lmsapi/lms-admin/api/v1/depts/options`
+    fetch_json(url).then(json => json.data)
+      .then(setDepartment)
+      .catch(dealError)
+  }
 
   /**
    * 获取默认地图 
@@ -78,6 +89,15 @@ export const MapProvider = ({ children }) => {
     const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/detail/${targetId}`
     return fetch_json(url)
       .catch(error => dealError(error))
+  }
+
+  /**
+   * 通过设备编码获取设备详情
+   */
+  async function requestDeviceDetailByNo({ deviceId }) {
+    const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/detailByNo/${deviceId}`
+    return fetch_json(url)
+      .catch(dealError)
   }
 
   /**
@@ -169,6 +189,7 @@ export const MapProvider = ({ children }) => {
 
   return (
     <MapContext.Provider value={{
+      department,
       requestDefaultMap, requestMapList,
       requestIndoorMap, requestListTargetReals, requestDeviceDetail,
       requestTargets, requestBindedTargets,
@@ -177,6 +198,8 @@ export const MapProvider = ({ children }) => {
       requestVehicleBase, requestVehicleDetail,
       requestListTargetRealsDevice,
       requestTargetInsideMap,
+      requestDepartment,
+      requestDeviceDetailByNo,
     }}>
       {children}
     </MapContext.Provider>

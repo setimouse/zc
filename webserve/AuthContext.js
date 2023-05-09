@@ -46,6 +46,7 @@ export const AuthProvider = ({ children }) => {
     return new Promise((resolve, reject) => {
       console.log('fetch json url:', url)
       fetch(url, init)
+        // .then(resp => { console.log('resp', resp); return resp })
         .then(resp => resp.json())
         .then(json => {
           // console.log('json', json)

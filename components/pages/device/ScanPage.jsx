@@ -49,7 +49,7 @@ export default function ScanPage() {
   const handleBarCodeScanned = ({ type, data }) => {
     console.log('type:', type, 'data:', data)
     // todo 设备详情接口需要增加按照 设备编码 查询设备详情
-    navigation.replace('devicedetail', { targetId: data })
+    navigation.replace('devicedetail', { deviceId: data })
   }
 
   return (
