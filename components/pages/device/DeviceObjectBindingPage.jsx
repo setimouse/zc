@@ -14,7 +14,7 @@ export default function DeviceObjectBindingPage() {
   const { requestUnbindDevice } = useContext(MapContext);
   const [objects, setObjects] = useState([]);
   const [results, setResults] = useState([]);
-
+  const [searchText, setSearchText] = useState('');
   useEffect(() => {
     requestUnbindDevice({}).then(resp => resp.data.list)
       .then(setObjects)
@@ -32,13 +32,14 @@ export default function DeviceObjectBindingPage() {
         // storeKey="binding-object"
         initStatus={{ isSearching: false, isResult: true }}
         onChangeText={(text) => {
+          setSearchText(text)
           let filtered = objects.filter(e => e.name.indexOf(text) > -1)
           setResults(filtered);
           console.log(filtered);
           return { isSearching: false, isResult: true, }
         }}
         resultPage={
-          results.length > 0
+          (searchText.length > 0)
           && <ResultPage data={results} onSelected={onSelected} />
           || <Department
             onSelected={(node) => onSelected(node)}
