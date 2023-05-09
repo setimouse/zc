@@ -4,15 +4,18 @@ import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { MapContext } from '../../../webserve/MapContext';
 import { FontAwesome } from '@expo/vector-icons';
+import LoadingPage from '../common/LoadingPage';
 
 export default function DeviceSearchPage() {
   const navigation = useNavigation();
 
   const { requestTargets } = useContext(MapContext)
+  const [loading, setLoading] = useState(false);
 
   const [result, setResult] = useState([])
 
   async function search(keywords) {
+    setLoading(true)
     return requestTargets({ keywords: keywords })
   }
 
@@ -20,7 +23,7 @@ export default function DeviceSearchPage() {
     <View style={[styles.container]}>
       <SearchBarWidget
         placeholder="请输入设备编号"
-        resultPage={<Page result={result} />}
+        resultPage={<Page result={result} isLoading={loading} />}
         storeKey='device-search'
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
@@ -29,11 +32,6 @@ export default function DeviceSearchPage() {
             .then(data => data.map(r => {
               return {
                 id: r.id,
-                // items: [
-                //   { key: '设备型号', value: r.deviceType },
-                //   { key: '标签编码', value: r.deviceId },
-                //   { key: '车号', value: r.consumerName ?? '-' },
-                // ],
                 device: {
                   vehicleNo: r.consumerName,
                   stage: '',
@@ -43,7 +41,11 @@ export default function DeviceSearchPage() {
               }
             }))
             .then(setResult)
-            .catch(error => console.log('error', error.message))
+            .then(() => { setLoading(false) })
+            .catch(error => {
+              console.log('error', error.message)
+              setLoading(false)
+            })
         }}
         rightButton={<BindHistory />}
       />
@@ -156,7 +158,7 @@ function Item({ item, onDetailPress, onTargetPress }) {
   )
 }
 
-function Page({ result }) {
+function Page({ result, isLoading }) {
   const navigation = useNavigation();
   return (
     <View style={{ width: '100%', flex: 1, }}>
@@ -171,6 +173,7 @@ function Page({ result }) {
           )}
           keyExtractor={item => item.id}
         />
+        || (isLoading && <LoadingPage />)
         ||
         <View style={{ flex: 0.618, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ color: '#666' }}>暂无信息</Text>

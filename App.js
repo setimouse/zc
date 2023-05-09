@@ -22,6 +22,7 @@ import TestProfilePage from './test/TestProfilePage';
 import { AuthProvider } from './webserve/AuthContext';
 import Splash from './components/Splash';
 import ErrorPage, { ErrorType } from './components/pages/common/ErrorPage';
+import LoadingPage from './components/pages/common/LoadingPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -34,6 +35,7 @@ export default function App() {
     //*/
 
     // <ErrorPage type={ErrorType.NetworkError} />
+    // <LoadingPage />
 
     // <SafeAreaView style={{ flex: 1 }}>
     // <NavigationContainer>
