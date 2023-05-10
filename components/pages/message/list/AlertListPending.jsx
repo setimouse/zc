@@ -12,6 +12,7 @@ export default function AlertListPending() {
 
   const {
     alarmingList,
+    requestAlarming,
     refreshAlarming,
   } = useContext(AlarmContext)
 
@@ -40,6 +41,8 @@ export default function AlertListPending() {
                 }}
               />
             }
+            onEndReached={requestAlarming}
+            onEndReachedThreshold={1}
             keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId }) }}

@@ -7,6 +7,7 @@ import { AlarmContext } from "../../../webserve/AlarmContext";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AlertListPending from "./list/AlertListPending";
 import AlertListDone from "./list/AlertListDone";
+import AlertListHistory from "./list/AlertListHistory";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -124,53 +125,34 @@ function Item(props) {
 }
 
 function AlertList() {
-  const { alarmingList, alarmEndList } = useContext(AlarmContext)
-  const route = useRoute();
-  console.log(route)
-  const [data, setData] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-  const [isRefreshing, setIsRefreshing] = useState(false)
-  const [loadError, setLoadError] = useState()
-
-  const alarmMap = {
-    'alarming': alarmingList,
-    'alarmEnd': alarmEndList,
-  }
-
-
-  // useEffect(() => {
-  //   refresher && refresher()
-  //   console.log('alarm list', list, alarmList)
-  // }, [])
-
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
-      {(isLoading && !isRefreshing)
-        && <View style={{ flex: 1, justifyContent: 'center' }}>
-          <ActivityIndicator color="#2882FF" />
-        </View>
-        || (data.length > 0 &&
+      {
+        isRefreshing && <LoadingPage /> ||
+        (alarmHistoryList.length > 0 &&
           <FlatList
-            data={data}
+            data={alarmHistoryList}
             refreshControl={
               <RefreshControl refreshing={isRefreshing}
                 onRefresh={() => {
-                  // setIsRefreshing(true)
-                  refresher && refresher()
+                  setIsRefreshing(true)
+                  refreshAlarmHistory()
                 }}
               />
             }
-            keyExtractor={item => item.alarmEventId}
-            renderItem={({ item }) => <Item item={item} navigation={props.navigation} />}
+            keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
+            renderItem={({ item }) => (<AlarmItemWidget item={item}
+              onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId }) }}
+            />)}
           />)
-        || (loadError &&
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Text style={{ color: '#f00', textAlign: 'center', marginHorizontal: 24, }}>{loadError}</Text>
-          </View>)
-        || (data.length == 0 &&
-          <View style={{ flex: 1, justifyContent: 'center' }}>
-            <Text style={{ textAlign: 'center', marginHorizontal: 24 }}>没有告警信息</Text>
-          </View>)
+        // || (loadError &&
+        //   <View style={{ flex: 1, justifyContent: 'center' }}>
+        //     <Text style={{ color: '#f00', textAlign: 'center', marginHorizontal: 24, }}>{loadError}</Text>
+        //   </View>)
+        // || (data.length == 0 &&
+        //   <View style={{ flex: 1, justifyContent: 'center' }}>
+        //     <Text style={{ textAlign: 'center', marginHorizontal: 24 }}>没有告警信息</Text>
+        //   </View>)
       }
     </View>
   )
@@ -187,7 +169,7 @@ export default function AlertListPage() {
     <Tab.Navigator>
       <Tab.Screen name="pending" component={AlertListPending} options={{ title: '正在告警' }} />
       <Tab.Screen name="done" component={AlertListDone} options={{ title: '告警记录' }} />
-      <Tab.Screen name="all" component={AlertList} initialParams={{}} options={{ title: '处理记录' }} />
+      <Tab.Screen name="history" component={AlertListHistory} initialParams={{}} options={{ title: '处理记录' }} />
     </Tab.Navigator>
   )
 }

@@ -12,13 +12,14 @@ export const AlarmProvider = ({ children }) => {
 
   const [alarmingList, setAlarmingList] = useState([]);
   const [alarmingCount, setAlarmingCount] = useState(0);
-  // const [alarmingPage, setAlarmingPage] = useState(1);
-  let alarmingPage = useRef(1);
+  let alarmingPage = useRef(0);
 
   const [alarmEndList, setAlarmEndList] = useState([]);
   const [alarmEndCount, setAlarmEndCount] = useState(0);
-  // const [alarmEndPage, setAlarmEndPage] = useState(1);
-  let alarmEndPage = useRef(1);
+  let alarmEndPage = useRef(0);
+
+  const [alarmHistoryList, setAlarmHistoryList] = useState([]);
+  let alarmHistoryPage = useRef(0)
 
   async function reminder() {
     console.log('alarm reminder')
@@ -108,23 +109,23 @@ export const AlarmProvider = ({ children }) => {
 
   /**
    * 告警中
-   */
+  */
   async function requestAlarming() {
-    console.log('request 告警中')
-    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/pages?pageNum=${alarmingPage.current}&pageSize=10`
+    console.log('request 正在告警')
+    alarmingPage.current++
+    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/pages?processingStatus=0&pageNum=${alarmingPage.current}&pageSize=10`
     fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm ing', data); return data })
       .then(data => data.list)
-      .then(list => alarmEndList.concat(list))
+      .then(list => alarmingPage.current > 1 ? alarmingList.concat(list) : list)
       .then(setAlarmingList)
       .catch(dealError)
-    alarmingPage.current++
   }
 
   async function refreshAlarming() {
     setAlarmingList([])
-    alarmingPage.current = 1
+    alarmingPage.current = 0
     requestAlarming()
   }
 
@@ -133,29 +134,51 @@ export const AlarmProvider = ({ children }) => {
    */
   async function requestAlarmEnd() {
     console.log('request 告警结束')
-    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/alarmEventEnd?pageNum=${alarmEndPage.current}&pageSize=10`
+    alarmEndPage.current++
+    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/alarmEventEnd?processingStatus=0&pageNum=${alarmEndPage.current}&pageSize=10`
     fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm end', data); return data })
       .then(data => data.list)
-      .then(list => alarmEndList.concat(list))
+      .then(list => alarmEndPage.current > 1 ? alarmEndList.concat(list) : list)
       .then(setAlarmEndList)
       .catch(dealError)
-    alarmEndPage.current++
   }
 
   async function refreshAlarmEnd() {
     setAlarmEndList([])
-    alarmEndPage.current = 1
+    alarmEndPage.current = 0
     requestAlarmEnd()
+  }
+
+  /**
+   * 告警处理记录
+   */
+  async function requestAlarmHistory() {
+    console.log('request 告警处理记录')
+    alarmHistoryPage.current++
+    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/alarmEventEnd?processingStatus=1&pageNum=${alarmHistoryPage.current}&pageSize=10`
+    fetch_json(url)
+      .then(resp => resp.data)
+      .then(data => data.list)
+      .then(data => { console.log('alarm history', data, alarmHistoryPage.current); return data })
+      .then(list => alarmHistoryPage.current > 1 ? alarmHistoryList.concat(list) : list)
+      .then(setAlarmHistoryList)
+      .catch(dealError)
+  }
+
+  async function refreshAlarmHistory() {
+    setAlarmHistoryList([])
+    alarmHistoryPage.current = 0
+    requestAlarmHistory()
   }
 
   return (
     <AlarmContext.Provider value={{
       reminder, alarmCount, alarmItems, alarmEvent, alarmDetail, alarmDeal,
-      requestAlarming, requestAlarmEnd,
-      alarmingList, alarmEndList,
-      refreshAlarming, refreshAlarmEnd,
+      alarmingList, alarmEndList, alarmHistoryList,
+      requestAlarming, requestAlarmEnd, requestAlarmHistory,
+      refreshAlarming, refreshAlarmEnd, refreshAlarmHistory,
     }}>
       {children}
     </AlarmContext.Provider>

@@ -1,21 +1,14 @@
 import React, { useContext, useEffect } from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import TestSwitchMapPage from "../../../test/TestSwitchMapPage";
 import SwitchMapPage from "./SwitchMapPage";
-import TestMapPage from "../../../test/TestMap";
 import MapPage from "./MapPage";
-import TestMapVehicleDetailPage from "../../../test/TestMapVehicleDetailPage";
 import MapSearchPage from "./MapSearchPage";
 import DeviceDetailPage from "../device/DeviceDetailPage";
 import DeviceSearchPage from "../device/DeviceSearchPage";
-import TestDeviceSearchPage from "../../../test/TestDeviceSearchPage";
-import TestDeviceDetailPage from "../../../test/TestDeviceDetailPage";
 import TestDeviceModelSettingPage from "../../../test/TestDeviceModelSettingPage";
 import TestDeviceIDSettingPage from '../../../test/TestDeviceIDSettingPage';
-import TestDeviceObjectBindingPage from '../../../test/TestDeviceObjectBindingPage';
 import DeviceObjectBindingPage from "../device/DeviceObjectBindingPage";
 import ScanPage from '../device/ScanPage'
-import TestMapSearch from "../../../test/TestMapSearch";
 import VehicleDetailPage from "./VehicleDetailPage";
 import headBar from "../../../common/global";
 import { MapProvider } from "../../../webserve/MapContext";

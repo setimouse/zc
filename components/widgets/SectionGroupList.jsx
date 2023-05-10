@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 })
 
 const Item = ({ info, index, section }) => {
-  console.log(index, "info=" + info, section.data)
+  // console.log(index, "info=" + info, section.data)
   let value;
   if (typeof info.value === 'string') {
     value = <Text style={styles.textValue}>{info.value}</Text>

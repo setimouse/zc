@@ -167,6 +167,8 @@ function DealBox({ id, onClose, onSave }) {
 }
 
 function alertInfo2listData(alert) {
+  alert = alert ?? {}
+
   const statusMap = {
     0: { title: '告警中' },
     1: { title: '已结束' },
@@ -186,31 +188,31 @@ function alertInfo2listData(alert) {
     {
       title: '基础信息',
       data: [
-        { key: '告警对象', value: alert['targetName'] },
-        { key: '对象部门', value: alert['targetGroupName'] },
-        { key: '标签编码', value: alert['terminalSn'] },
+        { key: '告警对象', value: alert.targetName ?? '-' },
+        { key: '对象部门', value: alert.targetGroupName ?? '-' },
+        { key: '标签编码', value: alert.terminalSn ?? '-' },
       ],
     },
     {
       title: '告警信息',
       data: [
-        { key: '告警地图', value: alert['mapName'] },
-        { key: '告警围栏', value: alert['fenceName'] },
-        { key: '告警时间', value: alert['createdTime'] },
-        { key: '告警时长（秒）', value: alert['retentionTime'] },
-        { key: '告警状态', value: statusMap[alert['status']] ? statusMap[alert['status']].title : '未知' },
-        { key: '告警事件', value: alert['triggerTypeName'] },
-        // { key: '滞留时长（秒）', value: alert['retentionTime'] },
+        { key: '告警地图', value: alert.mapName ?? '-' },
+        { key: '告警围栏', value: alert.fenceName ?? '-' },
+        { key: '告警时间', value: alert.createdTime ?? '-' },
+        { key: '告警时长（秒）', value: alert.retentionTime ?? '-' },
+        { key: '告警状态', value: statusMap[alert.status ?? '-'] ? statusMap[alert.status ?? '-'].title : '未知' },
+        { key: '告警事件', value: alert.triggerTypeName ?? '-' },
+        // { key: '滞留时长（秒）', value: alert.retentionTime ?? '-' },
       ],
     },
     {
       title: '处理信息',
       data: [
-        { key: '处理方式', value: handleMap[alert['handleWay']] ? handleMap[alert['handleWay']].title : '未知' },
-        { key: '处理意见', value: (alert['opinion'] ?? "").length > 19 ? <Text style={{ textAlign: 'left' }}>{alert['opinion']}</Text> : alert['opinion'] },
-        { key: '处理时间', value: alert['misinformationTime'] },
-        { key: '是否误报', value: alert['isMisinformation'] ? '是' : '否' },
-        { key: '处理状态', value: processingStatusMap[alert['processingStatus']] ? processingStatusMap[alert['processingStatus']].title : '未知' },
+        { key: '处理方式', value: handleMap[alert.handleWay ?? '-'] ? handleMap[alert.handleWay ?? '-'].title : '未知' },
+        { key: '处理意见', value: (alert.opinion ?? "").length > 19 ? <Text style={{ textAlign: 'left' }}>{alert.opinion ?? ''}</Text> : alert.opinion ?? '' },
+        { key: '处理时间', value: alert.misinformationTime ?? '' },
+        { key: '是否误报', value: alert.isMisinformation ?? '-' ? '是' : '否' },
+        { key: '处理状态', value: processingStatusMap[alert.processingStatus ?? '-'] ? processingStatusMap[alert.processingStatus ?? '-'].title : '未知' },
       ],
     },
   ]

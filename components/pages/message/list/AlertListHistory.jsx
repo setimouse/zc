@@ -1,50 +1,54 @@
 /**
- * 告警记录页面
+ * 正在告警页面
  */
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { FlatList, RefreshControl, View } from 'react-native';
 import { AlarmContext } from '../../../../webserve/AlarmContext';
 import AlarmItemWidget from '../../../widgets/AlarmItemWidget';
 import { useNavigation } from '@react-navigation/native';
+import LoadingPage from '../../common/LoadingPage';
 
-export default function AlertListDone() {
+export default function AlertListHistory() {
   const navigation = useNavigation();
 
   const {
-    alarmEndList,
-    requestAlarmEnd,
-    refreshAlarmEnd,
+    alarmHistoryList,
+    requestAlarmHistory,
+    refreshAlarmHistory,
   } = useContext(AlarmContext)
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
     console.log('refreshing')
-    refreshAlarmEnd()
+    refreshAlarmHistory()
   }, [])
 
   useEffect(() => {
-    setIsRefreshing(false)
-  }, [alarmEndList])
+    if (alarmHistoryList.length > 0) {
+      setIsRefreshing(false)
+    }
+    console.log('done')
+  }, [alarmHistoryList])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
       {
-        (alarmEndList.length > 0 &&
+        isRefreshing && <LoadingPage /> ||
+        (alarmHistoryList.length > 0 &&
           <FlatList
-            data={alarmEndList}
+            data={alarmHistoryList}
             refreshControl={
               <RefreshControl refreshing={isRefreshing}
                 onRefresh={() => {
-                  // setIsRefreshing(true)
-                  refreshAlarmEnd()
+                  setIsRefreshing(true)
+                  refreshAlarmHistory()
                 }}
               />
             }
-            onEndReached={requestAlarmEnd}
-            onEndReachedThreshold={2}
-
-            keyExtractor={item => item.alarmEventId}
+            onEndReached={requestAlarmHistory}
+            onEndReachedThreshold={1}
+            keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId }) }}
             />)}
