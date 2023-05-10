@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect } from "react";
 import { ActivityIndicator, Alert, Image, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import AlertImage from "../../../assets/alert.png"
-// import TaskImage from "../../../assets/task.png"
 import { AlarmContext } from "../../../webserve/AlarmContext";
 import { AuthContext } from "../../../webserve/AuthContext";
 import { AlertError } from "../../../common/global";

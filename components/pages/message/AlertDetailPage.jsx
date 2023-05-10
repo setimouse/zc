@@ -197,10 +197,10 @@ function alertInfo2listData(alert) {
         { key: '告警地图', value: alert['mapName'] },
         { key: '告警围栏', value: alert['fenceName'] },
         { key: '告警时间', value: alert['createdTime'] },
-        { key: '告警时长', value: alert['retentionTime'] },
+        { key: '告警时长（秒）', value: alert['retentionTime'] },
         { key: '告警状态', value: statusMap[alert['status']] ? statusMap[alert['status']].title : '未知' },
         { key: '告警事件', value: alert['triggerTypeName'] },
-        { key: '滞留时长', value: alert['retentionTime'] },
+        // { key: '滞留时长（秒）', value: alert['retentionTime'] },
       ],
     },
     {

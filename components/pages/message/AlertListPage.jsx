@@ -4,7 +4,9 @@ import AlertPending from '../../../assets/alert_pending.png';
 import AlertDone from '../../../assets/alert_done.png';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { AlarmContext } from "../../../webserve/AlarmContext";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import AlertListPending from "./list/AlertListPending";
+import AlertListDone from "./list/AlertListDone";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -98,12 +100,7 @@ function Body(props) {
           <Image style={s.icon} source={icon} />
           <Text style={s.statusText}>{title}</Text>
         </View>
-        <Pressable onPress={() => {
-          navigation.navigate('alertdetail', {
-            id: data.alarmEventId,
-            onGoBack: () => { console.log('go back!!!!!') }
-          })
-        }}>
+        <Pressable onPress={() => { navigation.navigate('alertdetail', { id: data.alarmEventId, }) }}>
           <View>
             <Text style={s.detail}>告警详情 &raquo;</Text>
           </View>
@@ -126,35 +123,25 @@ function Item(props) {
   )
 }
 
-function AlertList(props) {
-  const { alarmEvent, alarmItems } = useContext(AlarmContext)
-  const params = props.route.params;
+function AlertList() {
+  const { alarmingList, alarmEndList } = useContext(AlarmContext)
+  const route = useRoute();
+  console.log(route)
   const [data, setData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
   const [loadError, setLoadError] = useState()
 
-  const loadAlarmEvent = () => {
-    setIsLoading(true)
-    alarmEvent({ processingStatus: params.processingStatus, pageSize: 1000, })
-      .then(resp => { console.log('resp', resp); setData(resp.list) })
-      .then(() => {
-        setIsLoading(false)
-        setIsRefreshing(false)
-      })
-      .catch(error => {
-        console.log('alert list error', error)
-        setLoadError(error.message)
-        setIsLoading(false)
-        setIsRefreshing(false)
-      })
+  const alarmMap = {
+    'alarming': alarmingList,
+    'alarmEnd': alarmEndList,
   }
 
-  useEffect(function () {
-    loadAlarmEvent()
-    return () => {
-    }
-  }, [alarmItems])
+
+  // useEffect(() => {
+  //   refresher && refresher()
+  //   console.log('alarm list', list, alarmList)
+  // }, [])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
@@ -168,8 +155,8 @@ function AlertList(props) {
             refreshControl={
               <RefreshControl refreshing={isRefreshing}
                 onRefresh={() => {
-                  setIsRefreshing(true)
-                  loadAlarmEvent()
+                  // setIsRefreshing(true)
+                  refresher && refresher()
                 }}
               />
             }
@@ -190,11 +177,17 @@ function AlertList(props) {
 }
 
 export default function AlertListPage() {
+  const { alarmingList, alarmEndList, refreshAlarming, refreshAlarmEnd, requestAlarming, requestAlarmEnd } = useContext(AlarmContext);
+
+  useEffect(() => {
+    // console.log(refreshAlarming)
+    // console.log(refreshAlarmEnd)
+  }, [])
   return (
     <Tab.Navigator>
-      <Tab.Screen name="pending" component={AlertList} initialParams={{ processingStatus: 0 }} options={{ title: '未处理' }} />
-      <Tab.Screen name="done" component={AlertList} initialParams={{ processingStatus: 1 }} options={{ title: '已完成' }} />
-      <Tab.Screen name="all" component={AlertList} initialParams={{}} options={{ title: '全部' }} />
+      <Tab.Screen name="pending" component={AlertListPending} options={{ title: '正在告警' }} />
+      <Tab.Screen name="done" component={AlertListDone} options={{ title: '告警记录' }} />
+      <Tab.Screen name="all" component={AlertList} initialParams={{}} options={{ title: '处理记录' }} />
     </Tab.Navigator>
   )
 }

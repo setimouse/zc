@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TestSwitchMapPage from "../../../test/TestSwitchMapPage";
 import SwitchMapPage from "./SwitchMapPage";
@@ -25,11 +25,17 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import IconBack from '../../../assets/back.png';
+import { AuthContext } from "../../../webserve/AuthContext";
 
 const Stack = createNativeStackNavigator();
 
 export default function MainMap() {
   const navigation = useNavigation();
+  const { loadMe } = useContext(AuthContext)
+
+  useEffect(() => {
+    loadMe()
+  }, [])
 
   return (
     <MapProvider>
