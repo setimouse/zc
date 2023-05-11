@@ -103,7 +103,7 @@ const fmmapScript = `
     const consumerTypeIcon = device.consumerTypeIcon;
     device.fengGLBIcon = consumerTypeIcon;
     if (consumerTypeIcon !== null) {
-      device.fengGLBIcon = 'http://47.94.249.77'
+      device.fengGLBIcon = '{{baseURL}}'
         + "/static/images/pages/"
         // ""
         + consumerTypeIcon.substring(consumerTypeIcon.lastIndexOf('/'), consumerTypeIcon.lastIndexOf('.')).substring(1)
@@ -360,15 +360,15 @@ const template = `
   <title>地图</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <script src="http://47.94.249.77/fengmap/fengmap.map-nologo.min.js"></script>
-  <script src="http://47.94.249.77/fengmap/fengmap.analyser.min.js"></script>
-  <script src="http://47.94.249.77/fengmap/fengmap.effect.min.js"></script>
-  <script src="http://47.94.249.77/fengmap/fengmap.plugin.min.js"></script>
-  <script src="http://47.94.249.77/fengmap/fengmap.plugins-compositemarker.min.js"></script>
-  <script src="http://47.94.249.77/fengmap/fengmap.plugins-export.min.js"></script>
-  <script src="http://47.94.249.77/fengmap/fengmap.plugins-mapedit.min.js"></script>
-  <script src="http://47.94.249.77/fengmap/fengmap.plugins-track-player.min.js"></script>
-  <link rel="stylesheet" href="http://47.94.249.77/fengmap/toolBarStyle.css" />
+  <script src="{{baseURL}}/fengmap/fengmap.map-nologo.min.js"></script>
+  <script src="{{baseURL}}/fengmap/fengmap.analyser.min.js"></script>
+  <script src="{{baseURL}}/fengmap/fengmap.effect.min.js"></script>
+  <script src="{{baseURL}}/fengmap/fengmap.plugin.min.js"></script>
+  <script src="{{baseURL}}/fengmap/fengmap.plugins-compositemarker.min.js"></script>
+  <script src="{{baseURL}}/fengmap/fengmap.plugins-export.min.js"></script>
+  <script src="{{baseURL}}/fengmap/fengmap.plugins-mapedit.min.js"></script>
+  <script src="{{baseURL}}/fengmap/fengmap.plugins-track-player.min.js"></script>
+  <link rel="stylesheet" href="{{baseURL}}/fengmap/toolBarStyle.css" />
 ${indexCss}
 </head>
 
@@ -408,6 +408,7 @@ export default function mapHtml(mapInfo) {
   let prefix = mapInfo.filePath.split('/')[1]
   const mapUrl = mapUrlPrefix + prefix + '/'
   const map = {
+    baseURL: baseURL,
     mapUrl: mapUrl,
     mapId: mapInfo.configs.mapCode,
     themeId: mapInfo.configs.mapThemeCode,

@@ -58,7 +58,7 @@ export default function AlarmItemWidget({ item, onPress, onLocate, statusMap }) 
         <View style={styles.mapName}>
           <Image style={styles.mapIcon} source={MapIcon} />
           <Text style={{ fontSize: 12, color: '#3E4146', }}>{item.mapName}</Text></View>
-        <View style={styles.status}>{processingStatus.display}</View>
+        <View style={styles.status}>{processingStatus && processingStatus.display}</View>
       </View>
       <View style={styles.body}>
         <Pressable onPress={onPress}>
