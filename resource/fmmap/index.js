@@ -189,10 +189,12 @@ const fmmapScript = `
 
   function moveMarkers(deviceList) {
     deviceList.forEach(d => {
-      if (!devices[d['deviceId']]) {
-        addMarker(d)
-      }
-      move(devices[d['deviceId']], d)
+      try {
+        if (!devices[d['deviceId']]) {
+            addMarker(d)
+        }
+        move(devices[d['deviceId']], d)
+      } catch (e) {}
     });
     const deviceListIdSet = new Set(deviceList.map(e => e['deviceId']))
     for (key in devices) {

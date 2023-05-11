@@ -6,7 +6,6 @@ import FMMapWidget, { webView } from '../../widgets/FMMapWidget';
 import { useContext, useEffect, useState } from 'react';
 import { MapContext } from '../../../webserve/MapContext';
 import { AuthContext } from '../../../webserve/AuthContext';
-import { Dimensions } from 'react-native';
 import { AlertError } from '../../../common/global';
 
 export default function MapPage({ route, navigation }) {
@@ -26,7 +25,7 @@ export default function MapPage({ route, navigation }) {
       console.log("device list:", list.map(e => e.deviceId))
       let deviceListJson = JSON.stringify(list)
       // console.log('move devices:', list)
-      webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
+      webView && webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
     })
   }
 
@@ -141,7 +140,7 @@ export default function MapPage({ route, navigation }) {
     // </SafeAreaView>
   );
 }
-const { height } = Dimensions.get('screen')
+
 const styles = StyleSheet.create({
   container: {
     // flex: 1,

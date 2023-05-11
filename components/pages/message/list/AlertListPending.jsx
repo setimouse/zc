@@ -47,6 +47,10 @@ export default function AlertListPending() {
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId }) }}
               onLocate={() => navigation.navigate('vehicle_map', { deviceId: item.deviceId })}
+              statusMap={{
+                0: { display: <Text style={{ fontSize: 12, color: '#F72727' }}></Text> },
+                1: { display: <Text style={{ fontSize: 12, color: '#2882FF' }}></Text> },
+              }}
             />)}
           />)
         // || (loadError &&
