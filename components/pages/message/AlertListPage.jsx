@@ -159,16 +159,40 @@ function AlertList() {
 }
 
 export default function AlertListPage() {
-  const { alarmingList, alarmEndList, refreshAlarming, refreshAlarmEnd, requestAlarming, requestAlarmEnd } = useContext(AlarmContext);
+  const { alarmingCount, alarmEndCount, alarmingList, alarmEndList, refreshAlarming, refreshAlarmEnd, requestAlarming, requestAlarmEnd } = useContext(AlarmContext);
 
   useEffect(() => {
     // console.log(refreshAlarming)
     // console.log(refreshAlarmEnd)
   }, [])
+
+  let alarmBadge = (text) => {
+    const styles = StyleSheet.create({
+      pos: {
+        marginTop: 4, marginRight: 4,
+      },
+      container: {
+        backgroundColor: '#F72727',
+        paddingHorizontal: 4, borderRadius: 7,
+        // marginLeft: -20,
+      },
+      text: {
+        color: '#fff', fontSize: 10,
+      }
+    });
+    return (
+      <View style={styles.pos}>
+        <View style={styles.container}>
+          <Text style={styles.text}>{text}</Text>
+        </View>
+      </View>
+    )
+  }
+
   return (
     <Tab.Navigator>
-      <Tab.Screen name="pending" component={AlertListPending} options={{ title: '正在告警' }} />
-      <Tab.Screen name="done" component={AlertListDone} options={{ title: '告警记录' }} />
+      <Tab.Screen name="pending" component={AlertListPending} options={{ title: '正在告警', tabBarBadge: () => alarmBadge(alarmingCount) }} />
+      <Tab.Screen name="done" component={AlertListDone} options={{ title: '告警记录', tabBarBadge: () => alarmBadge(alarmEndCount) }} />
       <Tab.Screen name="history" component={AlertListHistory} initialParams={{}} options={{ title: '处理记录' }} />
     </Tab.Navigator>
   )

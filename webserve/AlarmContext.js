@@ -117,7 +117,10 @@ export const AlarmProvider = ({ children }) => {
     fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm ing', data); return data })
-      .then(data => data.list)
+      .then(data => {
+        setAlarmingCount(data.total)
+        return data.list
+      })
       .then(list => alarmingPage.current > 1 ? alarmingList.concat(list) : list)
       .then(setAlarmingList)
       .catch(dealError)
@@ -139,8 +142,10 @@ export const AlarmProvider = ({ children }) => {
     fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm end', data); return data })
-      .then(data => data.list)
-      .then(list => alarmEndPage.current > 1 ? alarmEndList.concat(list) : list)
+      .then(data => {
+        setAlarmEndCount(data.total)
+        return data.list
+      }).then(list => alarmEndPage.current > 1 ? alarmEndList.concat(list) : list)
       .then(setAlarmEndList)
       .catch(dealError)
   }
@@ -179,6 +184,7 @@ export const AlarmProvider = ({ children }) => {
       alarmingList, alarmEndList, alarmHistoryList,
       requestAlarming, requestAlarmEnd, requestAlarmHistory,
       refreshAlarming, refreshAlarmEnd, refreshAlarmHistory,
+      alarmingCount, alarmEndCount,
     }}>
       {children}
     </AlarmContext.Provider>

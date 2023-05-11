@@ -144,7 +144,7 @@ function Item({ item, onDetailPress, onTargetPress }) {
             <Text style={[styles.infoFont]}>当前台位：{item.vehicle.stage}</Text>
           </View>
           <View style={[styles.row,]}>
-            <Text style={[styles.infoFont]}>设备编号：{item.vehicle.deviceId}</Text>
+            <Text style={[styles.infoFont]}>标签编码：{item.vehicle.deviceId}</Text>
           </View>
         </Pressable>
       </View>

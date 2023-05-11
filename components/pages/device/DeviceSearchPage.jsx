@@ -22,7 +22,7 @@ export default function DeviceSearchPage() {
   return (
     <View style={[styles.container]}>
       <SearchBarWidget
-        placeholder="请输入设备编号"
+        placeholder="请输入标签编码"
         resultPage={<Page result={result} isLoading={loading} />}
         storeKey='device-search'
         onSubmit={(keywords) => {
@@ -142,7 +142,7 @@ function Item({ item, onDetailPress, onTargetPress }) {
             <Text style={[styles.infoFont]}>当前台位：{item.device.stage}</Text>
           </View>
           <View style={[styles.row,]}>
-            <Text style={[styles.infoFont]}>设备编号：{item.device.deviceId}</Text>
+            <Text style={[styles.infoFont]}>标签编码：{item.device.deviceId}</Text>
           </View>
         </Pressable>
       </View>
