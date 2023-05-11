@@ -67,11 +67,9 @@ function BindHistory({ }) {
   });
 
   return (
-    <View style={styles.container}>
-      <Pressable onPress={() => { navigation.navigate('device_bind_history') }}>
-        <Text style={{ fontSize: 14, color: '#2882FF', fontWeight: 400 }}><FontAwesome name="history" size={14} color="#2882FF" /> 绑定记录</Text>
-      </Pressable>
-    </View>
+    <Pressable style={styles.container} onPress={() => { navigation.navigate('device_bind_history') }}>
+      <Text style={{ fontSize: 14, color: '#2882FF', fontWeight: 400 }}><FontAwesome name="history" size={14} color="#2882FF" /> 绑定记录</Text>
+    </Pressable>
   )
 }
 
