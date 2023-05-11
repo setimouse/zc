@@ -156,7 +156,7 @@ export default function DeviceDetailPage(props) {
           <View style={{ marginBottom: 24, }}>
             {
               binding === '已绑定'
-              && <ButtonWidget title='解绑' onPress={() => {
+              && <ButtonWidget title='解绑' buttonColor='#F96868' onPress={() => {
                 Alert.alert('确认解绑该设备吗？', '', [
                   {
                     text: '确认', onPress: () => unbind({ targetId: device.id })
