@@ -11,7 +11,8 @@ export default function AlertDetailPage(props) {
   const { reminder, alarmDetail, alarmDeal } = useContext(AlarmContext)
   const route = useRoute()
   const id = route.params['id'];
-  console.log('alert id:', id)
+  const type = route.params.type;
+  console.log('alert id:', id, type)
 
   const [alert, setAlert] = useState({})
 
@@ -25,7 +26,7 @@ export default function AlertDetailPage(props) {
     loadDetail({ id })
   }, [])
 
-  const data = alertInfo2listData(alert);
+  const data = alertInfo2listData(alert, type);
 
   const [dealModal, setDealModal] = useState(false);
 
@@ -34,7 +35,7 @@ export default function AlertDetailPage(props) {
       {data.length > 0 &&
         <ScrollView style={{ padding: 12, }} showsVerticalScrollIndicator={false}>
           <SectionGroupList data={data} />
-          {alert.processingStatus == 0 &&
+          {alert.processingStatus == 0 && ['done'].indexOf(type) > -1 &&
             <View style={{ marginBottom: 32, }}>
               <ButtonWidget title='处理' onPress={() => setDealModal(true)} />
             </View>
@@ -166,7 +167,7 @@ function DealBox({ id, onClose, onSave }) {
   )
 }
 
-function alertInfo2listData(alert) {
+function alertInfo2listData(alert, type) {
   alert = alert ?? {}
 
   const statusMap = {
@@ -184,7 +185,7 @@ function alertInfo2listData(alert) {
     1: { title: '已处理' },
   }
 
-  return [
+  const data = [
     {
       title: '基础信息',
       data: [
@@ -205,7 +206,10 @@ function alertInfo2listData(alert) {
         // { key: '滞留时长（秒）', value: alert.retentionTime ?? '-' },
       ],
     },
-    {
+
+  ]
+  if (['done'].indexOf(type) > -1) {
+    data.push({
       title: '处理信息',
       data: [
         { key: '处理方式', value: handleMap[alert.handleWay ?? '-'] ? handleMap[alert.handleWay ?? '-'].title : '未知' },
@@ -214,7 +218,7 @@ function alertInfo2listData(alert) {
         { key: '是否误报', value: alert.isMisinformation ?? '-' ? '是' : '否' },
         { key: '处理状态', value: processingStatusMap[alert.processingStatus ?? '-'] ? processingStatusMap[alert.processingStatus ?? '-'].title : '未知' },
       ],
-    },
-  ]
-
+    })
+  }
+  return data
 }

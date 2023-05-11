@@ -45,7 +45,7 @@ export default function AlertListPending() {
             onEndReachedThreshold={1}
             keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
-              onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId }) }}
+              onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'pending' }) }}
               onLocate={() => navigation.navigate('vehicle_map', { deviceId: item.deviceId })}
               statusMap={{
                 0: { display: <Text style={{ fontSize: 12, color: '#F72727' }}></Text> },
