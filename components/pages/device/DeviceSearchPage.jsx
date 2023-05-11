@@ -62,6 +62,7 @@ function BindHistory({ }) {
       paddingHorizontal: 10, paddingVertical: 8,
       marginHorizontal: 8, marginVertical: 6,
       borderRadius: 4,
+      justifyContent: 'center',
     }
   });
 

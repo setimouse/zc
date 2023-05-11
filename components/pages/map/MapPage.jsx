@@ -9,7 +9,7 @@ import { AuthContext } from '../../../webserve/AuthContext';
 import { AlertError } from '../../../common/global';
 
 export default function MapPage({ route, navigation }) {
-  const { requestDefaultMap, requestMapList, requestIndoorMap,
+  const { requestMapList, requestIndoorMap,
     requestListTargetRealsDevice } = useContext(MapContext)
   const { siteSetting } = useContext(AuthContext)
   const [displayMap, setDisplayMap] = useState()
@@ -104,7 +104,7 @@ export default function MapPage({ route, navigation }) {
       </View>
       <View style={styles.search}>
         <MapSearchWidget placeholder="请输入车号"
-          onFocus={e => { navigation.navigate('mapsearch') }}
+          onFocus={() => { navigation.navigate('mapsearch') }}
         />
       </View>
       {mapInfo && mapInfo.name &&
