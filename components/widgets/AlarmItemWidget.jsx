@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import MapIcon from '../../assets/map_icon.png';
 import LocateIcon from '../../assets/locate.png';
 
-export default function AlarmItemWidget({ item, onPress, onLocate }) {
+export default function AlarmItemWidget({ item, onPress, onLocate, statusMap }) {
   const styles = StyleSheet.create({
     item: {
       marginTop: 16,
@@ -44,11 +44,13 @@ export default function AlarmItemWidget({ item, onPress, onLocate }) {
   })
 
   // const statusMap = 
-
-  let processingStatus = {
-    0: '未处理',
-    1: '已处理',
-  }[item.processingStatus]
+  if (statusMap == undefined) {
+    statusMap = {
+      0: { display: <Text style={{ fontSize: 12, color: '#FF903C' }}>·待处理</Text> },
+      1: { display: <Text style={{ fontSize: 12, color: '#2882FF' }}>·已处理</Text> },
+    }
+  }
+  let processingStatus = statusMap[item.processingStatus]
 
   return (
     <View style={styles.item}>
@@ -56,7 +58,7 @@ export default function AlarmItemWidget({ item, onPress, onLocate }) {
         <View style={styles.mapName}>
           <Image style={styles.mapIcon} source={MapIcon} />
           <Text style={{ fontSize: 12, color: '#3E4146', }}>{item.mapName}</Text></View>
-        <View style={styles.status}><Text style={{ fontSize: 12 }}>{processingStatus}</Text></View>
+        <View style={styles.status}>{processingStatus.display}</View>
       </View>
       <View style={styles.body}>
         <Pressable onPress={onPress}>

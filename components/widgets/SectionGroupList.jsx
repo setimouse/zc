@@ -69,7 +69,9 @@ export default function SectionGroupList({ data }) {
           <Text style={styles.headerText}>{title}</Text>
         </View>
       )}
-      ItemSeparatorComponent={() => (<View style={{ height: 1, backgroundColor: '#DDDEDF', marginHorizontal: 12, }}></View>)}
+      ItemSeparatorComponent={() => (<View style={{ height: 1, backgroundColor: '#fff', paddingHorizontal: 12, }}>
+        <View style={{ height: 1, backgroundColor: '#DDDEDF', }}></View>
+      </View>)}
     />
   )
 

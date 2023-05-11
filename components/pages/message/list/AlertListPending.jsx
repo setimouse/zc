@@ -46,6 +46,7 @@ export default function AlertListPending() {
             keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId }) }}
+              onLocate={() => navigation.navigate('vehicle_map', { deviceId: item.deviceId })}
             />)}
           />)
         // || (loadError &&
