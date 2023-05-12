@@ -46,6 +46,7 @@ export default function AlertListDone() {
             keyExtractor={item => item.alarmEventId}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'done' }) }}
+              onLocate={() => { navigation.navigate('history_map', { alert: item, type: 'history' }) }}
               statusMap={{
                 0: { display: <Text style={{ fontSize: 12, color: '#F72727' }}>·未处理</Text> },
                 1: { display: <Text style={{ fontSize: 12, color: '#2882FF' }}>·已处理</Text> },

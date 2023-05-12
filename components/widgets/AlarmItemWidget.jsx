@@ -71,15 +71,15 @@ export default function AlarmItemWidget({ item, onPress, onLocate, statusMap }) 
               <View style={styles.info}><Text style={styles.infoText}>告警时间：</Text><Text style={styles.infoText}>{item.createTime}</Text></View>
             </View>
             {item.mapId != '0' &&
-              <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center' }}>
-                <Pressable onPress={onLocate}>
+              <View style={{ flex: 1, justifyContent: 'flex-end', flexDirection: 'row', alignItems: 'center', }}>
+                <Pressable onPress={onLocate} style={{ paddingLeft: 18, paddingVertical: 12, alignItems: 'flex-end' }}>
                   <Image style={styles.icon} source={LocateIcon} />
                 </Pressable>
               </View>
             }
           </View>
         </Pressable>
-      </View>
-    </View>
+      </View >
+    </View >
   )
 }

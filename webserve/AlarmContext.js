@@ -178,6 +178,17 @@ export const AlarmProvider = ({ children }) => {
     requestAlarmHistory()
   }
 
+  /**
+   * 告警记录详情
+   */
+  async function requestAlarmRecordDetail({ eventId }) {
+    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/recordDetail/${eventId}`
+    return fetch_json(url)
+      .then(resp => resp.data)
+      .then(data => { console.log('record data', data); return data })
+      .catch(dealError)
+  }
+
   return (
     <AlarmContext.Provider value={{
       reminder, alarmCount, alarmItems, alarmEvent, alarmDetail, alarmDeal,
@@ -185,6 +196,7 @@ export const AlarmProvider = ({ children }) => {
       requestAlarming, requestAlarmEnd, requestAlarmHistory,
       refreshAlarming, refreshAlarmEnd, refreshAlarmHistory,
       alarmingCount, alarmEndCount,
+      requestAlarmRecordDetail,
     }}>
       {children}
     </AlarmContext.Provider>

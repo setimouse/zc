@@ -110,7 +110,7 @@ export default function DeviceDetailPage() {
       })
       .then(device => setDevice(device))
       .catch(error => {
-        SimpleAlert(error.msg)
+        SimpleAlert(error.msg ?? "标签编码有误")
         navigation.canGoBack() && navigation.goBack()
       })
   }

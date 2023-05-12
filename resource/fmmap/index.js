@@ -100,56 +100,60 @@ const fmmapScript = `
 
   var devices = {}
   function addMarker(device) {
-    const consumerTypeIcon = device.consumerTypeIcon;
-    device.fengGLBIcon = consumerTypeIcon;
-    if (consumerTypeIcon !== null) {
-      device.fengGLBIcon = '{{baseURL}}'
-        + "/static/images/pages/"
-        // ""
-        + consumerTypeIcon.substring(consumerTypeIcon.lastIndexOf('/'), consumerTypeIcon.lastIndexOf('.')).substring(1)
-        + "_model" + ".glb";
-    }
-    window.ReactNativeWebView.postMessage("glb icon: " + device.fengGLBIcon)
-    /*
-    var marker = new fengmap.FMImageMarker({
-      url: 'https://developer.fengmap.com/fmAPI/images/blueImageMarker.png',
-      x: device.x,
-      y: device.y
-    });
-    /*/
-    const maxLength = 15
-    let markerText = device.consumerName ? device.consumerName : device.deviceId
-    markerText = markerText.length > maxLength ? markerText.substr(0, maxLength) + '...' : markerText
-    var combineMarker = [
-      new fengmap.FMDynamicModel({
-        url:  + device.fengGLBIcon,
-        // url: imageurl,
-        id: 'uuid',
-        // height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
-        height: 0,
-        scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
-          device.consumerEntityExtend.scale : 8,
-        heading: 90,
-        fadeIn: false, fadeOut: false,
+    try {
+      const consumerTypeIcon = device.consumerTypeIcon;
+      device.fengGLBIcon = consumerTypeIcon;
+      if (consumerTypeIcon != null) {
+        device.fengGLBIcon = '{{baseURL}}'
+          + "/static/images/pages/"
+          // ""
+          + consumerTypeIcon.substring(consumerTypeIcon.lastIndexOf('/'), consumerTypeIcon.lastIndexOf('.')).substring(1)
+          + "_model" + ".glb";
+      }
+      window.ReactNativeWebView.postMessage("glb icon: " + device.fengGLBIcon)
+      /*
+      var marker = new fengmap.FMImageMarker({
+        url: 'https://developer.fengmap.com/fmAPI/images/blueImageMarker.png',
         x: device.x,
         y: device.y
-      }),
-      new fengmap.FMTextMarker({
-        text: markerText,
-        fontsize: 12,
-        fillColor: device.consumerEntityExtend && device.consumerEntityExtend.color || '#ccc',
-        height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
-        x: device.x,
-        y: device.y,
-      }),
-    ];
-    //*/
-    /* 将 Marker 添加到地图的指定楼层上 */
-    if (map.getLevels().includes(device.baseFloor)) {
-      var floor = map.getFloor(device.baseFloor);
-      combineMarker.forEach(e => e.addTo(floor))
+      });
+      /*/
+      const maxLength = 15
+      let markerText = device.consumerName ? device.consumerName : device.deviceId
+      markerText = markerText.length > maxLength ? markerText.substr(0, maxLength) + '...' : markerText
+      var combineMarker = [
+        new fengmap.FMDynamicModel({
+          url: device.fengGLBIcon,
+          // url: imageurl,
+          id: 'uuid',
+          // height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
+          height: 0,
+          scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
+            device.consumerEntityExtend.scale : 8,
+          heading: 90,
+          fadeIn: false, fadeOut: false,
+          x: device.x,
+          y: device.y
+        }),
+        new fengmap.FMTextMarker({
+          text: markerText,
+          fontsize: 12,
+          fillColor: device.consumerEntityExtend && device.consumerEntityExtend.color || '#ccc',
+          height: device.consumerEntityExtend && device.consumerEntityExtend.height || 1,
+          x: device.x,
+          y: device.y,
+        }),
+      ];
+      //*/
+      /* 将 Marker 添加到地图的指定楼层上 */
+      if (map.getLevels().includes(device.baseFloor)) {
+        var floor = map.getFloor(device.baseFloor);
+        combineMarker.forEach(e => e.addTo(floor))
+      }
+      devices[device['deviceId']] = combineMarker
+    } catch (e) {
+      window.ReactNativeWebView.postMessage('addMarker error ' + JSON.stringify([e.stack, e.message]))
     }
-    devices[device['deviceId']] = combineMarker
   }
 
   function removeMarker(device) {

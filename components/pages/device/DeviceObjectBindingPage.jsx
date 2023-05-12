@@ -58,10 +58,11 @@ function ResultPage({ data, onSelected }) {
         data={data}
         // keyExtractor={({ item }) => item.id}
         renderItem={({ item }) => (
-          <Pressable style={{ height: 44, justifyContent: 'center', marginLeft: 12 }}
+          <Pressable style={{ height: 44, justifyContent: 'center', marginHorizontal: 12 }}
             onPress={() => { onSelected(item) }}>
-            <View>
-              <Text style={{ color: '#2882FF', }}>{item.name}</Text>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Text style={{ color: '#2882FF', flex: 0, fontSize: 14, }}>{item.name}</Text>
+              <Text style={{ marginLeft: 12, color: '#aaa', fontSize: 12, flex: 1 }}>  {item.deptName}</Text>
             </View>
           </Pressable>
         )}

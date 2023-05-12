@@ -100,7 +100,6 @@ function FunctionButton({ icon, title, onPress }) {
       alignItems: 'center',
       justifyContent: 'space-evenly',
       marginBottom: 8,
-      // backgroundColor: 'red',
     },
     press: {
       alignItems: 'center',
@@ -192,6 +191,7 @@ export default function ProfilePage() {
 
   return (
     <View style={{ backgroundColor: '#F4F6F8', flex: 1 }}>
+      <StatusBar translucent={false} hidden={false} backgroundColor={'#2882FF'} />
       <Image style={{ position: 'absolute', height: 220, width: '100%' }} source={ProfileBg} />
       <UserView user={user} />
       <View top={-36} style={{ backgroundColor: '#fff', marginHorizontal: 12 }} borderRadius={10} >

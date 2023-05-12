@@ -51,6 +51,7 @@ export default function AlertListHistory() {
             keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'history' }) }}
+              onLocate={() => { navigation.navigate('history_map', { alert: item, type: 'history' }) }}
             />)}
           />)
         // || (loadError &&

@@ -10,6 +10,7 @@ import AlertListPage from "./AlertListPage";
 import AlertDetailPage from "./AlertDetailPage";
 import VehicleMapPage from "../map/VehicleMapPage";
 import { MapProvider } from "../../../webserve/MapContext";
+import HistoryMapPage from "./HistoryMapPage";
 const Stack = createNativeStackNavigator();
 
 export default function MainMessage({ navigation }) {
@@ -21,6 +22,7 @@ export default function MainMessage({ navigation }) {
           <Stack.Screen name="alertlist" component={AlertListPage} options={headBar({ title: '告警提醒', })} />
           <Stack.Screen name="alertdetail" component={AlertDetailPage} options={headBar({ title: '告警详情' })} />
           <Stack.Screen name="vehicle_map" component={VehicleMapPage} options={headBar({ title: '车辆定位' })} />
+          <Stack.Screen name="history_map" component={HistoryMapPage} options={headBar({ title: '告警时刻车辆定位' })} />
         </Stack.Navigator>
       </MapProvider>
     </AlarmProvider>
