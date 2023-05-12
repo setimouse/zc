@@ -10,7 +10,7 @@ function SplashScreen() {
 
   return (
     <View style={{ flex: 1 }}>
-      <StatusBar hidden={true} />
+      <StatusBar translucent={true} />
       {/* <Image style={{ width: width, height: height, }}
         source={require('../assets/splash_1284.png')}
       /> */}

@@ -150,12 +150,9 @@ export default function LoginPage() {
               </View>
             </View>
           </KeyboardAvoidingView>
-          <SafeAreaView >
-            <View style={{
-            }}>
-              <Image source={require('../../../assets/logo.png')} style={{ height: 63, alignSelf: 'center', }} resizeMode='contain' />
-            </View>
-          </SafeAreaView>
+          <View style={{ marginBottom: 44, }}>
+            <Image source={require('../../../assets/logo.png')} style={{ height: 63, alignSelf: 'center', }} resizeMode='contain' />
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </ImageBackground >
