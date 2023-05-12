@@ -391,7 +391,7 @@ ${indexCss}
     themeURL: mapUrl + "" + mapId + '/',
     level: {{level}},
     mapZoom: {{mapZoom}},
-    externalModelURL: mapUrl + "" + mapId + "/",
+    // externalModelURL: mapUrl + "" + mapId + "/",
   }
   window.ReactNativeWebView.postMessage(JSON.stringify(options))
   map = new fengmap.FMMap(options);
@@ -422,7 +422,7 @@ export default function mapHtml(mapInfo) {
   console.log(map)
   let html = template;
   for (var key in map) {
-    html = html.replace(`{{${key}}}`, map[key])
+    html = html.replaceAll(`{{${key}}}`, map[key])
   }
   // console.log(html)
   return html

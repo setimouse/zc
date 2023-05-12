@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   locate: {
     position: 'absolute',
     right: 9,
-    bottom: Platform.OS == 'android' ? 110 : 32,
+    bottom: 32,
     backgroundColor: '#fff',
     width: 40, height: 40,
     borderRadius: 20,

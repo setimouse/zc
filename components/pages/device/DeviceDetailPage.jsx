@@ -10,7 +10,8 @@ import { baseURL } from "../../../webserve/http_config";
 import { SimpleAlert } from "../../../common/global";
 import { AuthContext } from "../../../webserve/AuthContext";
 
-export default function DeviceDetailPage(props) {
+export default function DeviceDetailPage() {
+  const navigation = useNavigation();
   const route = useRoute()
 
   const {
@@ -108,6 +109,10 @@ export default function DeviceDetailPage(props) {
         }
       })
       .then(device => setDevice(device))
+      .catch(error => {
+        SimpleAlert(error.msg)
+        navigation.canGoBack() && navigation.goBack()
+      })
   }
 
   let unbind = async ({ targetId }) => {
