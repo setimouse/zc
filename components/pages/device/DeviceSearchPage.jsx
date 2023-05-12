@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { useContext, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native';
+import { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, Pressable, Image, } from 'react-native';
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { MapContext } from '../../../webserve/MapContext';
 import { FontAwesome } from '@expo/vector-icons';
@@ -16,46 +16,49 @@ export default function DeviceSearchPage() {
 
   async function search(keywords) {
     setLoading(true)
-    return requestTargets({ keywords: keywords })
+    requestTargets({ keywords: keywords }).then(resp => resp.data.list)
+      .then(data => data.map(r => {
+        return {
+          id: r.id,
+          device: {
+            vehicleNo: r.consumerName,
+            stage: '',
+            deviceId: r.deviceId,
+          },
+          info: r,
+        }
+      }))
+      .then(result => { console.log('result', result); return result })
+      .then(setResult)
+      .then(() => { setLoading(false) })
+      .catch(error => {
+        console.log('error', error.message)
+        setLoading(false)
+      })
   }
+
+  useEffect(() => {
+    search('')
+  }, [])
 
   return (
     <View style={[styles.container]}>
       <SearchBarWidget
         placeholder="请输入标签编码"
+        initStatus={{ isSearching: false, isResult: true }}
         resultPage={<Page result={result} isLoading={loading} />}
         storeKey='device-search'
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
           search(keywords)
-            .then(resp => resp.data.list)
-            .then(data => data.map(r => {
-              return {
-                id: r.id,
-                device: {
-                  vehicleNo: r.consumerName,
-                  stage: '',
-                  deviceId: r.deviceId,
-                },
-                info: r,
-              }
-            }))
-            .then(setResult)
-            .then(() => { setLoading(false) })
-            .catch(error => {
-              console.log('error', error.message)
-              setLoading(false)
-            })
         }}
-        rightButton={<BindHistory />}
+        rightButton={<BindHistory onPress={() => { navigation.navigate('device_bind_history') }} />}
       />
     </View>
   );
 }
 
-function BindHistory({ }) {
-  const navigation = useNavigation();
-
+function BindHistory({ onPress }) {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: '#FFFFFF',
@@ -67,7 +70,7 @@ function BindHistory({ }) {
   });
 
   return (
-    <Pressable style={styles.container} onPress={() => { navigation.navigate('device_bind_history') }}>
+    <Pressable style={styles.container} onPress={onPress}>
       <Text style={{ fontSize: 14, color: '#2882FF', fontWeight: 400 }}><FontAwesome name="history" size={14} color="#2882FF" /> 绑定记录</Text>
     </Pressable>
   )

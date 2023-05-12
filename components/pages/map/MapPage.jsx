@@ -154,8 +154,8 @@ const styles = StyleSheet.create({
   },
   current: {
     position: 'absolute',
-    top: 96,
-    left: 12,
+    top: Platform.OS === 'ios' ? 100 : 64,
+    left: 16,
   },
   currentText: {
     fontSize: 14,

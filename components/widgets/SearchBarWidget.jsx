@@ -137,7 +137,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
                 isResult !== null && setResult(isResult)
               }
             }}
-            autoFocus={true}
+            // autoFocus={true}
             onFocus={() => {
               setSearching(true);
             }}
@@ -146,12 +146,15 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
         </View>
         {rightButton}
       </View>
-      {result
+      {
+        result
         && <View style={[styles.mainpage]}>
+          {/* <Text>result</Text> */}
           {resultPage}
         </View>
       }
-      {searching &&
+
+      {/* {searching &&
         <View style={styles.history}>
           <FlatList
             data={suggests}
@@ -183,7 +186,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
             </View>
           }
         </View>
-      }
+      } */}
     </View >
   )
 }

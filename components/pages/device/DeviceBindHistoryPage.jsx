@@ -1,12 +1,13 @@
 /**
  * 绑定记录
  */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native';
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { MapContext } from '../../../webserve/MapContext';
+import LoadingPage from '../common/LoadingPage';
 
 export default function DeviceBindHistoryPage() {
   const navigation = useNavigation();
@@ -14,35 +15,42 @@ export default function DeviceBindHistoryPage() {
   const { requestBindedTargets } = useContext(MapContext)
 
   const [result, setResult] = useState([])
+  const [loading, setLoading] = useState(false);
 
   async function search(keywords) {
-    return requestBindedTargets({ keywords: keywords })
+    setLoading(true)
+    requestBindedTargets({ keywords: keywords }).then(resp => resp.data.list)
+      .then(data => data.map(r => {
+        return {
+          id: r.id,
+          device: {
+            vehicleNo: r.consumerName,
+            stage: '',
+            deviceId: r.deviceId,
+            bindTime: r.consumerTime,
+          },
+          info: r,
+        }
+      }))
+      .then(setResult)
+      .then(() => setLoading(false))
+      .catch(error => { console.log('error', error.message); setLoading(false) })
   }
+
+  useEffect(() => {
+    search('')
+  }, [])
 
   return (
     <View style={[styles.container]}>
       <SearchBarWidget
         placeholder="请输入标签编码"
-        resultPage={<Page result={result} />}
+        initStatus={{ isSearching: false, isResult: true }}
+        resultPage={<Page result={result} isLoading={loading} />}
         storeKey='device-bind-history'
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
           search(keywords)
-            .then(resp => resp.data.list)
-            .then(data => data.map(r => {
-              return {
-                id: r.id,
-                device: {
-                  vehicleNo: r.consumerName,
-                  stage: '',
-                  deviceId: r.deviceId,
-                  bindTime: r.consumerTime,
-                },
-                info: r,
-              }
-            }))
-            .then(setResult)
-            .catch(error => console.log('error', error.message))
         }}
       />
     </View>
@@ -135,7 +143,7 @@ function Item({ item, onDetailPress, onTargetPress }) {
   )
 }
 
-function Page({ result }) {
+function Page({ result, isLoading }) {
   const navigation = useNavigation();
   return (
     <View style={{ width: '100%', flex: 1, }}>
@@ -150,6 +158,7 @@ function Page({ result }) {
           )}
           keyExtractor={item => item.id}
         />
+        || (isLoading && <LoadingPage />)
         ||
         <View style={{ flex: 0.618, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ color: '#666' }}>暂无信息</Text>

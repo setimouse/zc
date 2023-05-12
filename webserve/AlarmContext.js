@@ -113,7 +113,7 @@ export const AlarmProvider = ({ children }) => {
   async function requestAlarming() {
     console.log('request 正在告警')
     alarmingPage.current++
-    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/pages?processingStatus=0&pageNum=${alarmingPage.current}&pageSize=10`
+    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/pages?&pageNum=${alarmingPage.current}&pageSize=10`
     fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm ing', data); return data })
@@ -138,7 +138,7 @@ export const AlarmProvider = ({ children }) => {
   async function requestAlarmEnd() {
     console.log('request 告警结束')
     alarmEndPage.current++
-    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/alarmEventEnd?processingStatus=0&pageNum=${alarmEndPage.current}&pageSize=10`
+    const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/alarmEventEnd?&pageNum=${alarmEndPage.current}&pageSize=10`
     fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm end', data); return data })

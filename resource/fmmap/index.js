@@ -392,6 +392,19 @@ ${indexCss}
     level: {{level}},
     mapZoom: {{mapZoom}},
     // externalModelURL: mapUrl + "" + mapId + "/",
+    // backgroundColor: "#0b0d1a",
+    rotation: 0,
+    //初始化倾斜角
+    tiltAngle: 70,
+    //最小倾斜角
+    minTiltAngle: 0,
+    //缩放范围
+    zoomRange: [11, 29],
+    //禁止把地图拖拽出视野范围
+    enabledPanRange: false,
+    //禁用了选中高亮
+    highlightPicker: [],
+    logarithmicDepthBuffer: true,
   }
   window.ReactNativeWebView.postMessage(JSON.stringify(options))
   map = new fengmap.FMMap(options);
