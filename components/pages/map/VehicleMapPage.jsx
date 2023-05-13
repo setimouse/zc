@@ -4,7 +4,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import FMMapWidget, { webView } from '../../widgets/FMMapWidget';
+import FMMapWidget from '../../widgets/FMMapWidget';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { MapContext } from '../../../webserve/MapContext';
 import { AuthContext } from '../../../webserve/AuthContext';
@@ -17,6 +17,8 @@ export default function VehicleMapPage({ route }) {
   const { requestTargetInsideMap, requestIndoorMap,
     requestListTargetRealsDevice } = useContext(MapContext);
   const { siteSetting } = useContext(AuthContext)
+
+  var webView;
 
   const deviceId = route.params['deviceId']
 
@@ -70,6 +72,7 @@ export default function VehicleMapPage({ route }) {
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo}
           onMapReady={() => { setMapReady(new Date()) }}
+          onWebViewRef={c => webView = c}
         />
       </View>
       {mapInfo && mapInfo.name &&

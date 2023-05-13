@@ -4,9 +4,8 @@ import { StyleSheet, View } from "react-native";
 // import mapHtml from '../../resource/fmmap/test.html';
 import mapHtml from "../../resource/fmmap/index";
 
-var webView;
 
-function FMMapWidget({ mapInfo, onMapReady }) {
+function FMMapWidget({ mapInfo, onMapReady, onWebViewRef }) {
   return (
     <View style={styles.container}>
       <WebView style={styles.webview}
@@ -14,7 +13,7 @@ function FMMapWidget({ mapInfo, onMapReady }) {
         allowingReadAccessToURL={true}
         allowFileAccess={true}
         allowFileAccessFromFileURLs={true}
-        ref={c => webView = c}
+        ref={c => onWebViewRef && onWebViewRef(c)}
         source={{ html: mapHtml(mapInfo) }}
         // source={{ uri: '../../resource/fmmap/test.html' }}
         // nativeConfig={{ props: { webContentsDebuggingEnabled: true } }}
@@ -48,4 +47,3 @@ const styles = StyleSheet.create({
 })
 
 export default FMMapWidget;
-export var webView;

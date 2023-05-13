@@ -2,7 +2,7 @@ import { Platform, Pressable, StatusBar, StyleSheet, Text, View } from 'react-na
 import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
-import FMMapWidget, { webView } from '../../widgets/FMMapWidget';
+import FMMapWidget from '../../widgets/FMMapWidget';
 import { useContext, useEffect, useState } from 'react';
 import { MapContext } from '../../../webserve/MapContext';
 import { AuthContext } from '../../../webserve/AuthContext';
@@ -16,6 +16,8 @@ export default function MapPage({ route, navigation }) {
   const [mapInfo, setMapInfo] = useState()
   const [deviceList, setDeviceList] = useState([])
   const [mapReady, setMapReady] = useState();
+
+  var webView;
 
   const refreshDevice = () => {
     console.log('refresh device')
@@ -100,6 +102,7 @@ export default function MapPage({ route, navigation }) {
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo}
           onMapReady={() => { setMapReady(new Date()) }}
+          onWebViewRef={c => webView = c}
         />
       </View>
       <View style={styles.search}>
