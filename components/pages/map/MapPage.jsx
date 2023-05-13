@@ -3,7 +3,7 @@ import MapSearchWidget from '../../widgets/MapSearchWidget';
 import MapButtonWidget from '../../widgets/MapButtonWidget';
 import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import FMMapWidget from '../../widgets/FMMapWidget';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { MapContext } from '../../../webserve/MapContext';
 import { AuthContext } from '../../../webserve/AuthContext';
 import { AlertError } from '../../../common/global';
@@ -17,7 +17,11 @@ export default function MapPage({ route, navigation }) {
   const [deviceList, setDeviceList] = useState([])
   const [mapReady, setMapReady] = useState();
 
-  var webView;
+  const webView = useRef();
+
+  function injectJS(js) {
+    webView.current && webView.current.injectJavaScript(js)
+  }
 
   const refreshDevice = () => {
     console.log('refresh device')
@@ -27,7 +31,7 @@ export default function MapPage({ route, navigation }) {
       console.log("device list:", list.map(e => e.deviceId))
       let deviceListJson = JSON.stringify(list)
       // console.log('move devices:', list)
-      webView && webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
+      injectJS(`moveMarkers(${deviceListJson})`)
     })
   }
 
@@ -48,7 +52,7 @@ export default function MapPage({ route, navigation }) {
             console.log(device);
             const x = device.x
             const y = device.y
-            webView.injectJavaScript(`setMapCenter(${x}, ${y})`)
+            injectJS(`setMapCenter(${x}, ${y})`)
           }
         })
     } else {
@@ -102,7 +106,7 @@ export default function MapPage({ route, navigation }) {
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo}
           onMapReady={() => { setMapReady(new Date()) }}
-          onWebViewRef={c => webView = c}
+          onWebViewRef={c => webView.current = c}
         />
       </View>
       <View style={styles.search}>
@@ -132,7 +136,7 @@ export default function MapPage({ route, navigation }) {
       </View>
       <Pressable style={styles.locate}
         onPress={() => {
-          webView.injectJavaScript('resetMapLocation()')
+          injectJS('resetMapLocation()')
         }}
       >
         <View>

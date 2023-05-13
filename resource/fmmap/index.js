@@ -431,10 +431,10 @@ export default function mapHtml(mapInfo) {
     themeId: mapInfo.configs.mapThemeCode,
     level: mapInfo.configs.defaultFloor,
     mapZoom: mapInfo.configs.zoomLevel,
-    floorControlPositionX: Platform.OS == 'android' ? -11 : -11,
-    floorControlPositionY: Platform.OS == 'android' ? 180 : 240,
-    zoomControlPositionX: Platform.OS == 'android' ? -11 : -11,
-    zoomControlPositionY: Platform.OS == 'android' ? -165 : -96,
+    floorControlPositionX: mapInfo.floorControlPositionX ?? Platform.OS == 'android' ? -11 : -11,
+    floorControlPositionY: mapInfo.floorControlPositionY ?? Platform.OS == 'android' ? 180 : 240,
+    zoomControlPositionX: mapInfo.zoomControlPositionX ?? Platform.OS == 'android' ? -11 : -11,
+    zoomControlPositionY: mapInfo.zoomControlPositionY ?? Platform.OS == 'android' ? -96 : -96,
   }
   console.log(map)
   let html = template;

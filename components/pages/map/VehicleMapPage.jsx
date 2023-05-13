@@ -2,7 +2,7 @@
  * 车辆定位
  */
 import { StatusBar } from 'expo-status-bar';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import FMMapWidget from '../../widgets/FMMapWidget';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
@@ -18,9 +18,13 @@ export default function VehicleMapPage({ route }) {
     requestListTargetRealsDevice } = useContext(MapContext);
   const { siteSetting } = useContext(AuthContext)
 
-  var webView;
+  const webView = useRef();
 
   const deviceId = route.params['deviceId']
+
+  function injectJS(js) {
+    webView.current && webView.current.injectJavaScript(js)
+  }
 
   useEffect(() => {
     requestTargetInsideMap({ deviceId: deviceId }).then(json => json.data).then(setTarget)
@@ -60,9 +64,9 @@ export default function VehicleMapPage({ route }) {
         if (list.length < 1) {
           return
         }
-        webView.injectJavaScript(`moveMarkers(${deviceListJson})`)
+        injectJS(`moveMarkers(${deviceListJson})`)
         let device = list[0];
-        webView.injectJavaScript(`focusDevice(${JSON.stringify(device)})`)
+        injectJS(`focusDevice(${JSON.stringify(device)})`)
       })
   }
 
@@ -72,7 +76,7 @@ export default function VehicleMapPage({ route }) {
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo}
           onMapReady={() => { setMapReady(new Date()) }}
-          onWebViewRef={c => webView = c}
+          onWebViewRef={c => webView.current = c}
         />
       </View>
       {mapInfo && mapInfo.name &&
@@ -82,7 +86,7 @@ export default function VehicleMapPage({ route }) {
       }
       <Pressable style={styles.locate}
         onPress={() => {
-          webView.injectJavaScript('resetMapLocation()')
+          injectJS('resetMapLocation()')
         }}
       >
         <View>
