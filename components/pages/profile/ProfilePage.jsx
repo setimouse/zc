@@ -173,7 +173,6 @@ function FunctionsView() {
 
 export default function ProfilePage() {
   const { logout, loadMe, me, userInfo } = useContext(AuthContext)
-  const [avatar, setAvatar] = useState();
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -181,6 +180,7 @@ export default function ProfilePage() {
   }, [])
 
   useEffect(() => {
+    me.avatar = null
     setUser({
       name: me.nickname,
       department: me.deptName,
