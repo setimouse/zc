@@ -3,7 +3,7 @@
  */
 import { StatusBar } from 'expo-status-bar';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import FMMapWidget from '../../widgets/FMMapWidget';
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { MapContext } from '../../../webserve/MapContext';
@@ -13,6 +13,7 @@ export default function VehicleMapPage({ route }) {
   const [mapInfo, setMapInfo] = useState();
   const [target, setTarget] = useState({});
   const [mapReady, setMapReady] = useState();
+  const [device, setDevice] = useState();
 
   const { requestTargetInsideMap, requestIndoorMap,
     requestListTargetRealsDevice } = useContext(MapContext);
@@ -33,7 +34,9 @@ export default function VehicleMapPage({ route }) {
   useEffect(() => {
     console.log('target is', target)
     if (target.mapId == undefined) return
-    requestIndoorMap({ id: target.mapId }).then(json => json.data).then(setMapInfo)
+    requestIndoorMap({ id: target.mapId }).then(json => json.data)
+      .then(data => Object.assign({}, data, { floorControlPositionY: Platform.OS == 'android' ? 150 : 150, }))
+      .then(setMapInfo)
   }, [target])
 
   useEffect(() => {
@@ -41,16 +44,15 @@ export default function VehicleMapPage({ route }) {
       return;
     }
     console.log('map ready')
-    const timeout = setTimeout(() => {
-      refreshDevice()
-    }, 500);
-    const interval = __DEV__ ? 3 * 1000 : siteSetting.realDataLoopInterval;
+
+    refreshDevice()
+
+    const interval = __DEV__ ? 3 * 1000 : parseFloat(siteSetting.realDataLoopInterval);
     let timer = setInterval(() => {
       refreshDevice()
     }, interval);
     return () => {
       clearInterval(timer)
-      clearTimeout(timeout)
     }
   }, [mapReady])
 
@@ -72,7 +74,6 @@ export default function VehicleMapPage({ route }) {
 
   return (
     <View style={styles.container}>
-      <StatusBar />
       <View style={styles.map}>
         <FMMapWidget mapInfo={mapInfo}
           onMapReady={() => { setMapReady(new Date()) }}
@@ -84,7 +85,7 @@ export default function VehicleMapPage({ route }) {
           <Text style={styles.currentText}>当前地图: {mapInfo.name}</Text>
         </View>
       }
-      <Pressable style={styles.locate}
+      {<Pressable style={styles.locate}
         onPress={() => {
           injectJS('resetMapLocation()')
         }}
@@ -92,7 +93,7 @@ export default function VehicleMapPage({ route }) {
         <View>
           <MaterialCommunityIcons name="target" size={28} color='#2882FF' />
         </View>
-      </Pressable>
+      </Pressable>}
     </View>
   )
 }

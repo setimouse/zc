@@ -184,7 +184,7 @@ const fmmapScript = `
       x: device.x,
       y: device.y,
       animate: true,
-      duration: 1,
+      duration: .35,
       finish: function () {
         console.log('finished')
       }
@@ -431,12 +431,12 @@ export default function mapHtml(mapInfo) {
     themeId: mapInfo.configs.mapThemeCode,
     level: mapInfo.configs.defaultFloor,
     mapZoom: mapInfo.configs.zoomLevel,
-    floorControlPositionX: mapInfo.floorControlPositionX ?? Platform.OS == 'android' ? -11 : -11,
-    floorControlPositionY: mapInfo.floorControlPositionY ?? Platform.OS == 'android' ? 180 : 240,
-    zoomControlPositionX: mapInfo.zoomControlPositionX ?? Platform.OS == 'android' ? -11 : -11,
-    zoomControlPositionY: mapInfo.zoomControlPositionY ?? Platform.OS == 'android' ? -96 : -96,
+    floorControlPositionX: mapInfo.floorControlPositionX ?? (Platform.OS == 'android' ? -11 : -11),
+    floorControlPositionY: mapInfo.floorControlPositionY ?? (Platform.OS == 'android' ? 180 : 240),
+    zoomControlPositionX: mapInfo.zoomControlPositionX ?? (Platform.OS == 'android' ? -11 : -11),
+    zoomControlPositionY: mapInfo.zoomControlPositionY ?? (Platform.OS == 'android' ? -96 : -96),
   }
-  console.log(map)
+  // console.log(map)
   let html = template;
   for (var key in map) {
     html = html.replaceAll(`{{${key}}}`, map[key])
