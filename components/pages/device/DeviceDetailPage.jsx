@@ -319,7 +319,7 @@ function BindInfoView({ device }) {
           <View><Text style={styles.text}>绑定状态</Text></View>
           <View><Text style={{ color: '#2882FF' }}>{device.bindStatus}</Text></View>
         </CellView>
-        <CellView onPress={device.consumerId ? null : () => navigation.navigate('objectbinding', {
+        <CellView onPress={device.bindTime ? null : () => navigation.navigate('objectbinding', {
           targetId: device.id,
         })}>
           <View><Text style={styles.text}>绑定对象</Text></View>
