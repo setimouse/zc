@@ -10,7 +10,7 @@ import { Image } from "react-native";
 import MainMap from "./map/MainMap";
 import MainMessage from "./message/MainMessage";
 import MainProfile from "./profile/MainProfile";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,6 +39,13 @@ export default function MainScreen() {
       <Tab.Navigator initialRouteName="map"
         screenOptions={({ route }) => {
           return ({
+            tabBarStyle: (() => {
+              const routeName = getFocusedRouteNameFromRoute(route) ?? ""
+              console.log('route name:', routeName, 'name:', route.name)
+              if ('' == routeName) return
+              if (!['mapmain', 'messagemain', 'profile_home'].includes(routeName))
+                return { display: 'none', flex: 0 }
+            })(),
             tabBarIcon: ({ focused, size, color }) => {
               let tab = tabs[route.name];
               let icon = focused ? tab.activeIcon : tab.icon
