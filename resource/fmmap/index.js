@@ -22,6 +22,48 @@ const fmmapScript = `
     }
   })
 
+  //生成自定义视图模式切换按钮
+  function renderViewModeBtn() {
+    console.log('viewMode', map.getViewMode())
+    let mapEl = document.querySelector('.fm-control-groups')
+    console.log(mapEl);
+    let viewModeDom = document.createElement("div");
+    viewModeDom.id = 'customViewMode'
+    viewModeDom.classList.add('fm-view');
+    viewModeDom.style = 'width: 36px; height: 36px;'
+    mapEl.appendChild(viewModeDom);
+    function renderText() {
+      let el = document.querySelector('#customViewMode')
+      el.innerHTML = map.getViewMode() == fengmap.FMViewMode.MODE_3D
+        ? '2D' : '3D';
+    }
+    renderText()
+    viewModeDom.addEventListener('touchstart', () => {
+      const viewMode = map.getViewMode() == fengmap.FMViewMode.MODE_2D
+        ? fengmap.FMViewMode.MODE_3D : fengmap.FMViewMode.MODE_2D
+      map.setViewMode({
+        mode: viewMode,
+        finish: () => {
+          renderText()
+        }
+      })
+    })
+  }
+
+  map.on('buildingEntered', (event) => {
+    console.log('buildingEntered')
+    setTimeout(() => {
+      renderViewModeBtn()
+    }, 500);
+  })
+
+  map.on('buildingExited', (event) => {
+    console.log('buildingExited')
+    setTimeout(() => {
+      renderViewModeBtn()
+    }, 500);
+  })
+
   map.on('loaded', function() {
     var scrollFloorCtlOpt = {
       position: fengmap.FMControlPosition.RIGHT_TOP,
@@ -38,44 +80,7 @@ const fmmapScript = `
     var scrollFloorControl = new fengmap.FMToolbar(scrollFloorCtlOpt);
     scrollFloorControl.addTo(map)
 
-    //生成自定义视图模式切换按钮
-    function renderViewModeBtn() {
-      console.log('viewMode', map.getViewMode())
-      let mapEl = document.querySelector('.fm-control-groups')
-      console.log(mapEl);
-      let viewModeDom = document.createElement("div");
-      viewModeDom.id = 'customViewMode'
-      viewModeDom.classList.add('fm-view');
-      viewModeDom.style = 'width: 36px; height: 36px;'
-      mapEl.appendChild(viewModeDom);
-      function renderText() {
-        let el = document.querySelector('#customViewMode')
-        el.innerHTML = map.getViewMode() == fengmap.FMViewMode.MODE_3D
-          ? '2D' : '3D';
-      }
-      renderText()
-      viewModeDom.addEventListener('touchstart', () => {
-        const viewMode = map.getViewMode() == fengmap.FMViewMode.MODE_2D
-          ? fengmap.FMViewMode.MODE_3D : fengmap.FMViewMode.MODE_2D
-        map.setViewMode({
-          mode: viewMode,
-          finish: () => {
-            renderText()
-          }
-        })
-      })
-    }
     renderViewModeBtn()
-    const width = '37px';
-    document.querySelector('div.fm-control-groups').style.width = width
-    document.querySelector('div.fm-layer').setAttribute('style', 'width: 37px;height:37px;border-radius:7px;')
-    document.querySelector('div.fm-floor-list-group').style.width = width
-    document.querySelector('div.fm-floor-list').style.width = width
-    document.querySelectorAll('div.fm-scroll')
-      .forEach(e => e.style.height = '10px')
-    document.querySelector('.fm-floor-list').style.padding="0 0 0 0"
-    document.querySelectorAll('.fm-floor-name-container').forEach(e => e.style.padding = "0 0 0 0")
-    document.querySelectorAll('.fm-floor-name').forEach(e => e.style.height = '48px')
   });
 
   map.on('loaded', function () {
@@ -85,18 +90,9 @@ const fmmapScript = `
         x: {{zoomControlPositionX}},
         y: {{zoomControlPositionY}},
       },
-
     };
     var toolbar = new fengmap.FMZoomBar(scrollZoomCtlOpt);
     toolbar.addTo(map)
-    {
-      var e = document.querySelector('.fm-control-zoom-bar')
-      e.setAttribute('style', e.getAttribute('style') + 'width:37px;')
-    }
-    {
-      document.querySelectorAll('div.fm-control-zoom-bar-button')
-        .forEach(e => e.setAttribute('style', 'width:37px;height:32px;'))
-    }
   });
 
   var devices = {}
@@ -358,6 +354,74 @@ const indexCss = `
       padding: 24px 16px;
       box-sizing: border-box;
       border-radius: 8px 8px 0 0
+    }
+  </style>
+    <style>
+    .markerText {
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 100px;
+      text-align: center;
+    }
+
+    .fm-view {
+      width: 36px;
+      height: 36px;
+    }
+
+    .fm-view-3d {
+      background: none;
+    }
+
+    .fm-view-2d {
+      background: none;
+    }
+
+    .fm-control-groups {
+      width: 36px;
+    }
+
+    .fm-layer {
+      width: 36px;
+      height: 36px;
+      border-radius: 7px;
+    }
+
+    .fm-floor-list-group {
+      width: 36px;
+    }
+
+    .fm-floor-list {
+      width: 36px;
+      padding: 0px;
+    }
+
+    .fm-floor-name-container {
+      padding: 0px
+    }
+
+    .fm-floor-name {
+      height: 48px;
+    }
+
+    .fm-enter-exit-building-button-enter {
+      width: 36px;
+      height: 36px;
+    }
+
+    .fm-enter-exit-building-button-exit {
+      width: 36px;
+      height: 36px;
+    }
+
+    .fm-control-zoom-bar {
+      width: 36px;
+    }
+
+    .fm-control-zoom-bar-button {
+      width: 36px;
+      height: 36px;
     }
   </style>
 `
