@@ -140,11 +140,21 @@
   // var mapId = 'qk0dyuqja7sr7mq';
   // var mapId = '0ubgbw7385supty';
   // var mapId = 'nk8h6ha27sfggrk';
-  var mapId = 'z21gtwbyf5a65rh';
+  // var mapId = 'z21gtwbyf5a65rh';
+  /* 最新中车一体化
+  var mapId = '0m5a9mefqpomiae';
+  var themeID = '1608648105697071106';
+  //*/
 
-  var mapUrl = 'http://101.200.150.143:8880/mediaresource/testadmin/';
+  //* 多楼层——主语
+  var mapId = 'nk8h6ha27sfggrk';
+  var themeID = '2000';
+  //*/
+
+  // var mapUrl = 'http://101.200.150.143:8880/mediaresource/testadmin/';
+  var mapUrl = 'http://47.94.249.77/mediaresource/admin/';
   // var themeID = '2000';
-  var themeID = '1602863199339343873';
+  // var themeID = '1602863199339343873';
   var options = {
     container: document.getElementById('fengmap'),
     appName: '综合位置服务',
@@ -167,6 +177,56 @@
     overflow: hidden;
     width: 100px;
     text-align: center;
+  }
+
+  .fm-view {
+    width: 36px;
+    height: 36px;
+  }
+
+  .fm-view-3d {
+    background: none;
+  }
+
+  .fm-view-2d {
+    background: none;
+  }
+
+  .fm-control-groups {
+    width: 36px;
+  }
+
+  .fm-layer {
+    width: 36px;
+    height: 36px;
+    border-radius: 7px;
+  }
+
+  .fm-floor-list-group {
+    width: 36px;
+  }
+
+  .fm-floor-list {
+    width: 36px;
+    padding: 0px;
+  }
+
+  .fm-floor-name-container {
+    padding: 0px
+  }
+
+  .fm-floor-name {
+    height: 48px;
+  }
+
+  .fm-enter-exit-building-button-enter {
+    width: 36px;
+    height: 36px;
+  }
+
+  .fm-enter-exit-building-button-exit {
+    width: 36px;
+    height: 36px;
   }
 </style>
 <script>
@@ -192,7 +252,7 @@
         x: -20,
         y: 10
       },
-      viewModeControl: false,
+      viewModeControl: true,
       floorModeControl: true,
       needAllLayerBtn: true,
     };
@@ -226,36 +286,36 @@
         })
       })
     }
-    renderViewModeBtn()
-    const width = '36px';
-    document.querySelector('div.fm-control-groups').style.width = '36px'
-    document.querySelector('div.fm-layer').setAttribute('style', 'width: 36px;height:36px;border-radius:7px;')
-    document.querySelector('div.fm-floor-list-group').style.width = width
-    document.querySelector('div.fm-floor-list').style.width = width
+    // renderViewModeBtn()
+    // const width = '36px';
+    // document.querySelector('div.fm-control-groups').style.width = '36px'
+    // document.querySelector('div.fm-layer').setAttribute('style', 'width: 36px;height:36px;border-radius:7px;')
+    // document.querySelector('div.fm-floor-list-group').style.width = width
+    // document.querySelector('div.fm-floor-list').style.width = width
   });
 
-  map.on('loaded', function () {
-    var scrollZoomCtlOpt = {
-      position: fengmap.FMControlPosition.RIGHT_BOTTOM,
-      offset: {
-        x: -20,
-        y: -60,
-      },
-    };
-    var toolbar = new fengmap.FMZoomBar(scrollZoomCtlOpt);
-    toolbar.addTo(map)
-    {
-      var e = document.querySelector('.fm-control-zoom-bar')
-      e.setAttribute('style', e.getAttribute('style') + 'width:36px;')
-    }
-    {
-      document.querySelectorAll('div.fm-control-zoom-bar-button')
-        .forEach(e => e.setAttribute('style', 'width:36px;height:36px;'))
-    }
-    document.querySelector('.fm-floor-list').style.padding = "0 0 0 0"
-    document.querySelectorAll('.fm-floor-name-container').forEach(e => e.style.padding = "0 0 0 0")
-    document.querySelectorAll('.fm-floor-name').forEach(e => e.style.height = '48px')
-  });
+  // map.on('loaded', function () {
+  //   var scrollZoomCtlOpt = {
+  //     position: fengmap.FMControlPosition.RIGHT_BOTTOM,
+  //     offset: {
+  //       x: -20,
+  //       y: -60,
+  //     },
+  //   };
+  //   var toolbar = new fengmap.FMZoomBar(scrollZoomCtlOpt);
+  //   toolbar.addTo(map)
+  //   {
+  //     var e = document.querySelector('.fm-control-zoom-bar')
+  //     e.setAttribute('style', e.getAttribute('style') + 'width:36px;')
+  //   }
+  //   {
+  //     document.querySelectorAll('div.fm-control-zoom-bar-button')
+  //       .forEach(e => e.setAttribute('style', 'width:36px;height:36px;'))
+  //   }
+  //   document.querySelector('.fm-floor-list').style.padding = "0 0 0 0"
+  //   document.querySelectorAll('.fm-floor-name-container').forEach(e => e.style.padding = "0 0 0 0")
+  //   document.querySelectorAll('.fm-floor-name').forEach(e => e.style.height = '48px')
+  // });
 
   map.on("move", function () {
     console.log(oriCenter.x, oriCenter.y)
@@ -344,6 +404,25 @@
     })
   }
 
+  function move(marker, device) {
+    marker.forEach(e => {
+      e.moveTo({
+        x: device.x,
+        y: device.y,
+        animate: true,
+        duration: .35,
+        finish: function () {
+          console.log('finished')
+        }
+      })
+      if (typeof e === 'FMDynamicModel') {
+        e.rotateTo({
+          heading: device.angle ?? 270,
+          animate: false,
+        })
+      }
+    })
+  }
   function moveMarkers(deviceList) {
     deviceList.forEach(d => {
       if (!devices[d['deviceId']]) {

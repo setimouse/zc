@@ -32,7 +32,8 @@ const fmmapScript = `
       },
       viewModeControl: false,
       floorModeControl: true,
-      needAllLayerBtn: true
+      needAllLayerBtn: true,
+      entranceIcon: false,
     };
     var scrollFloorControl = new fengmap.FMToolbar(scrollFloorCtlOpt);
     scrollFloorControl.addTo(map)
@@ -130,7 +131,7 @@ const fmmapScript = `
           height: 0,
           scale: device.consumerEntityExtend && device.consumerEntityExtend.scale !== null ?
             device.consumerEntityExtend.scale : 8,
-          heading: 90,
+          heading: device.angle ?? 270,
           fadeIn: false, fadeOut: false,
           x: device.x,
           y: device.y
@@ -179,16 +180,21 @@ const fmmapScript = `
     deviceList.forEach(m => addMarker(m))
   }
 
-  function move(marker, device) {
-    marker.forEach(e => e.moveTo({
-      x: device.x,
-      y: device.y,
-      animate: true,
-      duration: .35,
-      finish: function () {
-        console.log('finished')
-      }
-    }))
+function move(marker, device) {
+    marker.forEach(e => {
+      const isModel = e.type === fengmap.FMType.DYNAMIC_MODEL_MARKER;
+      isModel && e.startAction(e.getActionNames()[0]);
+      isModel && e.rotateTo({
+          heading: device.angle ?? 270,
+          animate: false,
+        })
+      e.moveTo({
+        x: device.x,
+        y: device.y,
+        animate: true,
+        duration: .35,
+      })
+    })
   }
 
   function moveMarkers(deviceList) {
