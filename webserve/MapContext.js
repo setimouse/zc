@@ -170,6 +170,9 @@ export const MapProvider = ({ children }) => {
       body: JSON.stringify({
         consumerName: consumerName,
         consumerStatus: consumerStatus,
+        deviceIdList: [],
+        room: '',
+        deviceTargetTypeList: [],
       })
     })
       .catch(error => dealError(error))

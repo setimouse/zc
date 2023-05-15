@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, TextInput, Keyboard } from "react-native";
+import { StyleSheet, View, TextInput, Keyboard, Pressable } from "react-native";
 import { useState } from "react";
 import { EvilIcons } from '@expo/vector-icons';
 
@@ -17,6 +17,7 @@ export default function MapSearchWidget({ placeholder, onSubmitText, onFocus }) 
         ref={input => { this.textInput = input }}
         onFocus={(e) => {
           this.textInput.blur();
+          Keyboard.dismiss()
           onFocus && onFocus(e);
         }}
         clearButtonMode='always'></TextInput>
@@ -36,6 +37,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     elevation: 2,
     borderRadius: 4,
+    flex: 1,
   },
   search: {
     flex: 1,

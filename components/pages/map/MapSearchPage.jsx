@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { View, FlatList, StyleSheet, Text, Pressable, Image } from "react-native";
+import { View, FlatList, StyleSheet, Text, Pressable, Image, Keyboard } from "react-native";
 import { MapContext } from "../../../webserve/MapContext";
 import SearchBarWidget from "../../widgets/SearchBarWidget";
 
@@ -28,6 +28,7 @@ export default function MapSearchPage() {
   let search = async ({ consumerName }) => {
     requestListTargetReals({ consumerName: consumerName })
       .then(resp => resp.data)
+      .then(data => { console.log("reals:", data); return data; })
       .then(data => data.map(e => {
         return {
           id: e.deviceId,
@@ -51,7 +52,7 @@ export default function MapSearchPage() {
       alignItems: 'center',
       justifyContent: 'flex-start',
     }}>
-      <SearchBarWidget
+      <SearchBarWidget autoFocus={true}
         storeKey="map-search"
         initStatus={{ isSearching: false, isResult: true }}
         resultPage={<Page result={searchResult}
@@ -67,7 +68,7 @@ export default function MapSearchPage() {
                 const stage = data.length > 0 ? data[0].fenceName ?? '-' : '-'
                 console.log('stage', stage, info.deviceId, info.x, info.y)
                 setStageInfo({ id: item.id, stage: stage })
-                setStageInfo({ id: '------------', stage: stage })
+                // setStageInfo({ id: '------------', stage: stage })
               })
               .catch(console.log)
           }}
@@ -180,28 +181,8 @@ function Page({ result, onRequestStation }) {
             />
           )
         }}
+        onScroll={() => { Keyboard.dismiss() }}
       />
-      {/* <FlatList style={{ height: '100%' }}
-        data={result}
-        renderItem={({ item }) => {
-          onRequestStation && onRequestStation({ item })
-          return (
-            <SearchResultItemWidget item={item}
-              // detailText="车辆详情"
-              onTargetPress={() => {
-                navigation.navigate('mapmain', {
-                  deviceId: item.info.deviceId
-                })
-              }}
-              onDetailPress={() => {
-                navigation.navigate('vehicledetail', {
-                  vehicle: item.info
-                })
-              }}
-            />)
-        }}
-        keyExtractor={item => item.id}
-      /> */}
     </View>
   )
 }

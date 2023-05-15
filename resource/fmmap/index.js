@@ -75,7 +75,7 @@ const fmmapScript = `
       viewModeControl: false,
       floorModeControl: true,
       needAllLayerBtn: true,
-      entranceIcon: false,
+      entranceIcon: true,
     };
     var scrollFloorControl = new fengmap.FMToolbar(scrollFloorCtlOpt);
     scrollFloorControl.addTo(map)

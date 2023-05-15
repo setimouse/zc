@@ -28,7 +28,7 @@ function Item({ item, onDelete, onSelected }) {
 }
 
 export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onChangeText,
-  resultPage, initStatus, rightButton }) {
+  resultPage, initStatus, rightButton, autoFocus }) {
   const [text, setText] = useState('');
   const [searching, setSearching] = useState(false);
   const [result, setResult] = useState(false);
@@ -137,7 +137,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
                 isResult !== null && setResult(isResult)
               }
             }}
-            // autoFocus={true}
+            autoFocus={autoFocus}
             onFocus={() => {
               setSearching(true);
             }}
