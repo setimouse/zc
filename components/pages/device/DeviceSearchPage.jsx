@@ -198,10 +198,7 @@ function Page({ result, isLoading, onRefresh, onEndReached }) {
           keyExtractor={item => item.id}
           refreshControl={
             <RefreshControl
-              onRefresh={() => {
-                console.log("refreshsss", onRefresh)
-                onRefresh && onRefresh()
-              }}
+              onRefresh={() => { onRefresh && onRefresh() }}
             />
           }
           onEndReached={onEndReached}

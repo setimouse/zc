@@ -1,10 +1,10 @@
 /**
  * 绑定记录
  */
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Pressable, Image, Keyboard, RefreshControl } from 'react-native';
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { MapContext } from '../../../webserve/MapContext';
 import LoadingPage from '../common/LoadingPage';
@@ -16,10 +16,18 @@ export default function DeviceBindHistoryPage() {
 
   const [result, setResult] = useState([])
   const [loading, setLoading] = useState(false);
+  const keyword = useRef('')
+  const pageNum = useRef(0)
 
-  async function search(keywords) {
+  function reset() {
+    pageNum.current = 0
+    setResult([])
+  }
+
+  async function search() {
     setLoading(true)
-    requestBindedTargets({ keywords: keywords }).then(resp => resp.data.list)
+    pageNum.current++
+    requestBindedTargets({ keywords: keyword.current, pageNum: pageNum.current, pageSize: 50 }).then(resp => resp.data.list)
       .then(data => data.map(r => {
         return {
           id: r.id,
@@ -32,13 +40,15 @@ export default function DeviceBindHistoryPage() {
           info: r,
         }
       }))
+      .then(data => pageNum.current > 1 ? result.concat(data) : data)
       .then(setResult)
       .then(() => setLoading(false))
       .catch(error => { console.log('error', error.message); setLoading(false) })
   }
 
   useEffect(() => {
-    search('')
+    reset()
+    search()
   }, [])
 
   return (
@@ -46,7 +56,15 @@ export default function DeviceBindHistoryPage() {
       <SearchBarWidget
         placeholder="请输入标签编码"
         initStatus={{ isSearching: false, isResult: true }}
-        resultPage={<Page result={result} isLoading={loading} />}
+        resultPage={<Page result={result} isLoading={loading}
+          onRefresh={() => {
+            reset()
+            search()
+          }}
+          onEndReached={() => {
+            console.log('end reached')
+            search()
+          }} />}
         storeKey='device-bind-history'
         onSubmit={(keywords) => {
           console.log('keywords', keywords)
@@ -143,7 +161,7 @@ function Item({ item, onDetailPress, onTargetPress }) {
   )
 }
 
-function Page({ result, isLoading }) {
+function Page({ result, isLoading, onRefresh, onEndReached }) {
   const navigation = useNavigation();
   return (
     <View style={{ width: '100%', flex: 1, }}>
@@ -157,6 +175,14 @@ function Page({ result, isLoading }) {
             />
           )}
           keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => { onRefresh && onRefresh() }}
+            />
+          }
+          onEndReached={onEndReached}
+          onEndReachedThreshold={1}
+          onScroll={() => { Keyboard.dismiss() }}
         />
         || (isLoading && <LoadingPage />)
         ||
