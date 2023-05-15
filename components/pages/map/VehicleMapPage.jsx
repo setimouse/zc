@@ -40,6 +40,13 @@ export default function VehicleMapPage({ route }) {
   }, [target])
 
   useEffect(() => {
+    if (!mapInfo) {
+      return
+    }
+    mapInfo.configs.zoomLevel = 18
+  }, [mapInfo])
+
+  useEffect(() => {
     if (mapReady == undefined) {
       return;
     }
