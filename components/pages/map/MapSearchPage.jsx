@@ -23,6 +23,10 @@ export default function MapSearchPage() {
     console.log('after', stageInfo)
   }, [stageInfo])
 
+  useEffect(() => {
+    search({ consumerName: '' })
+  }, [])
+
   let search = async ({ consumerName }) => {
     requestListTargetReals({ consumerName: consumerName })
       .then(resp => resp.data)
@@ -56,6 +60,7 @@ export default function MapSearchPage() {
     }}>
       <SearchBarWidget
         storeKey="map-search"
+        initStatus={{ isSearching: false, isResult: true }}
         resultPage={<Page result={searchResult}
           onRequestStation={({ item }) => {
             if (item.stageTag) {
