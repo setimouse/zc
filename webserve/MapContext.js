@@ -49,16 +49,18 @@ export const MapProvider = ({ children }) => {
    */
   async function requestListTargetRealsDevice({ consumerStatus = 1, deviceList = [], status = 0 }) {
     const url = `${baseURL}/lmsapi/lms-device/api/v1/targets/listTargetReals`
+    var body = {
+      consumerStatus: consumerStatus,
+      deviceIdList: deviceList,
+      status: status,
+    }
+    console.log('request body', body)
     return fetch_json(url, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        consumerStatus: consumerStatus,
-        deviceIdList: deviceList,
-        status: status,
-      })
+      body: JSON.stringify(body)
     })
       .catch(error => dealError(error))
   }

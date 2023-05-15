@@ -15,9 +15,7 @@ export default function MapSearchPage() {
       if (e.id !== stageInfo.id) {
         return
       }
-      e.items.forEach(kv => {
-        if (kv.key == '当前台位') kv.value = stageInfo.stage === '' ? '-' : stageInfo.stage
-      })
+      e.vehicle.stage = stageInfo.stage ?? '-'
     })
     setSearchResult(searchResult)
     console.log('after', stageInfo)
@@ -38,11 +36,6 @@ export default function MapSearchPage() {
             stage: '',
             deviceId: e.deviceId,
           },
-          items: [
-            { key: '车号', value: e.consumerName },
-            { key: '当前台位', value: '' },
-            { key: '标签编码', value: e.deviceId },
-          ],
           info: e,
           stageTag: null,
         }
