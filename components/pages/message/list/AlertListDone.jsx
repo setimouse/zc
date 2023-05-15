@@ -6,6 +6,8 @@ import { FlatList, Image, Pressable, RefreshControl, StyleSheet, Text, View } fr
 import { AlarmContext } from '../../../../webserve/AlarmContext';
 import AlarmItemWidget from '../../../widgets/AlarmItemWidget';
 import { useNavigation } from '@react-navigation/native';
+import ErrorPage, { ErrorType } from '../../common/ErrorPage';
+import LoadingPage from '../../common/LoadingPage';
 
 export default function AlertListDone() {
   const navigation = useNavigation();
@@ -19,24 +21,28 @@ export default function AlertListDone() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
+    setIsRefreshing(true)
     console.log('refreshing')
     refreshAlarmEnd()
   }, [])
 
   useEffect(() => {
-    setIsRefreshing(false)
+    if (alarmEndList.length > 0) {
+      setIsRefreshing(false)
+    }
   }, [alarmEndList])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
       {
-        (alarmEndList.length > 0 &&
+        isRefreshing && <LoadingPage /> ||
+        (
           <FlatList
             data={alarmEndList}
             refreshControl={
               <RefreshControl refreshing={isRefreshing}
                 onRefresh={() => {
-                  // setIsRefreshing(true)
+                  setIsRefreshing(true)
                   refreshAlarmEnd()
                 }}
               />
@@ -53,14 +59,8 @@ export default function AlertListDone() {
               }}
             />)}
           />)
-        // || (loadError &&
-        //   <View style={{ flex: 1, justifyContent: 'center' }}>
-        //     <Text style={{ color: '#f00', textAlign: 'center', marginHorizontal: 24, }}>{loadError}</Text>
-        //   </View>)
-        // || (data.length == 0 &&
-        //   <View style={{ flex: 1, justifyContent: 'center' }}>
-        //     <Text style={{ textAlign: 'center', marginHorizontal: 24 }}>没有告警信息</Text>
-        //   </View>)
+        || alarmEndList.length == 0 &&
+        <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
       }
     </View>
   )

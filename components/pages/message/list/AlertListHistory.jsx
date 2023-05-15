@@ -7,6 +7,7 @@ import { AlarmContext } from '../../../../webserve/AlarmContext';
 import AlarmItemWidget from '../../../widgets/AlarmItemWidget';
 import { useNavigation } from '@react-navigation/native';
 import LoadingPage from '../../common/LoadingPage';
+import ErrorPage, { ErrorType } from '../../common/ErrorPage';
 
 export default function AlertListHistory() {
   const navigation = useNavigation();
@@ -35,7 +36,7 @@ export default function AlertListHistory() {
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
       {
         isRefreshing && <LoadingPage /> ||
-        (alarmHistoryList.length > 0 &&
+        (
           <FlatList
             data={alarmHistoryList}
             refreshControl={
@@ -47,21 +48,15 @@ export default function AlertListHistory() {
               />
             }
             onEndReached={requestAlarmHistory}
-            onEndReachedThreshold={1}
+            onEndReachedThreshold={2}
             keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'history' }) }}
               onLocate={() => { navigation.navigate('history_map', { alert: item, type: 'history' }) }}
             />)}
           />)
-        // || (loadError &&
-        //   <View style={{ flex: 1, justifyContent: 'center' }}>
-        //     <Text style={{ color: '#f00', textAlign: 'center', marginHorizontal: 24, }}>{loadError}</Text>
-        //   </View>)
-        // || (data.length == 0 &&
-        //   <View style={{ flex: 1, justifyContent: 'center' }}>
-        //     <Text style={{ textAlign: 'center', marginHorizontal: 24 }}>没有告警信息</Text>
-        //   </View>)
+        || alarmHistoryList.length == 0 &&
+        <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
       }
     </View>
   )

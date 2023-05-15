@@ -5,10 +5,10 @@ export const ErrorType = {
   NetworkError: { source: require('../../../assets/network_error.png') },
 }
 
-export default function ErrorPage({ type }) {
+export default function ErrorPage({ type, style }) {
   return (
-    <View style={{ paddingHorizontal: 12, flex: 1, }}>
-      <Image source={type.source} style={{ flex: .618, resizeMode: 'contain', width: '100%', }} />
+    <View style={[{ paddingHorizontal: 12, width: '100%' }, style]}>
+      <Image source={type.source} style={{ flex: 1, resizeMode: 'contain', maxWidth: 351, aspectRatio: 1, maxHeight: 380, }} />
     </View>
   )
 }

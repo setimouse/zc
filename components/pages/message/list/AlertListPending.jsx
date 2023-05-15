@@ -6,6 +6,8 @@ import { FlatList, Image, Pressable, RefreshControl, StyleSheet, Text, View } fr
 import { AlarmContext } from '../../../../webserve/AlarmContext';
 import AlarmItemWidget from '../../../widgets/AlarmItemWidget';
 import { useNavigation } from '@react-navigation/native';
+import ErrorPage, { ErrorType } from '../../common/ErrorPage';
+import LoadingPage from '../../common/LoadingPage';
 
 export default function AlertListPending() {
   const navigation = useNavigation();
@@ -19,30 +21,34 @@ export default function AlertListPending() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   useEffect(() => {
-    console.log('refreshing')
+    console.log('refreshing pending')
+    setIsRefreshing(true)
     refreshAlarming()
   }, [])
 
   useEffect(() => {
-    setIsRefreshing(false)
+    if (alarmingList.length > 0) {
+      setIsRefreshing(false)
+    }
   }, [alarmingList])
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
       {
-        (alarmingList.length > 0 &&
+        isRefreshing && <LoadingPage />
+        || (
           <FlatList
             data={alarmingList}
             refreshControl={
               <RefreshControl refreshing={isRefreshing}
                 onRefresh={() => {
-                  // setIsRefreshing(true)
+                  setIsRefreshing(true)
                   refreshAlarming()
                 }}
               />
             }
             onEndReached={requestAlarming}
-            onEndReachedThreshold={1}
+            onEndReachedThreshold={2}
             keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
             renderItem={({ item }) => (<AlarmItemWidget item={item}
               onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'pending' }) }}
@@ -50,14 +56,8 @@ export default function AlertListPending() {
               statusMap={{}}
             />)}
           />)
-        // || (loadError &&
-        //   <View style={{ flex: 1, justifyContent: 'center' }}>
-        //     <Text style={{ color: '#f00', textAlign: 'center', marginHorizontal: 24, }}>{loadError}</Text>
-        //   </View>)
-        // || (data.length == 0 &&
-        //   <View style={{ flex: 1, justifyContent: 'center' }}>
-        //     <Text style={{ textAlign: 'center', marginHorizontal: 24 }}>没有告警信息</Text>
-        //   </View>)
+        || alarmingList.length == 0 &&
+        <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
       }
     </View>
   )
