@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, Pressable, Image, } from 'react-native';
+import { useContext, useEffect, useRef, useState } from 'react';
+import { StyleSheet, Text, View, FlatList, Pressable, Image, RefreshControl, Keyboard, } from 'react-native';
 import SearchBarWidget from '../../widgets/SearchBarWidget';
 import { MapContext } from '../../../webserve/MapContext';
 import { FontAwesome } from '@expo/vector-icons';
@@ -13,10 +13,18 @@ export default function DeviceSearchPage() {
   const [loading, setLoading] = useState(false);
 
   const [result, setResult] = useState([])
+  const keyword = useRef('')
+  const pageNum = useRef(0)
 
-  async function search(keywords) {
+  function reset() {
+    pageNum.current = 0
+    setResult([])
+  }
+
+  async function search() {
     setLoading(true)
-    requestTargets({ keywords: keywords }).then(resp => resp.data.list)
+    pageNum.current++
+    requestTargets({ keywords: keyword.current, pageNum: pageNum.current, pageSize: 50 }).then(resp => resp.data.list)
       .then(data => data.map(r => {
         return {
           id: r.id,
@@ -29,8 +37,9 @@ export default function DeviceSearchPage() {
         }
       }))
       .then(result => { console.log('result', result); return result })
+      .then(data => pageNum.current > 1 ? result.concat(data) : data)
       .then(setResult)
-      .then(() => { setLoading(false) })
+      .then(() => { setLoading(false); })
       .catch(error => {
         console.log('error', error.message)
         setLoading(false)
@@ -38,7 +47,8 @@ export default function DeviceSearchPage() {
   }
 
   useEffect(() => {
-    search('')
+    reset()
+    search()
   }, [])
 
   return (
@@ -46,11 +56,23 @@ export default function DeviceSearchPage() {
       <SearchBarWidget
         placeholder="请输入标签编码"
         initStatus={{ isSearching: false, isResult: true }}
-        resultPage={<Page result={result} isLoading={loading} />}
+        resultPage={<Page
+          result={result} isLoading={loading}
+          onRefresh={() => {
+            reset()
+            search()
+          }}
+          onEndReached={() => {
+            console.log('end reached')
+            search()
+          }}
+        />}
         storeKey='device-search'
-        onSubmit={(keywords) => {
-          console.log('keywords', keywords)
-          search(keywords)
+        onSubmit={(kw) => {
+          reset()
+          console.log('keyword', kw)
+          keyword.current = kw
+          search()
         }}
         rightButton={<BindHistory onPress={() => { navigation.navigate('device_bind_history') }} />}
       />
@@ -160,7 +182,7 @@ function Item({ item, onDetailPress, onTargetPress }) {
   )
 }
 
-function Page({ result, isLoading }) {
+function Page({ result, isLoading, onRefresh, onEndReached }) {
   const navigation = useNavigation();
   return (
     <View style={{ width: '100%', flex: 1, }}>
@@ -174,6 +196,17 @@ function Page({ result, isLoading }) {
             />
           )}
           keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl
+              onRefresh={() => {
+                console.log("refreshsss", onRefresh)
+                onRefresh && onRefresh()
+              }}
+            />
+          }
+          onEndReached={onEndReached}
+          onEndReachedThreshold={1}
+          onScroll={() => { Keyboard.dismiss() }}
         />
         || (isLoading && <LoadingPage />)
         ||

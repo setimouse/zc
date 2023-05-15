@@ -154,7 +154,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
         </View>
       }
 
-      {/* {searching &&
+      {searching &&
         <View style={styles.history}>
           <FlatList
             data={suggests}
@@ -186,7 +186,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
             </View>
           }
         </View>
-      } */}
+      }
     </View >
   )
 }
