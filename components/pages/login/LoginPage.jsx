@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import {
   StyleSheet, Text, View, TextInput, TouchableWithoutFeedback, Keyboard,
-  Pressable, Image, ImageBackground, SafeAreaView, KeyboardAvoidingView
+  Pressable, Image, ImageBackground, KeyboardAvoidingView, Modal, ActivityIndicator
 } from 'react-native';
 import { useContext, useEffect, useState } from 'react';
 import BackgroundImage from '../../../assets/login_bg.png';
@@ -65,6 +65,7 @@ export default function LoginPage() {
   const [wrongTimes, setWrongTimes] = useState(0);
   const [verifyCode, setVerifyCode] = useState('');
   const usernameMaxLength = 30
+  const [logining, setLogining] = useState(false);
 
   useEffect(() => {
     setHidePassword(true)
@@ -134,10 +135,13 @@ export default function LoginPage() {
                       SimpleAlert('请输入验证码')
                       return
                     }
+                    setLogining(true)
                     login(phoneNumber, password, verifyCode)
+                      .then(() => { setLogining(false) })
                       .catch((error) => {
+                        setLogining(false)
                         if (error.message === "Network request failed") {
-                          SimpleAlert("网络请求失败")
+                          SimpleAlert("网络请求失败，请稍后再试")
                           return
                         }
                         if (error.message && error.message.indexOf("JSON Parse error:") > -1) {
@@ -159,6 +163,14 @@ export default function LoginPage() {
           </View>
         </View>
       </TouchableWithoutFeedback>
+      <Modal visible={logining} animationType="none" transparent={true}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <View style={{ width: 168, height: 100, backgroundColor: 'rgba(0 0 0 / .618)', justifyContent: 'center', alignItems: 'center', borderRadius: 12 }}>
+            <ActivityIndicator style={{ marginBottom: 12 }}></ActivityIndicator>
+            <Text style={{ color: '#fff' }}>正在登录</Text>
+          </View>
+        </View>
+      </Modal>
     </ImageBackground >
   );
 }

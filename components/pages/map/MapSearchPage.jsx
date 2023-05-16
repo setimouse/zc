@@ -1,13 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { View, FlatList, StyleSheet, Text, Pressable, Image, Keyboard } from "react-native";
 import { MapContext } from "../../../webserve/MapContext";
 import SearchBarWidget from "../../widgets/SearchBarWidget";
 
 export default function MapSearchPage() {
-  const { requestListTargetReals, requestStation } = useContext(MapContext)
+  const { requestListTargetReals, requestLocalConsumers, requestStation } = useContext(MapContext)
   const [searchResult, setSearchResult] = useState([]);
   const [stageInfo, setStageInfo] = useState({ id: '', stage: null })
+  const [total, setTotal] = useState(null);
+  const keyword = useRef('')
+  const pageNum = useRef(0)
 
   useEffect(() => {
     console.log('stage info', stageInfo)
@@ -43,6 +46,26 @@ export default function MapSearchPage() {
       }))
       .then(setSearchResult)
   }
+
+  // let search = async ({ consumerName }) => {
+  //   requestLocalConsumers({ value: consumerName, onlineStatus: 1, pageNum: pageNum.current, pageSize: 50, })
+  //     .then(resp => resp.data)
+  //     .then(data => { console.log("reals:", data); setTotal(data.total); return data; })
+  //     .then(data => data.list)
+  //     .then(data => data.map(e => {
+  //       return {
+  //         id: e.deviceId,
+  //         vehicle: {
+  //           no: e.name,
+  //           stage: '',
+  //           deviceId: e.deviceId,
+  //         },
+  //         info: e,
+  //         stageTag: null,
+  //       }
+  //     }))
+  //     .then(setSearchResult)
+  // }
 
   return (
     <View style={{

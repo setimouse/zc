@@ -1,4 +1,4 @@
-//* 开发环境
+/* 开发环境
 export const baseURL = __DEV__ ? 'http://47.94.249.77' : 'http://47.94.249.77' //'http://101.200.150.143';
 export const mapUrlPrefix = __DEV__ ? 'http://47.94.249.77/mediaresource/'
   : 'http://47.94.249.77/mediaresource/';
@@ -6,6 +6,11 @@ export const mapUrlPrefix = __DEV__ ? 'http://47.94.249.77/mediaresource/'
 export const baseURL = 'http://10.217.215.3'
 export const mapUrlPrefix = 'http://10.217.215.3/mediaresource/'
 //*/
+
+/* 联通演示环境
+export const baseURL = 'https://lms.cuscri.com'
+export const mapUrlPrefix = 'https://lms.cuscri.com/mediaresource/'
+// */
 
 /* 测试环境
 export const baseURL = __DEV__ ?

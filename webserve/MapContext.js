@@ -105,7 +105,7 @@ export const MapProvider = ({ children }) => {
   /**
    * 获取部门下未绑定设备
    */
-  async function requestUnbindDevice({ deptId, value }) {
+  async function requestUnbindDevice({ deptId, value, pageNum = 1, pageSize = 1000 }) {
     let url = `${baseURL}/lmsapi/lms-device/api/v1/localConsumers/pages/all?onlineStatus=4&pageNum=1&pageSize=1000`
     if (deptId !== undefined) {
       url += `&deptId=${deptId}`
@@ -114,6 +114,22 @@ export const MapProvider = ({ children }) => {
       url += `&value=${value}`
     }
     console.log('ddd request unbind device', url)
+    return fetch_json(url)
+      .catch(dealError)
+  }
+
+  /**
+   * 搜索车号
+   */
+  async function requestLocalConsumers({ deptId, value, onlineStatus, pageNum = 1, pageSize = 50 }) {
+    let url = `${baseURL}/lmsapi/lms-device/api/v1/localConsumers/pages/all?onlineStatus=${onlineStatus}&pageNum=${pageNum}&pageSize=${pageSize}`
+    if (deptId !== undefined) {
+      url += `&deptId=${deptId}`
+    }
+    if (value !== undefined) {
+      url += `&value=${value}`
+    }
+    console.log('request localconsumers', url)
     return fetch_json(url)
       .catch(dealError)
   }
@@ -222,6 +238,7 @@ export const MapProvider = ({ children }) => {
       requestDepartment,
       requestDeviceDetailByNo,
       requestUnbindDevice,
+      requestLocalConsumers,
     }}>
       {children}
     </MapContext.Provider>
