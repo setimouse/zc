@@ -105,6 +105,10 @@ export default function MapSearchPage() {
           if (allResult === undefined) {
             return { isSearching: true, isResult: false }
           }
+          if (text == '') {
+            setSuggests([])
+            return { isSearching: false, isResult: true }
+          }
           setSuggests(allResult.filter(e => e.vehicle.no.indexOf(text) > -1).slice(0, 5))
           return { isSearching: true, isResult: false }
         }}

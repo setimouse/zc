@@ -17,6 +17,8 @@ export default function DeviceSearchPage() {
   const keyword = useRef('')
   const pageNum = useRef(0)
 
+  const [suggests, setSuggests] = useState([]);
+
   function reset() {
     pageNum.current = 0
     setResult([])
@@ -106,6 +108,17 @@ export default function DeviceSearchPage() {
           search()
         }}
         rightButton={<BindHistory onPress={() => { navigation.navigate('device_bind_history') }} />}
+        onChangeText={text => {
+          if (text == '') {
+            setSuggests([])
+            return { isSearching: false, isResult: true }
+          }
+          requestTargets({ keywords: text, pageNum: 1, pageSize: 10 }).then(resp => resp.data.list)
+            .then(list => list.map(e => e.deviceId).filter(e => e.indexOf(text) > -1).slice(0, 5))
+            .then(setSuggests)
+          return { isSearching: true, isResult: false }
+        }}
+        suggests={suggests}
       />
     </View>
   );

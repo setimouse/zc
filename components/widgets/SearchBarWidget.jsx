@@ -173,7 +173,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
             keyExtractor={({ word }) => word}
             renderItem={({ item }) => <Item
               item={item}
-              onDelete={word => {
+              onDelete={customSuggests ? null : (word) => {
                 removeHistory(word)
                 searchBox.focus()
               }}

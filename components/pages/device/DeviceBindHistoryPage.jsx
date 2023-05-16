@@ -12,10 +12,13 @@ import LoadingPage from '../common/LoadingPage';
 export default function DeviceBindHistoryPage() {
   const navigation = useNavigation();
 
-  const { requestBindedTargets } = useContext(MapContext)
+  const { requestBindedTargets, requestListTargetRealsDevice, requestStation } = useContext(MapContext)
 
   const [result, setResult] = useState([])
   const [loading, setLoading] = useState(false);
+  const [stageInfo, setStageInfo] = useState({ id: '', stage: null })
+  const [suggests, setSuggests] = useState([]);
+
   const keyword = useRef('')
   const pageNum = useRef(0)
 
@@ -38,6 +41,7 @@ export default function DeviceBindHistoryPage() {
             bindTime: r.consumerTime,
           },
           info: r,
+          stageTag: null,
         }
       }))
       .then(data => pageNum.current > 1 ? result.concat(data) : data)
@@ -50,6 +54,28 @@ export default function DeviceBindHistoryPage() {
     reset()
     search()
   }, [])
+
+  useEffect(() => {
+    let deviceList = result.filter(e => e.stageTag === null).map(e => e.info.deviceId)
+    if (deviceList.length < 1) return
+    console.log('即将获取如下设备的实时信息', deviceList)
+    result.forEach(e => e.stageTag = 1)
+    requestListTargetRealsDevice({ deviceList: deviceList })
+      .then(resp => resp.data)
+      .then(list => {
+        console.log("获取到设备实时信息", list)
+        list.forEach(e => {
+          requestStation({ x: e.x, y: e.y }).then(resp => resp.data)
+            .then(data => {
+              console.log('stage data', data)
+              const stage = data.length > 0 ? data[0].fenceName ?? '-' : '-'
+              console.log('stage', stage, e.deviceId, e.x, e.y)
+              setStageInfo({ id: e.deviceId, stage: stage })
+            })
+            .catch(console.log)
+        });
+      })
+  }, [result])
 
   return (
     <View style={[styles.container]}>
@@ -66,10 +92,23 @@ export default function DeviceBindHistoryPage() {
             search()
           }} />}
         storeKey='device-bind-history'
-        onSubmit={(keywords) => {
-          console.log('keywords', keywords)
-          search(keywords)
+        onSubmit={(kv) => {
+          console.log('keyword', kv)
+          keyword.current = kv
+          reset()
+          search()
         }}
+        onChangeText={text => {
+          if (text == '') {
+            setSuggests([])
+            return { isSearching: false, isResult: true }
+          }
+          requestBindedTargets({ keywords: text, pageNum: 1, pageSize: 10 }).then(resp => resp.data.list)
+            .then(list => list.map(e => e.deviceId).filter(e => e.indexOf(text) > -1).slice(0, 5))
+            .then(setSuggests)
+          return { isSearching: true, isResult: false }
+        }}
+        suggests={suggests}
       />
     </View>
   );
