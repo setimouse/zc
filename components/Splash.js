@@ -3,6 +3,7 @@ import { AuthContext } from "../webserve/AuthContext";
 import LoginPage from "./pages/login/LoginPage";
 import MainScreen from "./pages/MainScreen";
 import { View, Image, Dimensions, StatusBar, ImageBackground, Text } from "react-native";
+import { AlarmProvider } from "../webserve/AlarmContext";
 
 function SplashScreen() {
   const { width, height } = Dimensions.get("screen")
@@ -54,8 +55,8 @@ export default function Splash() {
     accessToken === null || accessToken === undefined
       ? <LoginPage /> : <MainScreen />
   return (
-    <>
+    <AlarmProvider>
       {screen}
-    </>
+    </AlarmProvider>
   )
 }

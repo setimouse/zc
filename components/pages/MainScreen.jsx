@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import IconMessage from '../../assets/icon_message.png';
 import IconMessageChecked from '../../assets/icon_message_checked.png';
@@ -11,6 +11,7 @@ import MainMap from "./map/MainMap";
 import MainMessage from "./message/MainMessage";
 import MainProfile from "./profile/MainProfile";
 import { NavigationContainer, getFocusedRouteNameFromRoute } from "@react-navigation/native";
+import { AlarmContext } from "../../webserve/AlarmContext";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,7 +34,10 @@ const tabs = {
 };
 
 export default function MainScreen() {
-
+  const { alarmCount, reminder } = useContext(AlarmContext)
+  useEffect(() => {
+    reminder()
+  }, [])
   return (
     <NavigationContainer>
       <Tab.Navigator initialRouteName="map"
@@ -59,6 +63,7 @@ export default function MainScreen() {
         <Tab.Screen name="message" component={MainMessage} options={() => {
           return {
             tabBarLabel: '消息',
+            tabBarBadge: (alarmCount === undefined || alarmCount == 0 ? null : ''),
           }
         }} />
         <Tab.Screen name="map" component={MainMap} options={() => {
