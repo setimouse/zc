@@ -128,6 +128,7 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
             maxLength={100}
             ref={c => searchBox = c}
             placeholder={placeholder ?? '搜索词'}
+            placeholderTextColor={'rgba(255 255 255 / .7)'}
             clearButtonMode='always'
             onChangeText={(text) => {
               setText(text)
