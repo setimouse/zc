@@ -140,6 +140,10 @@ export default function LoginPage() {
                           SimpleAlert("网络请求失败")
                           return
                         }
+                        if (error.message && error.message.indexOf("JSON Parse error:") > -1) {
+                          SimpleAlert("登录服务异常，请稍后再试")
+                          return
+                        }
                         setWrongTimes(wrongTimes + 1)
                         AlertError(error)
                       })
