@@ -70,6 +70,7 @@ export default function DeviceDetailPage() {
           // 'img': image,
           deviceId: data.deviceId,
           deviceModel: data.deviceType,
+          status: data.status,
           desc: data.description,
           // 绑定信息
           bindStatus: data.consumerStatusLabel,
@@ -98,6 +99,7 @@ export default function DeviceDetailPage() {
           // 'img': image,
           deviceId: data.deviceId,
           deviceModel: data.deviceType,
+          status: data.status,
           desc: data.description,
           // 绑定信息
           bindStatus: data.consumerStatusLabel,
@@ -295,6 +297,10 @@ function BaseInfoView({ device }) {
         <CellView>
           <View><Text style={styles.text}>设备型号</Text></View>
           <View><Text style={styles.text}>{device.deviceModel}</Text></View>
+        </CellView>
+        <CellView>
+          <View><Text style={styles.text}>状态</Text></View>
+          <View><Text style={styles.text}>{device.status == 0 ? '在线' : '离线'}</Text></View>
         </CellView>
         <CellView direction="column" underline={false}>
           <View><Text style={styles.text}>描述</Text></View>

@@ -10,6 +10,16 @@ const fmmapScript = `
       window.ReactNativeWebView.postMessage(data)
     }
   }
+
+  function reloadFloor() {
+    var floor = indoorMap.getFloor(indoorMap.getLevel());
+    floor.traverse((fm) => {
+      if (fm.type === fengmap.FMType.EXTENT_LAYER) {
+        fm.visible = false;
+      }
+    })
+  }
+
   map.on('loaded', function () {
     ready = true;
     oriCenter = map.getCenter()
@@ -20,6 +30,7 @@ const fmmapScript = `
         return true;
       }
     }
+    reloadFloor()
   })
 
   //生成自定义视图模式切换按钮
@@ -187,7 +198,7 @@ function move(marker, device) {
       e.moveTo({
         x: device.x,
         y: device.y,
-        animate: true,
+        animate: false,
         duration: .35,
       })
     })

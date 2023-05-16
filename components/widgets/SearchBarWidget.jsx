@@ -15,20 +15,22 @@ function Item({ item, onDelete, onSelected }) {
         <Image style={styles.icon} source={IconHistory} />
         <Text style={styles.text}>{item.word}</Text>
       </Pressable>
-      <Pressable style={{ padding: 8, }}
-        onPress={() => {
-          console.log('pressed remove')
-          onDelete && onDelete(item.word)
-        }}
-      >
-        <Image style={styles.cross} source={IconCross} />
-      </Pressable>
+      {onDelete &&
+        <Pressable style={{ padding: 8, }}
+          onPress={() => {
+            console.log('pressed remove')
+            onDelete && onDelete(item.word)
+          }}
+        >
+          <Image style={styles.cross} source={IconCross} />
+        </Pressable>
+      }
     </View >
   )
 }
 
 export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onChangeText,
-  resultPage, initStatus, rightButton, autoFocus }) {
+  resultPage, initStatus, rightButton, autoFocus, suggests: customSuggests }) {
   const [text, setText] = useState('');
   const [searching, setSearching] = useState(false);
   const [result, setResult] = useState(false);
@@ -114,8 +116,17 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
   }
 
   useEffect(() => {
+    if (customSuggests !== undefined) {
+      return
+    }
     setSuggests(history.filter(e => e.word.indexOf(text) > -1).splice(0, 10))
   }, [text, history])
+
+  useEffect(() => {
+    if (customSuggests) {
+      setSuggests(customSuggests.map(e => ({ 'word': e })))
+    }
+  }, [customSuggests])
 
   var searchBox;
   return (
@@ -172,11 +183,11 @@ export default function SearchBarWidget({ placeholder, storeKey, onSubmit, onCha
           />
           {suggests && suggests.length > 0 &&
             <View>
-              <Pressable style={styles.clearView}
+              {/* <Pressable style={styles.clearView}
                 onPress={() => clearHistory()}
               >
                 <Text style={styles.clear}>清空历史</Text>
-              </Pressable>
+              </Pressable> */}
               <Pressable style={{ height: 1024 }}
                 onPress={() => {
                   searchBox.blur()

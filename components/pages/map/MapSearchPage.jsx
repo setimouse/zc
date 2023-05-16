@@ -7,6 +7,8 @@ import SearchBarWidget from "../../widgets/SearchBarWidget";
 export default function MapSearchPage() {
   const { requestListTargetReals, requestLocalConsumers, requestStation } = useContext(MapContext)
   const [searchResult, setSearchResult] = useState([]);
+  const [allResult, setAllResult] = useState([]);
+  const [suggests, setSuggests] = useState([]);
   const [stageInfo, setStageInfo] = useState({ id: '', stage: null })
   const [total, setTotal] = useState(null);
   const keyword = useRef('')
@@ -26,10 +28,11 @@ export default function MapSearchPage() {
 
   useEffect(() => {
     search({ consumerName: '' })
+      .then(data => setAllResult(data))
   }, [])
 
   let search = async ({ consumerName }) => {
-    requestListTargetReals({ consumerName: consumerName })
+    return requestListTargetReals({ consumerName: consumerName })
       .then(resp => resp.data)
       .then(data => { console.log("reals:", data); return data; })
       .then(data => data.map(e => {
@@ -44,7 +47,7 @@ export default function MapSearchPage() {
           stageTag: null,
         }
       }))
-      .then(setSearchResult)
+      .then(data => { setSearchResult(data); return data })
   }
 
   // let search = async ({ consumerName }) => {
@@ -76,6 +79,7 @@ export default function MapSearchPage() {
       justifyContent: 'flex-start',
     }}>
       <SearchBarWidget autoFocus={true}
+        suggests={suggests.map(e => e.vehicle.no).slice(0, 5)}
         storeKey="map-search"
         initStatus={{ isSearching: false, isResult: true }}
         resultPage={<Page result={searchResult}
@@ -91,12 +95,19 @@ export default function MapSearchPage() {
                 const stage = data.length > 0 ? data[0].fenceName ?? '-' : '-'
                 console.log('stage', stage, info.deviceId, info.x, info.y)
                 setStageInfo({ id: item.id, stage: stage })
-                // setStageInfo({ id: '------------', stage: stage })
+                setStageInfo({ id: '------------', stage: stage })
               })
               .catch(console.log)
           }}
         />}
         onSubmit={(keyword) => search({ consumerName: keyword })}
+        onChangeText={(text) => {
+          if (allResult === undefined) {
+            return { isSearching: true, isResult: false }
+          }
+          setSuggests(allResult.filter(e => e.vehicle.no.indexOf(text) > -1).slice(0, 5))
+          return { isSearching: true, isResult: false }
+        }}
       />
     </View >
   )
