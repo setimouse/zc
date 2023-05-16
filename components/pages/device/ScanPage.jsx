@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 export default function ScanPage() {
   const navigation = useNavigation();
 
-  const [hasPermission, setHasPermission] = useState(false);
+  const [hasPermission, setHasPermission] = useState(null);
   const styles = StyleSheet.create({
     container: {
       backgroundColor: '#000', flex: 1,
@@ -32,6 +32,7 @@ export default function ScanPage() {
     },
     scanner: {
       padding: 3,
+      width: 269, height: 269,
     }
   });
 
@@ -56,9 +57,11 @@ export default function ScanPage() {
     <View style={styles.container}>
       <View style={{ alignItems: 'center', flex: .618 }}>
         <ImageBackground source={require('../../../assets/scanbox.png')} style={styles.scanner}>
-          <BarCodeScanner style={styles.window}
-            onBarCodeScanned={handleBarCodeScanned}
-          />
+          {hasPermission === true &&
+            <BarCodeScanner style={styles.window}
+              onBarCodeScanned={handleBarCodeScanned}
+            />
+          }
         </ImageBackground>
         <View style={styles.tint}>
           <MaterialCommunityIcons name="flashlight" size={24} style={{ alignSelf: 'center' }} color="white" />
