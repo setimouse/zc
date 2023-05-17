@@ -30,7 +30,6 @@ const fmmapScript = `
         return true;
       }
     }
-    reloadFloor()
   })
 
   //生成自定义视图模式切换按钮
@@ -92,9 +91,7 @@ const fmmapScript = `
     scrollFloorControl.addTo(map)
 
     renderViewModeBtn()
-  });
 
-  map.on('loaded', function () {
     var scrollZoomCtlOpt = {
       position: fengmap.FMControlPosition.RIGHT_BOTTOM,
       offset: {
@@ -104,6 +101,8 @@ const fmmapScript = `
     };
     var toolbar = new fengmap.FMZoomBar(scrollZoomCtlOpt);
     toolbar.addTo(map)
+
+    reloadFloor()
   });
 
   var devices = {}
