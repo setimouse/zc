@@ -63,7 +63,8 @@ export default function MainScreen() {
         <Tab.Screen name="message" component={MainMessage} options={() => {
           return {
             tabBarLabel: '消息',
-            tabBarBadge: (alarmCount === undefined || alarmCount == 0 ? null : ''),
+            tabBarBadge: (alarmCount === undefined || alarmCount == 0 ? null : '.'),
+            tabBarBadgeStyle: { fontSize: 82, left: -2, top: 0, lineHeight: 32, backgroundColor: 'rgba(0 0 0 / 0)', color: '#f00' }
           }
         }} />
         <Tab.Screen name="map" component={MainMap} options={() => {
