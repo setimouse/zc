@@ -10,7 +10,8 @@ const headBar = (options) => {
     headerTitleAlign: "center",
     headerBackTitleVisible: false,
     headerTintColor: '#fff',
-    animationTypeForReplace: 'push', animation: 'slide_from_right'
+    animationTypeForReplace: 'push', animation: 'slide_from_right',
+    headerShadowVisible: false,
   }, options);
 };
 

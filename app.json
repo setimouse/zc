@@ -4,7 +4,7 @@
     "slug": "zc",
     "version": "0.0.0.3",
     "orientation": "portrait",
-    "icon": "./assets/app-icon_1024.png",
+    "icon": "./assets/app-icon_192.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image__": "./assets/splash_1284.png",

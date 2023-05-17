@@ -40,12 +40,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   title: {
-    paddingTop: 11,
     fontWeight: 'bold',
     fontSize: 14,
-    paddingBottom: 4,
     color: '#3E4146',
-    flex: 0.618,
   },
   subtitle: {
     color: '#B0B1B3',

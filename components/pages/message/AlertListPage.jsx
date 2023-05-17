@@ -46,7 +46,7 @@ export default function AlertListPage() {
   }
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator screenOptions={{ tabBarPressColor: 'rgba(0 0 0/ 0)' }}>
       <Tab.Screen name="pending" component={AlertListPending} options={{ title: '正在告警', tabBarBadge: () => alarmBadge(alarmingCount) }} />
       <Tab.Screen name="done" component={AlertListDone} options={{ title: '告警记录', tabBarBadge: () => alarmBadge(alarmEndCount) }} />
       <Tab.Screen name="history" component={AlertListHistory} initialParams={{}} options={{ title: '处理记录' }} />
