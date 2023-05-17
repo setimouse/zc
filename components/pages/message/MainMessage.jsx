@@ -18,8 +18,11 @@ export default function MainMessage({ navigation }) {
     <AlarmProvider>
       <MapProvider>
         <Stack.Navigator initialRouteName='messagemain'>
-          <Stack.Screen name="messagemain" component={MessagePage} options={headBar({ title: '消息', })} />
-          <Stack.Screen name="alertlist" component={AlertListPage} options={headBar({ title: '告警提醒', })} />
+          <Stack.Screen name="messagemain" component={MessagePage} options={headBar({ title: '消息', animationTypeForReplace: 'push', animation: 'slide_from_right' })}
+          />
+          <Stack.Screen name="alertlist" component={AlertListPage} options={headBar({
+            title: '告警提醒',
+          })} />
           <Stack.Screen name="alertdetail" component={AlertDetailPage} options={headBar({ title: '告警详情' })} />
           <Stack.Screen name="vehicle_map" component={VehicleMapPage} options={headBar({ title: '车辆定位' })} />
           <Stack.Screen name="history_map" component={HistoryMapPage} options={headBar({ title: '告警时刻车辆定位' })} />

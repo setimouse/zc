@@ -10,6 +10,7 @@ import IconUser from '../../../assets/login_icon_user.png';
 import IconPassword from '../../../assets/login_icon_password.png';
 import { Ionicons } from '@expo/vector-icons';
 import { AlertError, SimpleAlert } from '../../../common/global';
+import { env } from '../../../webserve/http_config';
 
 function InputIconBox({ placeholder, maxLength = 9999, source, onChangeText, value, secureTextEntry = false, tip }) {
   const s = StyleSheet.create({
@@ -171,6 +172,7 @@ export default function LoginPage() {
           </View>
         </View>
       </Modal>
+      <View style={{ position: 'absolute', top: 44, right: 0, backgroundColor: 'rgba(0 0 0 / .382)', padding: 6, borderTopLeftRadius: 6, borderBottomLeftRadius: 6 }}><Text style={{ color: '#fff' }}>{env}</Text></View>
     </ImageBackground >
   );
 }
