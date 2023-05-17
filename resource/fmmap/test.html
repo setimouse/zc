@@ -168,10 +168,18 @@
     .fm-floor-list {
       width: 36px;
       padding: 0px;
+      /* height: 147px; */
+      /* background-color: rgb(47, 101, 238); */
     }
 
     .fm-floor-name-container {
-      padding: 0px
+      padding: 0px;
+      background-color: white;
+    }
+
+    .fm-floor-line {
+      background-color: white;
+      padding: 0px;
     }
 
     .fm-floor-name {
@@ -210,9 +218,13 @@
   // var mapId = 'nk8h6ha27sfggrk';
   // var mapId = 'z21gtwbyf5a65rh';
 
-  //* 最新中车一体化
+  /* 最新中车一体化
   var mapId = '0m5a9mefqpomiae';
   var themeID = '1608648105697071106';
+  //*/
+  //* 智慧冬奥沙盘
+  var mapId = 'kdxud9hgjzufdd9';
+  var themeID = '2000';
   //*/
   /* 多楼层——主语
   var mapId = 'nk8h6ha27sfggrk';
@@ -317,6 +329,10 @@
     scrollFloorControl.addTo(map)
 
     renderViewModeBtn()
+    // setTimeout(() => {
+    document.querySelector('.fm-floor-list').style.height = (parseInt(document.querySelector('.fm-floor-list').style.height) - 2) + 'px'
+    console.log('minus', document.querySelector('.fm-floor-list').style.height)
+    // }, 1000);
     // const width = '36px';
     // document.querySelector('div.fm-control-groups').style.width = '36px'
     // document.querySelector('div.fm-layer').setAttribute('style', 'width: 36px;height:36px;border-radius:7px;')

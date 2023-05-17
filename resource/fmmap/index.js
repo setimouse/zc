@@ -20,18 +20,6 @@ const fmmapScript = `
     })
   }
 
-  map.on('loaded', function () {
-    ready = true;
-    oriCenter = map.getCenter()
-    window.ReactNativeWebView.postMessage("mapready")
-    // setMarkers(deviceList)
-    map.pickFilterFunction = function (event) {
-      if (event.type == fengmap.FMType.DYNAMIC_MODEL_MARKER) {
-        return true;
-      }
-    }
-  })
-
   //生成自定义视图模式切换按钮
   function renderViewModeBtn() {
     console.log('viewMode', map.getViewMode())
@@ -92,17 +80,29 @@ const fmmapScript = `
 
     renderViewModeBtn()
 
-    var scrollZoomCtlOpt = {
-      position: fengmap.FMControlPosition.RIGHT_BOTTOM,
-      offset: {
-        x: {{zoomControlPositionX}},
-        y: {{zoomControlPositionY}},
-      },
-    };
-    var toolbar = new fengmap.FMZoomBar(scrollZoomCtlOpt);
-    toolbar.addTo(map)
+    ready = true;
+    oriCenter = map.getCenter()
+    window.ReactNativeWebView.postMessage("mapready")
+    // setMarkers(deviceList)
+    map.pickFilterFunction = function (event) {
+      if (event.type == fengmap.FMType.DYNAMIC_MODEL_MARKER) {
+        return true;
+      }
+    }
 
-    reloadFloor()
+    document.querySelector('.fm-floor-list').style.height = (parseInt(document.querySelector('.fm-floor-list').style.height) - 2) + 'px'
+
+    // var scrollZoomCtlOpt = {
+    //   position: fengmap.FMControlPosition.RIGHT_BOTTOM,
+    //   offset: {
+    //     x: {{zoomControlPositionX}},
+    //     y: {{zoomControlPositionY}},
+    //   },
+    // };
+    // var toolbar = new fengmap.FMZoomBar(scrollZoomCtlOpt);
+    // toolbar.addTo(map)
+
+    // reloadFloor()
   });
 
   var devices = {}

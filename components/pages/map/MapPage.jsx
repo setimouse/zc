@@ -74,13 +74,18 @@ export default function MapPage({ route, navigation }) {
     }
   }, [route.params])
 
-  useEffect(() => {
+  function refreshMap() {
     if (displayMap) {
+      setMapInfo(null)
       // 获取室内地图
       requestIndoorMap({ id: displayMap.id }).then(resp => {
         setMapInfo(resp.data)
       }).catch(error => console.log("Oops", error.message))
     }
+  }
+
+  useEffect(() => {
+    refreshMap()
   }, [displayMap])
 
   useEffect(() => {
@@ -136,11 +141,13 @@ export default function MapPage({ route, navigation }) {
       </View>
       <Pressable style={styles.locate}
         onPress={() => {
-          injectJS('resetMapLocation()')
+          // injectJS('resetMapLocation()')
+          refreshMap()
         }}
       >
         <View>
-          <MaterialCommunityIcons name="target" size={28} color='#2882FF' />
+          {/* <MaterialCommunityIcons name="target" size={28} color='#2882FF' /> */}
+          <FontAwesome name="refresh" size={20} color="#2882FF" />
         </View>
       </Pressable>
     </View>
