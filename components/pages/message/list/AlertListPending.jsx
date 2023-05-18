@@ -20,45 +20,46 @@ export default function AlertListPending() {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  let refreshCallback = () => {
+    setIsRefreshing(false)
+  }
+
   useEffect(() => {
     console.log('refreshing pending')
     setIsRefreshing(true)
-    refreshAlarming()
+    refreshAlarming(refreshCallback)
   }, [])
 
-  useEffect(() => {
-    if (alarmingList.length > 0) {
-      setIsRefreshing(false)
-    }
-  }, [alarmingList])
+  let listView = (
+    <>
+      <FlatList
+        data={alarmingList}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing}
+            onRefresh={() => {
+              setIsRefreshing(true)
+              refreshAlarming(refreshCallback)
+            }}
+          />
+        }
+        onEndReached={requestAlarming}
+        onEndReachedThreshold={2}
+        keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
+        renderItem={({ item }) => (<AlarmItemWidget item={item}
+          onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'pending' }) }}
+          onLocate={() => navigation.navigate('vehicle_map', { deviceId: item.deviceId })}
+          statusMap={{}}
+        />)}
+      />
+      {alarmingList.length == 0 &&
+        <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
+      }
+    </>
+  )
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
-      {
-        isRefreshing && <LoadingPage />
-        || (
-          <FlatList
-            data={alarmingList}
-            refreshControl={
-              <RefreshControl refreshing={isRefreshing}
-                onRefresh={() => {
-                  setIsRefreshing(true)
-                  refreshAlarming()
-                }}
-              />
-            }
-            onEndReached={requestAlarming}
-            onEndReachedThreshold={2}
-            keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
-            renderItem={({ item }) => (<AlarmItemWidget item={item}
-              onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'pending' }) }}
-              onLocate={() => navigation.navigate('vehicle_map', { deviceId: item.deviceId })}
-              statusMap={{}}
-            />)}
-          />)
-        || alarmingList.length == 0 &&
-        <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
-      }
+      {isRefreshing && <LoadingPage /> || (listView)}
     </View>
   )
 }

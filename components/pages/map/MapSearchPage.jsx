@@ -81,6 +81,7 @@ export default function MapSearchPage() {
       <SearchBarWidget autoFocus={true}
         suggests={suggests.map(e => e.vehicle.no).slice(0, 5)}
         storeKey="map-search"
+        placeholder="请输入车号"
         initStatus={{ isSearching: false, isResult: true }}
         resultPage={<Page result={searchResult}
           onRequestStation={({ item }) => {

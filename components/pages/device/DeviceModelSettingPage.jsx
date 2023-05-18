@@ -3,8 +3,7 @@
  */
 import { useRoute } from "@react-navigation/native";
 import React from "react";
-import { StyleSheet, Image, View, Text, SectionList, ScrollView } from "react-native";
-import ButtonWidget from "../../widgets/ButtonWidget";
+import { StyleSheet, Image, View } from "react-native";
 
 const styles = StyleSheet.create({
   frame: {

@@ -114,7 +114,7 @@ export const AlarmProvider = ({ children }) => {
     console.log('request 正在告警')
     alarmingPage.current++
     const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/pages?&pageNum=${alarmingPage.current}&pageSize=10`
-    fetch_json(url)
+    await fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm ing', data); return data })
       .then(data => {
@@ -126,10 +126,11 @@ export const AlarmProvider = ({ children }) => {
       .catch(dealError)
   }
 
-  async function refreshAlarming() {
+  async function refreshAlarming(doneCallback) {
     setAlarmingList([])
     alarmingPage.current = 0
-    requestAlarming()
+    await requestAlarming()
+    doneCallback && doneCallback()
   }
 
   /**
@@ -139,7 +140,7 @@ export const AlarmProvider = ({ children }) => {
     console.log('request 告警结束')
     alarmEndPage.current++
     const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/alarmEventEnd?&pageNum=${alarmEndPage.current}&pageSize=10`
-    fetch_json(url)
+    await fetch_json(url)
       .then(resp => resp.data)
       .then(data => { console.log('alarm end', data); return data })
       .then(data => {
@@ -150,10 +151,11 @@ export const AlarmProvider = ({ children }) => {
       .catch(dealError)
   }
 
-  async function refreshAlarmEnd() {
+  async function refreshAlarmEnd(doneCallback) {
     setAlarmEndList([])
     alarmEndPage.current = 0
-    requestAlarmEnd()
+    await requestAlarmEnd()
+    doneCallback && doneCallback()
   }
 
   /**
@@ -163,7 +165,7 @@ export const AlarmProvider = ({ children }) => {
     console.log('request 告警处理记录')
     alarmHistoryPage.current++
     const url = `${baseURL}/lmsapi/lms-map/api/v1/alarmEvents/alarmEventEnd?processingStatus=1&pageNum=${alarmHistoryPage.current}&pageSize=10`
-    fetch_json(url)
+    await fetch_json(url)
       .then(resp => resp.data)
       .then(data => data.list)
       .then(data => { console.log('alarm history', data, alarmHistoryPage.current); return data })
@@ -172,10 +174,11 @@ export const AlarmProvider = ({ children }) => {
       .catch(dealError)
   }
 
-  async function refreshAlarmHistory() {
+  async function refreshAlarmHistory(doneCallback) {
     setAlarmHistoryList([])
     alarmHistoryPage.current = 0
-    requestAlarmHistory()
+    await requestAlarmHistory()
+    doneCallback && doneCallback()
   }
 
   /**

@@ -20,48 +20,49 @@ export default function AlertListDone() {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  let refreshCallback = () => {
+    setIsRefreshing(false)
+  }
+
   useEffect(() => {
     setIsRefreshing(true)
     console.log('refreshing')
-    refreshAlarmEnd()
+    refreshAlarmEnd(refreshCallback)
   }, [])
 
-  useEffect(() => {
-    if (alarmEndList.length > 0) {
-      setIsRefreshing(false)
-    }
-  }, [alarmEndList])
+  let listView = (
+    <>
+      <FlatList
+        data={alarmEndList}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing}
+            onRefresh={() => {
+              setIsRefreshing(true)
+              refreshAlarmEnd(refreshCallback)
+            }}
+          />
+        }
+        onEndReached={requestAlarmEnd}
+        onEndReachedThreshold={2}
+        keyExtractor={item => item.alarmEventId}
+        renderItem={({ item }) => (<AlarmItemWidget item={item}
+          onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'done' }) }}
+          onLocate={() => { navigation.navigate('history_map', { alert: item, type: 'history' }) }}
+          statusMap={{
+            0: { display: <Text style={{ fontSize: 12, color: '#F72727' }}>·未处理</Text> },
+            1: { display: <Text style={{ fontSize: 12, color: '#2882FF' }}>·已处理</Text> },
+          }}
+        />)}
+      />
+      {alarmEndList.length == 0 &&
+        <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
+      }
+    </>
+  )
 
   return (
     <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
-      {
-        isRefreshing && <LoadingPage /> ||
-        (
-          <FlatList
-            data={alarmEndList}
-            refreshControl={
-              <RefreshControl refreshing={isRefreshing}
-                onRefresh={() => {
-                  setIsRefreshing(true)
-                  refreshAlarmEnd()
-                }}
-              />
-            }
-            onEndReached={requestAlarmEnd}
-            onEndReachedThreshold={2}
-            keyExtractor={item => item.alarmEventId}
-            renderItem={({ item }) => (<AlarmItemWidget item={item}
-              onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'done' }) }}
-              onLocate={() => { navigation.navigate('history_map', { alert: item, type: 'history' }) }}
-              statusMap={{
-                0: { display: <Text style={{ fontSize: 12, color: '#F72727' }}>·未处理</Text> },
-                1: { display: <Text style={{ fontSize: 12, color: '#2882FF' }}>·已处理</Text> },
-              }}
-            />)}
-          />)
-        || alarmEndList.length == 0 &&
-        <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
-      }
+      {isRefreshing && <LoadingPage /> || (listView)}
     </View>
   )
 }

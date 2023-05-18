@@ -20,9 +20,13 @@ export default function AlertListHistory() {
 
   const [isRefreshing, setIsRefreshing] = useState(false);
 
+  let refreshCallback = () => {
+    setIsRefreshing(false)
+  }
+
   useEffect(() => {
     console.log('refreshing')
-    refreshAlarmHistory()
+    refreshAlarmHistory(refreshCallback)
   }, [])
 
   useEffect(() => {
@@ -32,32 +36,35 @@ export default function AlertListHistory() {
     console.log('done')
   }, [alarmHistoryList])
 
-  return (
-    <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
-      {
-        isRefreshing && <LoadingPage /> ||
-        (
-          <FlatList
-            data={alarmHistoryList}
-            refreshControl={
-              <RefreshControl refreshing={isRefreshing}
-                onRefresh={() => {
-                  setIsRefreshing(true)
-                  refreshAlarmHistory()
-                }}
-              />
-            }
-            onEndReached={requestAlarmHistory}
-            onEndReachedThreshold={2}
-            keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
-            renderItem={({ item }) => (<AlarmItemWidget item={item}
-              onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'history' }) }}
-              onLocate={() => { navigation.navigate('history_map', { alert: item, type: 'history' }) }}
-            />)}
-          />)
-        || alarmHistoryList.length == 0 &&
+  let listView = (
+    <>
+      <FlatList
+        data={alarmHistoryList}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing}
+            onRefresh={() => {
+              setIsRefreshing(true)
+              refreshAlarmHistory(refreshCallback)
+            }}
+          />
+        }
+        onEndReached={requestAlarmHistory}
+        onEndReachedThreshold={2}
+        keyExtractor={item => item.alarmEventId + '' + item.alarmModelId + item.alarmModelName}
+        renderItem={({ item }) => (<AlarmItemWidget item={item}
+          onPress={() => { navigation.navigate('alertdetail', { id: item.alarmEventId, type: 'history' }) }}
+          onLocate={() => { navigation.navigate('history_map', { alert: item, type: 'history' }) }}
+        />)}
+      />
+      {alarmHistoryList.length == 0 &&
         <ErrorPage type={ErrorType.NoData} style={{ position: 'absolute', zIndex: -1, backgroundColor: '#fff' }} />
       }
+    </>
+  )
+
+  return (
+    <View style={{ flex: 1, backgroundColor: '#F4F6F8', }}>
+      {isRefreshing && <LoadingPage /> || (listView)}
     </View>
   )
 }
