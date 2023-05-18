@@ -42,7 +42,7 @@ export default function DeviceDetailPage() {
       .then(data => { console.log('list target types: ', data); return data })
       .then(data => data.featureImage)
       .then(image => image ? { uri: `${baseURL}${image}` } : require('../../../assets/default_image.png'))
-      .then(img => setImage({ img: img }))
+    // .then(img => setImage({ img: img }))
   }
 
   let getStation = async (data) => {
@@ -59,7 +59,7 @@ export default function DeviceDetailPage() {
     requestDeviceDetail({ targetId: targetId }).then(result => result.data)
       .then(data => {
         getStation(data)
-        getImage(data)
+        // getImage(data)
         return data
       })
       .then(data => {
@@ -88,7 +88,7 @@ export default function DeviceDetailPage() {
     requestDeviceDetailByNo({ deviceId: deviceId }).then(result => result.data)
       .then(data => {
         getStation(data)
-        getImage(data)
+        // getImage(data)
         return data
       })
       .then(data => {
@@ -277,6 +277,8 @@ function CellView({ direction = 'row', children, underline = true, onPress }) {
 
 function BaseInfoView({ device }) {
   const navigation = useNavigation();
+
+  device.img = require('../../../assets/default_device.png')
 
   return (
     <>

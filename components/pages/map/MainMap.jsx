@@ -19,6 +19,7 @@ import { Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import IconBack from '../../../assets/back.png';
 import { AuthContext } from "../../../webserve/AuthContext";
+import DeviceModelSettingPage from "../device/DeviceModelSettingPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -50,7 +51,7 @@ export default function MainMap() {
           headerBackImageSource: IconBack,
         }} />
         <Stack.Screen name="devicedetail" component={DeviceDetailPage} options={headBar({ title: '设备详情' })} />
-        <Stack.Screen name="devicepic" component={TestDeviceModelSettingPage} options={headBar({ title: '设备型号图片' })} />
+        <Stack.Screen name="devicepic" component={DeviceModelSettingPage} options={headBar({ title: '设备型号图片' })} />
         <Stack.Screen name="deviceid" component={TestDeviceIDSettingPage} options={headBar({ title: '设置标签编码' })} />
         <Stack.Screen name="objectbinding" component={DeviceObjectBindingPage} options={headBar({ title: '绑定对象' })} />
         <Stack.Screen name="vehicle_map" component={VehicleMapPage} options={headBar({ title: '车辆定位' })} />

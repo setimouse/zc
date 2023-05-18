@@ -185,7 +185,7 @@ export default function ProfilePage() {
       name: me.nickname,
       department: me.deptName,
       tel: me.mobile,
-      avatar: me.avatar ? { uri: me.avatar } : require('../../../assets/default_avatar.png'),
+      avatar: me.avatar ? { uri: me.avatar } : require('../../../assets/default_avatar_zc.png'),
     })
   }, [me])
 

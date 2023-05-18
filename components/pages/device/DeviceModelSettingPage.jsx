@@ -8,12 +8,13 @@ import ButtonWidget from "../../widgets/ButtonWidget";
 
 const styles = StyleSheet.create({
   frame: {
-    height: '61.8%',
-    justifyContent: 'center',
+    // justifyContent: 'center',
     alignItems: 'center',
+    flex: 1,
   },
   image: {
     width: '85.4%',
+    height: undefined,
     aspectRatio: 1,
   }
 });
@@ -22,7 +23,7 @@ export default function DeviceModelSettingPage() {
   const device = route.params.device
 
   return (
-    <View style={{ width: '100%', flex: 1, backgroundColor: '#F4F6F8' }}>
+    <View style={{ flex: 1, width: '100%', backgroundColor: '#F4F6F8' }}>
       <View style={styles.frame}>
         <Image source={device.img} style={styles.image} />
       </View>
