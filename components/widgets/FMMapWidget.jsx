@@ -21,6 +21,7 @@ function FMMapWidget({ mapInfo, onMapReady, onWebViewRef }) {
         javaScriptEnabled={true}
         scrollEnabled={false}
         onLoadStart={() => { setIsLoading(true) }}
+        onLoad={() => setIsLoading(false)}
         onLoadEnd={() => { setIsLoading(false) }}
         onMessage={event => {
           const message = event.nativeEvent.data;
