@@ -2,7 +2,7 @@
  * 告警记录页面
  */
 import React, { useContext, useEffect, useState } from 'react';
-import { FlatList, Image, Pressable, RefreshControl, StyleSheet, Text, View } from 'react-native';
+import { FlatList, RefreshControl, Text, View } from 'react-native';
 import { AlarmContext } from '../../../../webserve/AlarmContext';
 import AlarmItemWidget from '../../../widgets/AlarmItemWidget';
 import { useNavigation } from '@react-navigation/native';

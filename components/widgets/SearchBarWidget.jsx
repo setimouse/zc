@@ -213,6 +213,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#2882FF',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    zIndex: 99999,
   },
   bar: {
     flexDirection: 'row',

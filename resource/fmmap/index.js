@@ -186,7 +186,7 @@ const fmmapScript = `
     deviceList.forEach(m => addMarker(m))
   }
 
-function move(marker, device) {
+  function move(marker, device) {
     marker.forEach(e => {
       const isModel = e.type === fengmap.FMType.DYNAMIC_MODEL_MARKER;
       isModel && e.startAction(e.getActionNames()[0]);
