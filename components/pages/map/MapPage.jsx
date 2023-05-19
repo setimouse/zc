@@ -105,7 +105,6 @@ export default function MapPage({ route, navigation }) {
   }, [mapReady])
 
   return (
-    // <SafeAreaView>
     <View style={styles.container}>
       <StatusBar />
       <View style={styles.map}>
@@ -149,7 +148,6 @@ export default function MapPage({ route, navigation }) {
         </View>
       </Pressable>
     </View>
-    // </SafeAreaView>
   );
 }
 

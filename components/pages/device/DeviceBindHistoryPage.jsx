@@ -204,7 +204,7 @@ function Page({ result, isLoading, onRefresh, onEndReached }) {
   const navigation = useNavigation();
   return (
     <View style={{ width: '100%', flex: 1, }}>
-      {result.length > 0 &&
+      {(isLoading || result.length > 0) &&
         <FlatList style={{}}
           data={result}
           renderItem={({ item }) => (
@@ -215,15 +215,15 @@ function Page({ result, isLoading, onRefresh, onEndReached }) {
           )}
           keyExtractor={item => item.id}
           refreshControl={
-            <RefreshControl
+            <RefreshControl refreshing={isLoading}
               onRefresh={() => { onRefresh && onRefresh() }}
             />
           }
           onEndReached={onEndReached}
           onEndReachedThreshold={1}
-          onScroll={() => { Keyboard.dismiss() }}
+          onScrollBeginDrag={() => Keyboard.dismiss()}
         />
-        || (isLoading && <LoadingPage />)
+        // || (isLoading && <LoadingPage />)
         ||
         <View style={{ flex: 0.618, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ color: '#666' }}>暂无信息</Text>

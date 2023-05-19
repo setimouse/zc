@@ -228,18 +228,11 @@ function Item({ item, onDetailPress, onTargetPress }) {
 
 function Page({ result, isLoading, onRefresh, onEndReached }) {
   const navigation = useNavigation();
-  const [showRefresher, setShowRefresher] = useState(true);
-  useEffect(() => {
-    return () => {
-      setShowRefresher(false)
-      console.log('destruct')
-    }
-  }, [])
 
   return (
     <View style={{ width: '100%', flex: 1, }}>
-      {result.length > 0 &&
-        <FlatList style={{}}
+      {(isLoading || result.length > 0) &&
+        <FlatList
           data={result}
           renderItem={({ item }) => (
             <Item item={item}
@@ -248,17 +241,18 @@ function Page({ result, isLoading, onRefresh, onEndReached }) {
             />
           )}
           keyExtractor={item => item.id}
-          refreshControl={showRefresher &&
-            <RefreshControl
+          refreshControl={
+            <RefreshControl refreshing={isLoading}
               onRefresh={() => { onRefresh && onRefresh() }}
             />
           }
           onEndReached={onEndReached}
           onEndReachedThreshold={1}
-          onScroll={() => { Keyboard.dismiss() }}
+          onScrollBeginDrag={() => Keyboard.dismiss()}
         />
-        || (isLoading && <LoadingPage />)
-        ||
+      }
+      {/* {isLoading && <LoadingPage />} */}
+      {!isLoading && result.length == 0 &&
         <View style={{ flex: 0.618, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ color: '#666' }}>暂无信息</Text>
         </View>
