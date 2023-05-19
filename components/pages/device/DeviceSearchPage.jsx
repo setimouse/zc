@@ -228,6 +228,14 @@ function Item({ item, onDetailPress, onTargetPress }) {
 
 function Page({ result, isLoading, onRefresh, onEndReached }) {
   const navigation = useNavigation();
+  const [showRefresher, setShowRefresher] = useState(true);
+  useEffect(() => {
+    return () => {
+      setShowRefresher(false)
+      console.log('destruct')
+    }
+  }, [])
+
   return (
     <View style={{ width: '100%', flex: 1, }}>
       {result.length > 0 &&
@@ -240,7 +248,7 @@ function Page({ result, isLoading, onRefresh, onEndReached }) {
             />
           )}
           keyExtractor={item => item.id}
-          refreshControl={
+          refreshControl={showRefresher &&
             <RefreshControl
               onRefresh={() => { onRefresh && onRefresh() }}
             />

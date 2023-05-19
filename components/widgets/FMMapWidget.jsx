@@ -6,6 +6,21 @@ import mapHtml from "../../resource/fmmap/index";
 function FMMapWidget({ mapInfo, onMapReady, onWebViewRef }) {
   const [isLoading, setIsLoading] = useState(false);
 
+  useEffect(() => {
+    let timer
+    if (isLoading) {
+      timer = setTimeout(() => {
+        setIsLoading(false)
+      }, 5000);
+    } else if (timer) {
+      clearTimeout(timer)
+      timer = null
+    }
+    return () => {
+      timer && clearTimeout(timer)
+    }
+  }, [isLoading])
+
   return (
     <View style={styles.container}>
       {isLoading && <LoadingView />}

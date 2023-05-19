@@ -141,12 +141,10 @@ export default function MapPage({ route, navigation }) {
       </View>
       <Pressable style={styles.locate}
         onPress={() => {
-          // injectJS('resetMapLocation()')
           refreshMap()
         }}
       >
         <View>
-          {/* <MaterialCommunityIcons name="target" size={28} color='#2882FF' /> */}
           <FontAwesome name="refresh" size={20} color="#2882FF" />
         </View>
       </Pressable>

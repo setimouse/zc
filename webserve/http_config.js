@@ -3,7 +3,7 @@ export const env = '开发环境'
 export const baseURL = __DEV__ ? 'http://47.94.249.77' : 'http://47.94.249.77' //'http://101.200.150.143';
 export const mapUrlPrefix = __DEV__ ? 'http://47.94.249.77/mediaresource/'
   : 'http://47.94.249.77/mediaresource/';
-/*///中车环境
+/* ///中车环境
 export const env = '中车内网'
 export const baseURL = 'http://10.217.215.3'
 export const mapUrlPrefix = 'http://10.217.215.3/mediaresource/'
